@@ -17,7 +17,7 @@ function App() {
                     <Route path="/admin/*" element={<AdminPage />} />
                     <Route path="/mechanic/*" element={<MechanicPage />} />
                     <Route path="/user/*" element={<UserPage />}>
-                        <Route path="notifications" element={<UserNotificationsPage />} /> {/* Agrega la subruta para las notificaciones */}
+                    <Route path="notifications" element={<UserNotificationsPage />} /> {/* Agrega la subruta para las notificaciones */}
                     </Route>                    
                 </Routes>
             </Router>
