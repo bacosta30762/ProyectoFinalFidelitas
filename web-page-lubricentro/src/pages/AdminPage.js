@@ -1,8 +1,8 @@
 import React from 'react';
-import OrdenForm from '../components/OrdenForm';
-import OrdenList from '../components/OrdenList';
-import OrdenDetail from '../components/OrdenDetail';
-import OrdenSearch from '../components/OrdenSearch';
+import OrdenForm from '../components/orden/OrdenForm';
+import OrdenList from '../components/orden/OrdenList';
+import OrdenDetail from '../components/orden/OrdenDetail';
+import OrdenSearch from '../components/orden/OrdenSearch';
 import { Route, Routes, Link, useResolvedPath } from 'react-router-dom';
 import axios from 'axios';
 

@@ -1,6 +1,6 @@
 import React from 'react';
-import OrdenList from '../components/OrdenList';
-import OrdenDetail from '../components/OrdenDetail';
+import OrdenList from '../components/orden/OrdenList';
+import OrdenDetail from '../components/orden/OrdenDetail';
 import { Route, Routes, Link, useResolvedPath } from 'react-router-dom';
 
 const MechanicPage = () => {

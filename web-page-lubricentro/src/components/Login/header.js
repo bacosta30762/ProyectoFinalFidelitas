@@ -12,10 +12,11 @@ export default function AppHeader() {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="ms-auto">
-                        <Nav.Link as={NavLink} to="/">Home</Nav.Link>
-                        <Nav.Link as={NavLink} to="/admin">Admin</Nav.Link>
-                        <Nav.Link as={NavLink} to="/mechanic">Mechanic</Nav.Link>
-                        <Nav.Link as={NavLink} to="/user">User</Nav.Link>
+                        <Nav.Link as={NavLink} to="/">Inicio</Nav.Link>
+                        <Nav.Link as={NavLink} to="/admin">Administrador</Nav.Link>
+                        <Nav.Link as={NavLink} to="/mechanic">Mecánico</Nav.Link>
+                        <Nav.Link as={NavLink} to="/user">Usuario</Nav.Link>
+                        <Nav.Link as={NavLink} to="/user/notifications">Notificaciones</Nav.Link> {/* Agrega enlace a Notificaciones */}
                     </Nav>
                 </Navbar.Collapse>
             </Container>
