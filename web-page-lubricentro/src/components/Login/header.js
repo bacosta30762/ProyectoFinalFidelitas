@@ -2,6 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
+import NavDropdown from 'react-bootstrap/NavDropdown';
 import Navbar from "react-bootstrap/Navbar";
 
 export default function AppHeader() {
@@ -32,6 +33,11 @@ export default function AppHeader() {
             <Nav.Link as={NavLink} to="/feedback">
               Retroalimentación
             </Nav.Link>
+            <NavDropdown title="Contabilidad" id="basic-nav-dropdown">
+                            <NavDropdown.Item as={NavLink} to="/ingresos">Ingresos</NavDropdown.Item>
+                            <NavDropdown.Item as={NavLink} to="/egresos">Egresos</NavDropdown.Item>
+                            <NavDropdown.Item as={NavLink} to="/reportes">Reportes Financieros</NavDropdown.Item>
+                        </NavDropdown>
           </Nav>
         </Navbar.Collapse>
       </Container>

@@ -10,6 +10,7 @@ import NewsletterPage from "./pages/NewsletterPage";
 import FeedbackPage from "./pages/FeedbackPage";
 import SubscriptionPage from "./pages/SubscriptionPage";
 import FeedbackList from "./components/marketing/FeedbackList";
+import IngresosPage from './components/Contability/Ingresos'
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
             element={<SubscriptionPage />}
           />
           <Route path="/marketing/feedback" element={<FeedbackList />} />
+          <Route path="/ingresos" element={<IngresosPage />} />
         </Routes>
       </Router>
     </div>
