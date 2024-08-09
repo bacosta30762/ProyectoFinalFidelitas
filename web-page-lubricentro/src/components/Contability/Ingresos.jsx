@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { FaEdit, FaTrashAlt, FaFilePdf, FaFileExcel } from 'react-icons/fa';
+import { useNavigate} from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './IngresosPage.css';
 
 const IngresosPage = () => {
+    const navigate = useNavigate();
+
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
 
@@ -12,6 +15,10 @@ const IngresosPage = () => {
     const handleSearch = () => {
         // Lógica de búsqueda según las fechas seleccionadas
         console.log("Buscando ingresos desde:", startDate, "hasta:", endDate);
+    };
+
+    const handleAgregarClick = () => {
+        navigate('/agregar-ingreso');
     };
 
     const ingresos = [
@@ -47,7 +54,7 @@ const IngresosPage = () => {
         <div className="ingresos-container">
             <h1>Ingresos</h1>
             <div className="buttons-container">
-                <button className="add-button">Agregar</button>
+                <button className="add-button" onClick={handleAgregarClick}>Agregar</button>
                 <div className="generate-buttons">
                     <button className="pdf-button"><FaFilePdf /> Generar Informe PDF</button>
                     <button className="excel-button"><FaFileExcel /> Generar Informe Excel</button>

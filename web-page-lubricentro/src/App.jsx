@@ -11,6 +11,7 @@ import FeedbackPage from "./pages/FeedbackPage";
 import SubscriptionPage from "./pages/SubscriptionPage";
 import FeedbackList from "./components/marketing/FeedbackList";
 import IngresosPage from './components/Contability/Ingresos'
+import AgregarIngreso from './components/Contability/AgregarIngreso';
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
           />
           <Route path="/marketing/feedback" element={<FeedbackList />} />
           <Route path="/ingresos" element={<IngresosPage />} />
+          <Route path="/agregar-ingreso" element={<AgregarIngreso />} />
         </Routes>
       </Router>
     </div>
