@@ -1,4 +1,9 @@
 import React, { useState } from "react";
+import React, { useState } from "react";
+import { FaStar, FaEdit } from "react-icons/fa";
+import { FaTrashAlt } from "react-icons/fa";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./ComentariosValoraciones.css";
 
 function ListGroup() {
   const [items, setItems] = useState(["Lubricantes", "Filtros", "Repuestos y componentes"]);

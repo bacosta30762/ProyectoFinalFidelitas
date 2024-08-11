@@ -16,8 +16,8 @@ import EditarIngreso from './components/Contability/EditarIngreso';
 import EgresosPage from "./components/Contability/Egresos";
 import AgregarEgreso from "./components/Contability/AgregarEgreso";
 import EditarEgreso from "./components/Contability/EditarEgreso";
-import ReportesFinancieros from './components/Contability/ReportesFinancieros';
-import ListGroup from "./components/Inventarios/ListGroup";  
+import ReportesFinancieros from './components/Contability/ReportesFinancieros'; 
+import ComentariosValoraciones from './components/Comentarios/ComentariosValoraciones';   
 
 function App() {
     const [ingresos] = useState([
@@ -97,6 +97,7 @@ function App() {
                     <Route path="/agregar-egreso" element={<AgregarEgreso />} />
                     <Route path="/editar-egreso/:id" element={<EditarEgreso egresos={egresos} />} /> 
                     <Route path="/reportes-financieros" element={<ReportesFinancieros ingresos={ingresos} egresos={egresos} />} />
+                    <Route path="/comentarios-valoraciones" element={<ComentariosValoraciones />} />
                     
                 </Routes>
             </Router>

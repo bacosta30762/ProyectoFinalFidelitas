@@ -37,7 +37,10 @@ export default function AppHeader() {
                             <NavDropdown.Item as={NavLink} to="/ingresos">Ingresos</NavDropdown.Item>
                             <NavDropdown.Item as={NavLink} to="/egresos">Egresos</NavDropdown.Item>
                             <NavDropdown.Item as={NavLink} to="/reportes-financieros">Reportes Financieros</NavDropdown.Item>
-                        </NavDropdown>
+            </NavDropdown>
+            <Nav.Link as={NavLink} to="/comentarios-valoraciones">
+              Opiniones
+            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
