@@ -16,7 +16,8 @@ import EditarIngreso from './components/Contability/EditarIngreso';
 import EgresosPage from "./components/Contability/Egresos";
 import AgregarEgreso from "./components/Contability/AgregarEgreso";
 import EditarEgreso from "./components/Contability/EditarEgreso";
-import ReportesFinancieros from './components/Contability/ReportesFinancieros';  
+import ReportesFinancieros from './components/Contability/ReportesFinancieros';
+import ListGroup from "./components/Inventarios/ListGroup";  
 
 function App() {
     const [ingresos] = useState([
@@ -103,5 +104,7 @@ function App() {
     );
 }
 
-export default App;
+
+
+export default App;im
 
