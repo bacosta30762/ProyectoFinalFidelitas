@@ -6,35 +6,35 @@ import "react-datepicker/dist/react-datepicker.css";
 import { PDFDownloadLink, Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
-import "./IngresosPage.css";
+import "./EgresosPage.css";
 
-const IngresosPage = () => {
+const EgresosPage = () => {
   const navigate = useNavigate();
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
-  const [selectedIngreso, setSelectedIngreso] = useState(null);
+  const [selectedEgreso, setSelectedEgreso] = useState(null);
 
   const handleSearch = () => {
-    console.log("Buscando ingresos desde:", startDate, "hasta:", endDate);
+    console.log("Buscando egresos desde:", startDate, "hasta:", endDate);
   };
 
   const handleAgregarClick = () => {
-    navigate("/agregar-ingreso");
+    navigate("/agregar-egreso");
   };
 
-  const handleDeleteClick = (ingreso) => {
-    setSelectedIngreso(ingreso);
+  const handleDeleteClick = (egreso) => {
+    setSelectedEgreso(egreso);
     setShowDeletePopup(true);
   };
 
   const handleEditClick = (id) => {
-    navigate(`/editar-ingreso/${id}`);
+    navigate(`/editar-egreso/${id}`);
   };
 
   const handleConfirmDelete = () => {
-    // Lógica para eliminar el ingreso seleccionado
-    console.log("Ingreso eliminado:", selectedIngreso);
+    // Lógica para eliminar el egreso seleccionado
+    console.log("Egreso eliminado:", selectedEgreso);
     setShowDeletePopup(false);
     alert("Eliminado con éxito");
   };
@@ -43,31 +43,27 @@ const IngresosPage = () => {
     setShowDeletePopup(false);
   };
 
-  const [ingresos] = useState([
+  const [egresos] = useState([
     {
       id: 1,
       fecha: "2023-08-01",
-      descripcion: "Venta de lubricante",
-      tipo: "Venta",
-      cantidad: 10,
-      precioUnitario: 15000.0,
-      total: 150000.0,
-      metodoPago: "Efectivo",
-      cliente: "Juan Pérez",
-      factura: "F12345",
+      categoria: "Compra de Materiales",
+      descripcion: "Compra de cemento",
+      monto: 1500.00,
+      metodoPago: "Transferencia",
+      proveedor: "Cementos XYZ",
+      numeroFactura: "F12345",
       comentarios: "Ninguno",
     },
     {
       id: 2,
       fecha: "2023-08-02",
-      descripcion: "Servicio de cambio de aceite",
-      tipo: "Servicio",
-      cantidad: 1,
-      precioUnitario: 20000.0,
-      total: 20000.0,
-      metodoPago: "Tarjeta",
-      cliente: "María López",
-      factura: "F12346",
+      categoria: "Salarios",
+      descripcion: "Pago de salario Julio",
+      monto: 2500.00,
+      metodoPago: "Efectivo",
+      proveedor: "Juan Pérez",
+      numeroFactura: "-",
       comentarios: "Ninguno",
     },
   ]);
@@ -76,19 +72,17 @@ const IngresosPage = () => {
     <Document>
       <Page style={styles.page}>
         <View style={styles.section}>
-          <Text style={styles.title}>Informe de Ingresos</Text>
-          {ingresos.map(ingreso => (
-            <View key={ingreso.id} style={styles.item}>
-              <Text>Fecha: {ingreso.fecha}</Text>
-              <Text>Descripción: {ingreso.descripcion}</Text>
-              <Text>Tipo de Ingreso: {ingreso.tipo}</Text>
-              <Text>Cantidad: {ingreso.cantidad}</Text>
-              <Text>Precio Unitario: {ingreso.precioUnitario.toFixed(2)}</Text>
-              <Text>Total: {ingreso.total.toFixed(2)}</Text>
-              <Text>Método de Pago: {ingreso.metodoPago}</Text>
-              <Text>Cliente: {ingreso.cliente}</Text>
-              <Text>Factura/Número de Recibo: {ingreso.factura}</Text>
-              <Text>Notas/Comentarios: {ingreso.comentarios}</Text>
+          <Text style={styles.title}>Informe de Egresos</Text>
+          {egresos.map(egreso => (
+            <View key={egreso.id} style={styles.item}>
+              <Text>Fecha: {egreso.fecha}</Text>
+              <Text>Categoría: {egreso.categoria}</Text>
+              <Text>Descripción: {egreso.descripcion}</Text>
+              <Text>Monto: {egreso.monto.toFixed(2)}</Text>
+              <Text>Método de Pago: {egreso.metodoPago}</Text>
+              <Text>Proveedor/Empleado: {egreso.proveedor}</Text>
+              <Text>Número de Factura/Recibo: {egreso.numeroFactura}</Text>
+              <Text>Comentarios: {egreso.comentarios}</Text>
               <View style={styles.separator} />
             </View>
           ))}
@@ -98,16 +92,16 @@ const IngresosPage = () => {
   );
 
   const handleExcelExport = () => {
-    const ws = XLSX.utils.json_to_sheet(ingresos);
+    const ws = XLSX.utils.json_to_sheet(egresos);
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Ingresos");
+    XLSX.utils.book_append_sheet(wb, ws, "Egresos");
     const wbout = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-    saveAs(new Blob([wbout], { type: "application/octet-stream" }), "reporte-ingresos.xlsx");
+    saveAs(new Blob([wbout], { type: "application/octet-stream" }), "reporte-egresos.xlsx");
   };
 
   return (
-    <div className="ingresos-container">
-      <h1>Ingresos</h1>
+    <div className="egresos-container">
+      <h1>Egresos</h1>
       <div className="buttons-container">
         <button className="add-button" onClick={handleAgregarClick}>
           Agregar
@@ -115,7 +109,7 @@ const IngresosPage = () => {
         <div className="generate-buttons">
           <PDFDownloadLink
             document={generatePDF()}
-            fileName="reporte-ingresos.pdf"
+            fileName="reporte-egresos.pdf"
             className="pdf-button"
           >
             {({ loading }) => (loading ? "Cargando documento..." : <><FaFilePdf /> Generar Informe PDF</>)}
@@ -147,43 +141,39 @@ const IngresosPage = () => {
           Buscar
         </button>
       </div>
-      <table className="ingresos-table">
+      <table className="egresos-table">
         <thead>
           <tr>
             <th>Fecha</th>
+            <th>Categoría</th>
             <th>Descripción</th>
-            <th>Tipo de Ingreso</th>
-            <th>Cantidad</th>
-            <th>Precio Unitario</th>
-            <th>Total</th>
+            <th>Monto</th>
             <th>Método de Pago</th>
-            <th>Cliente</th>
-            <th>Factura/Número de Recibo</th>
-            <th>Notas/Comentarios</th>
+            <th>Proveedor/Empleado</th>
+            <th>Número de Factura/Recibo</th>
+            <th>Comentarios</th>
             <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
-          {ingresos.map((ingreso) => (
-            <tr key={ingreso.id}>
-              <td>{ingreso.fecha}</td>
-              <td>{ingreso.descripcion}</td>
-              <td>{ingreso.tipo}</td>
-              <td>{ingreso.cantidad}</td>
-              <td>{ingreso.precioUnitario.toFixed(2)}</td>
-              <td>{ingreso.total.toFixed(2)}</td>
-              <td>{ingreso.metodoPago}</td>
-              <td>{ingreso.cliente}</td>
-              <td>{ingreso.factura}</td>
-              <td>{ingreso.comentarios}</td>
+          {egresos.map((egreso) => (
+            <tr key={egreso.id}>
+              <td>{egreso.fecha}</td>
+              <td>{egreso.categoria}</td>
+              <td>{egreso.descripcion}</td>
+              <td>{egreso.monto.toFixed(2)}</td>
+              <td>{egreso.metodoPago}</td>
+              <td>{egreso.proveedor}</td>
+              <td>{egreso.numeroFactura}</td>
+              <td>{egreso.comentarios}</td>
               <td className="icon-group">
                 <FaEdit
                   className="edit-icon"
-                  onClick={() => handleEditClick(ingreso.id)}
+                  onClick={() => handleEditClick(egreso.id)}
                 />
                 <FaTrashAlt
                   className="delete-icon"
-                  onClick={() => handleDeleteClick(ingreso)}
+                  onClick={() => handleDeleteClick(egreso)}
                 />
               </td>
             </tr>
@@ -194,7 +184,7 @@ const IngresosPage = () => {
       {showDeletePopup && (
         <div className="popup-overlay">
           <div className="popup-content">
-            <h3>¿Está seguro que desea eliminar el ingreso?</h3>
+            <h3>¿Está seguro que desea eliminar el egreso?</h3>
             <div className="popup-buttons">
               <button onClick={handleConfirmDelete}>Sí</button>
               <button onClick={handleCancelDelete}>No</button>
@@ -229,4 +219,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default IngresosPage;
+export default EgresosPage;

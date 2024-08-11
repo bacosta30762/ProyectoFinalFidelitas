@@ -1,65 +1,61 @@
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import './AgregarIngreso.css';
+import './AgregarEgreso.css';
 
-const AgregarIngreso = () => {
+const AgregarEgreso = () => {
     const [fecha, setFecha] = useState(null);
     const [descripcion, setDescripcion] = useState('');
-    const [tipo, setTipo] = useState('');
-    const [cantidad, setCantidad] = useState('');
-    const [precioUnitario, setPrecioUnitario] = useState('');
+    const [categoria, setCategoria] = useState('');
+    const [monto, setMonto] = useState('');
     const [metodoPago, setMetodoPago] = useState('');
-    const [cliente, setCliente] = useState('');
-    const [factura, setFactura] = useState('');
+    const [proveedor, setProveedor] = useState('');
+    const [numeroFactura, setNumeroFactura] = useState('');
     const [comentarios, setComentarios] = useState('');
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
         // Validación simple de que todos los campos están llenos
-        if (!fecha || !descripcion || !tipo || !cantidad || !precioUnitario || !metodoPago || !cliente || !factura) {
+        if (!fecha || !descripcion || !categoria || !monto || !metodoPago || !proveedor || !numeroFactura) {
             alert('Todos los campos son obligatorios.');
             return;
         }
 
         // Validación de formato de datos
-        if (isNaN(cantidad) || isNaN(precioUnitario)) {
-            alert('Cantidad y Precio Unitario deben ser valores numéricos.');
+        if (isNaN(monto)) {
+            alert('Monto debe ser un valor numérico.');
             return;
         }
 
-        // Manejar el ingreso (enviar al backend, etc.)
-        const nuevoIngreso = {
+        // Manejar el egreso (enviar al backend, etc.)
+        const nuevoEgreso = {
             fecha,
             descripcion,
-            tipo,
-            cantidad: parseFloat(cantidad),
-            precioUnitario: parseFloat(precioUnitario),
-            total: parseFloat(cantidad) * parseFloat(precioUnitario),
+            categoria,
+            monto: parseFloat(monto),
             metodoPago,
-            cliente,
-            factura,
+            proveedor,
+            numeroFactura,
             comentarios,
         };
 
-        console.log('Ingreso agregado:', nuevoIngreso);
-        // Resetear los campos después de agregar el ingreso
+        console.log('Egreso agregado:', nuevoEgreso);
+        // Resetear los campos después de agregar el egreso
         setFecha(null);
         setDescripcion('');
-        setTipo('');
-        setCantidad('');
-        setPrecioUnitario('');
+        setCategoria('');
+        setMonto('');
         setMetodoPago('');
-        setCliente('');
-        setFactura('');
+        setProveedor('');
+        setNumeroFactura('');
         setComentarios('');
     };
 
     return (
-        <div className="agregar-ingreso-container">
-            <h2>Agregar Ingreso</h2>
-            <form onSubmit={handleSubmit} className="agregar-ingreso-form">
+        <div className="agregar-egreso-container">
+            <h2>Agregar Egreso</h2>
+            <form onSubmit={handleSubmit} className="agregar-egreso-form">
                 <div className="form-group">
                     <label>Fecha</label>
                     <DatePicker
@@ -82,35 +78,26 @@ const AgregarIngreso = () => {
                     />
                 </div>
                 <div className="form-group">
-                    <label>Tipo de Ingreso</label>
+                    <label>Categoría</label>
                     <select
-                        value={tipo}
-                        onChange={(e) => setTipo(e.target.value)}
+                        value={categoria}
+                        onChange={(e) => setCategoria(e.target.value)}
                         className="form-control"
                         required
                     >
-                        <option value="">Seleccione un tipo</option>
-                        <option value="Servicio prestados">Servicio prestados</option>
-                        <option value="Venta de productos">Venta de productos</option>
-                        <option value="Otras fuentes">Otras fuentes</option>
+                        <option value="">Seleccione una categoría</option>
+                        <option value="Compra de materiales">Compra de materiales</option>
+                        <option value="Salarios">Salarios</option>
+                        <option value="Mantenimiento y reparaciones">Mantenimiento y reparaciones</option>
+                        <option value="Gastos Operativos">Gastos Operativos</option>
                     </select>
                 </div>
                 <div className="form-group">
-                    <label>Cantidad</label>
+                    <label>Monto</label>
                     <input
                         type="number"
-                        value={cantidad}
-                        onChange={(e) => setCantidad(e.target.value)}
-                        className="form-control"
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <label>Precio Unitario</label>
-                    <input
-                        type="number"
-                        value={precioUnitario}
-                        onChange={(e) => setPrecioUnitario(e.target.value)}
+                        value={monto}
+                        onChange={(e) => setMonto(e.target.value)}
                         className="form-control"
                         required
                     />
@@ -126,21 +113,21 @@ const AgregarIngreso = () => {
                     />
                 </div>
                 <div className="form-group">
-                    <label>Cliente</label>
+                    <label>Proveedor/Empleado</label>
                     <input
                         type="text"
-                        value={cliente}
-                        onChange={(e) => setCliente(e.target.value)}
+                        value={proveedor}
+                        onChange={(e) => setProveedor(e.target.value)}
                         className="form-control"
                         required
                     />
                 </div>
                 <div className="form-group">
-                    <label>Factura/Número de Recibo</label>
+                    <label>Número de Factura/Recibo</label>
                     <input
                         type="text"
-                        value={factura}
-                        onChange={(e) => setFactura(e.target.value)}
+                        value={numeroFactura}
+                        onChange={(e) => setNumeroFactura(e.target.value)}
                         className="form-control"
                         required
                     />
@@ -153,10 +140,10 @@ const AgregarIngreso = () => {
                         className="form-control"
                     />
                 </div>
-                <button type="submit" className="submit-button">Agregar Ingreso</button>
+                <button type="submit" className="submit-button">Agregar Egreso</button>
             </form>
         </div>
     );
 };
 
-export default AgregarIngreso;
+export default AgregarEgreso;

@@ -1,4 +1,4 @@
-.ingresos-container {
+.egresos-container {
     padding: 20px;
     font-family: Arial, sans-serif;
 }
@@ -70,22 +70,22 @@ h1 {
     margin-bottom: 20px;
 }
 
-.ingresos-table {
+.egresos-table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.ingresos-table th, .ingresos-table td {
+.egresos-table th, .egresos-table td {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: left;
 }
 
-.ingresos-table th {
+.egresos-table th {
     background-color: #f2f2f2;
 }
 
-.ingresos-table tr:nth-child(even) {
+.egresos-table tr:nth-child(even) {
     background-color: #f9f9f9;
 }
 

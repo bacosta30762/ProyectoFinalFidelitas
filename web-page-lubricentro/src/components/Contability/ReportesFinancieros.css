@@ -1,0 +1,42 @@
+.reportes-financieros-container {
+  padding: 20px;
+  max-width: 60%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.reporte-resultados {
+  margin-top: 20px;
+}
+
+.reporte-exportar {
+  margin-top: 20px;
+}
+
+.export-button {
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.export-button:hover {
+  background-color: #45a049;
+}
