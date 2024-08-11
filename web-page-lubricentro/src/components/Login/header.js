@@ -20,15 +20,6 @@ export default function AppHeader() {
             <Nav.Link as={NavLink} to="/admin">
               Administrador
             </Nav.Link>
-            <Nav.Link as={NavLink} to="/mechanic">
-              Mecánico
-            </Nav.Link>
-            <Nav.Link as={NavLink} to="/user">
-              Usuario
-            </Nav.Link>
-            <Nav.Link as={NavLink} to="/notifications">
-              Notificaciones
-            </Nav.Link>
             <Nav.Link as={NavLink} to="/feedback">
               Retroalimentación
             </Nav.Link>
