@@ -1,0 +1,77 @@
+.comentarios-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.comentarios-lista {
+  margin-top: 20px;
+}
+
+.comentario {
+  border: 1px solid #ccc;
+  padding: 15px;
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.comentario-header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+.eliminar-icon,
+.editar-icon {
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.valoracion-container {
+  margin-top: 10px;
+}
+
+.star {
+  color: #ffd700;
+  cursor: pointer;
+}
+
+.star.filled {
+  color: #ffb400;
+}
+
+.respuesta {
+  border-top: 1px solid #ddd;
+  margin-top: 10px;
+  padding-top: 10px;
+  padding-left: 20px;
+  position: relative;
+}
+
+.responder-button {
+  text-align: right;
+  display: block;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.respuesta-form {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #ddd;
+}
+
+.respuesta-form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.respuesta-form button {
+  display: inline-block;
+}
+
+.eliminar-icon:hover, .editar-icon:hover {
+  color: #d9534f;
+}

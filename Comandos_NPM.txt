@@ -1,0 +1,7 @@
+npm install react react-dom
+npm install bootstrap
+npm install @react-pdf/renderer
+npm install react-csv
+npm install @react-pdf/renderer xlsx file-saver
+npm install react-icons
+npm install react-datepicker
