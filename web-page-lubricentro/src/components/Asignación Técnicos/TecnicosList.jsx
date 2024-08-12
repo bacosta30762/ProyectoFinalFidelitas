@@ -5,7 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./ComentariosValoraciones.css";
 
 function TecnicosList() {
-  const [items, setItems] = useState(["Lubricantes", "Filtros", "Repuestos y componentes"]);
+  const [items, setItems] = useState(["Luis Alvarado", "Felipe Perez", "Gustavo Rojas"]);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [newItem, setNewItem] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
