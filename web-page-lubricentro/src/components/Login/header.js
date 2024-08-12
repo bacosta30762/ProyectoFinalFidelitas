@@ -18,6 +18,7 @@ export default function AppHeader() {
             <Nav.Link as={NavLink} to="/">
               Inicio
             </Nav.Link>
+            
             <Nav.Link as={NavLink} to="/admin">
               Administrador
             </Nav.Link>
@@ -43,6 +44,9 @@ export default function AppHeader() {
             </Nav.Link>
             <Nav.Link as={NavLink} to="/inventarios">
               Inventarios
+            </Nav.Link>
+            <Nav.Link as={NavLink} to="/Inicio">
+              Inicio Sesion
             </Nav.Link>
           </Nav>
         </Navbar.Collapse>

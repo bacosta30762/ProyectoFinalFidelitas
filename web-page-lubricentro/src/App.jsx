@@ -19,6 +19,8 @@ import EditarEgreso from "./components/Contability/EditarEgreso";
 import ReportesFinancieros from "./components/Contability/ReportesFinancieros";
 import ComentariosValoraciones from "./components/Comentarios/ComentariosValoraciones";
 import Inventarios from "./components/Inventarios/ListGroup";
+import Inicio from "./components/Inicio/login.jsx";
+import RecuperarContra from './components/Inicio/recuperarcontra.jsx';
 
 function App() {
   const [ingresos] = useState([
@@ -82,6 +84,8 @@ function App() {
           <AppHeader />
         </header>
         <Routes>
+        <Route path="/Inicio/" element={<Inicio />} />
+        <Route path="/RecuperarContra/*" element={<RecuperarContra />} />
           <Route path="/admin/*" element={<AdminPage />} />
           <Route path="/mechanic/*" element={<MechanicPage />} />
           <Route path="/user/*" element={<UserPage />} />
