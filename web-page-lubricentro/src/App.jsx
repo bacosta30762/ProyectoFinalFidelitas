@@ -116,8 +116,8 @@ function App() {
             path="/comentarios-valoraciones"
             element={<ComentariosValoraciones />}
           />
+          <Route path="/inventarios" element={<Inventarios />} />
         </Routes>
-        <Route path="/inventarios" element={<Inventarios />} />
       </Router>
     </div>
   );
