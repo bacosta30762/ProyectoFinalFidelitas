@@ -32,6 +32,9 @@ export default function AppHeader() {
             <Nav.Link as={NavLink} to="/comentarios-valoraciones">
               Opiniones
             </Nav.Link>
+            <Nav.Link as={NavLink} to="/inventarios">
+              Inventarios
+            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>

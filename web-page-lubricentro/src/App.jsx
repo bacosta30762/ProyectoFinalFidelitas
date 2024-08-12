@@ -18,6 +18,7 @@ import AgregarEgreso from "./components/Contability/AgregarEgreso";
 import EditarEgreso from "./components/Contability/EditarEgreso";
 import ReportesFinancieros from "./components/Contability/ReportesFinancieros";
 import ComentariosValoraciones from "./components/Comentarios/ComentariosValoraciones";
+import Inventarios from "./components/Inventarios/ListGroup";
 
 function App() {
   const [ingresos] = useState([
@@ -116,6 +117,7 @@ function App() {
             element={<ComentariosValoraciones />}
           />
         </Routes>
+        <Route path="/inventarios" element={<Inventarios />} />
       </Router>
     </div>
   );
