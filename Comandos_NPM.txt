@@ -6,4 +6,5 @@ npm install @react-pdf/renderer xlsx file-saver
 npm install react-icons
 npm install react-datepicker
 npm install axios
+npm install @fortawesome/react-fontawesome @fortawesome/free-solid-svg-icons @fortawesome/fontawesome-svg-core
 Npm i 
