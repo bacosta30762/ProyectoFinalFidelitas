@@ -3,8 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import "./modifica.css";
 
 const EditUser = () => {
-  const { id } = useParams(); // Obtener el ID del usuario desde la URL
-  const navigate = useNavigate(); // Para redireccionar después de eliminar
+  const { id } = useParams(); 
+  const navigate = useNavigate(); 
   const [userData, setUserData] = useState({
     name: '',
     cedula: '',
@@ -12,10 +12,9 @@ const EditUser = () => {
     rol: ''
   });
 
-  // Simulación de obtención de datos del usuario
+  
   React.useEffect(() => {
-    // Aquí podrías hacer una solicitud para obtener los datos del usuario por ID
-    // Por ahora, simularemos con datos de ejemplo
+
     const fetchedUser = {
       name: 'Juan Perez',
       cedula: '123456789',

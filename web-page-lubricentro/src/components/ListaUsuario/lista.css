@@ -1,4 +1,4 @@
-/* Estilos Generales */
+
 .user-list-container {
     max-width: 600px;
     margin: 20px auto;
@@ -8,7 +8,7 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
   
-  /* Título de la Lista */
+
   .user-list-title {
     font-size: 24px;
     margin-bottom: 20px;
@@ -16,7 +16,7 @@
     color: #333;
   }
   
-  /* Lista de Usuarios */
+
   .user-list {
     list-style: none;
     padding: 0;
@@ -39,8 +39,7 @@
     font-size: 16px;
     color: #555;
   }
-  
-  /* Botón de Modificar */
+ 
   .modify-button {
     padding: 8px 12px;
     border: none;

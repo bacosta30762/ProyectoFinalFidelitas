@@ -12,7 +12,6 @@ const UserList = () => {
   const navigate = useNavigate();
 
   const handleModify = (id) => {
-    // Redirigir a la página de edición del usuario con el ID correspondiente
     navigate(`/edit-user/${id}`);
   };
 
