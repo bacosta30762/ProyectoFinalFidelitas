@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import AppHeader from "./components/Login/header";
+import AppHeader from "./components/HeaderFooter/header";
 import AdminPage from "./pages/AdminPage";
 import MechanicPage from "./pages/MechanicPage";
 import UserPage from "./pages/UserPage";
@@ -21,6 +21,7 @@ import ComentariosValoraciones from "./components/Comentarios/ComentariosValorac
 import Inventarios from "./components/Inventarios/ListGroup";
 import Inicio from "./components/Inicio/login.jsx";
 import RecuperarContra from './components/Inicio/recuperarcontra.jsx';
+import Footer from "./components/HeaderFooter/Footer"; 
 
 function App() {
   const [ingresos] = useState([
@@ -123,6 +124,9 @@ function App() {
           <Route path="/inventarios" element={<Inventarios />} />
         </Routes>
       </Router>
+      <footer id="footer">
+          <Footer />
+        </footer>
     </div>
   );
 }
