@@ -19,17 +19,6 @@ export default function AppHeader() {
             <Nav.Link as={NavLink} to="/">
               Inicio
             </Nav.Link>
-            <Nav.Link as={NavLink} to="/calendario">
-              Disponibilidad Citas
-            </Nav.Link>
-            <NavDropdown title="Mecanico" id="basic-nav-dropdown">
-              <NavDropdown.Item as={NavLink} to="/mis-ordenes">
-                Mis Órdenes
-              </NavDropdown.Item>
-              <NavDropdown.Item as={NavLink} to="/reporte-retroalimentacion">
-                Reportes de Retroalimentacion
-              </NavDropdown.Item>
-            </NavDropdown>
             <NavDropdown title="Administrador" id="basic-nav-dropdown">
               <NavDropdown.Item as={NavLink} to="/lista-ordenes">
                 Lista de Órdenes
@@ -39,6 +28,14 @@ export default function AppHeader() {
               </NavDropdown.Item>
               <NavDropdown.Item as={NavLink} to="/marketing">
                 Marketing{" "}
+              </NavDropdown.Item>
+            </NavDropdown>
+            <NavDropdown title="Mecanico" id="basic-nav-dropdown">
+              <NavDropdown.Item as={NavLink} to="/reporte-retroalimentacion">
+                Mis Órdenes
+              </NavDropdown.Item>
+              <NavDropdown.Item as={NavLink} to="/mis-ordenes">
+                Reportes de Retroalimentacion
               </NavDropdown.Item>
             </NavDropdown>
             <NavDropdown title="Contabilidad" id="basic-nav-dropdown">
@@ -51,6 +48,9 @@ export default function AppHeader() {
               <NavDropdown.Item as={NavLink} to="/reportes-financieros">
                 Reportes Financieros
               </NavDropdown.Item>
+              <Nav.Link as={NavLink} to="/calendario">
+                Disponibilidad Citas
+              </Nav.Link>
             </NavDropdown>
             <Nav.Link as={NavLink} to="/comentarios-valoraciones">
               Opiniones
