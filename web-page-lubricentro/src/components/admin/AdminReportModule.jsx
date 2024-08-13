@@ -6,7 +6,7 @@ const AdminReportModule = () => {
     {
       id: 1,
       numeroOrden: "001",
-      placaVehiculo: "ABC-123",
+      placaVehiculo: "WTH459",
       servicio: "Cambio de aceite",
       cliente: "Juan Pérez",
       mecanico: "Luis Martínez",
@@ -15,7 +15,7 @@ const AdminReportModule = () => {
     {
       id: 2,
       numeroOrden: "002",
-      placaVehiculo: "XYZ-789",
+      placaVehiculo: "HHT848",
       servicio: "Revisión de frenos",
       cliente: "María López",
       mecanico: "Carlos Ruiz",
@@ -24,7 +24,7 @@ const AdminReportModule = () => {
     {
       id: 3,
       numeroOrden: "003",
-      placaVehiculo: "DEF-456",
+      placaVehiculo: "KYT972",
       servicio: "Alineación y balanceo",
       cliente: "Carlos Gómez",
       mecanico: "Fernando Torres",
@@ -33,7 +33,7 @@ const AdminReportModule = () => {
     {
       id: 4,
       numeroOrden: "004",
-      placaVehiculo: "GHI-321",
+      placaVehiculo: "KHV875",
       servicio: "Cambio de batería",
       cliente: "Ana Fernández",
       mecanico: "Miguel Hernández",
