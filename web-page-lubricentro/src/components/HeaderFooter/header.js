@@ -8,7 +8,7 @@ import "./AppHeader.css";
 
 export default function AppHeader() {
   return (
-    <Navbar bg="light" expand="lg" className="bg-body-tertiary">
+    <Navbar expand="lg" className="bg-rojizo">
       <Container>
         <Navbar.Brand as={NavLink} to="/">
           Lubricentro RyM
