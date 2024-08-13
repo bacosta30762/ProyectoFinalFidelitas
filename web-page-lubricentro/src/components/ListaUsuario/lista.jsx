@@ -1,35 +1,45 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import "./lista.css";
+import './lista.css';
 
 const UserList = () => {
+  const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState('');
   const [users, setUsers] = useState([
     { id: 1, name: 'Juan Perez', cedula: '123456789', email: 'juan@example.com', rol: 'Usuario' },
-    { id: 2, name: 'Maria Gomez', cedula: '987654321', email: 'maria@example.com', rol: 'Mecanico' },
-    { id: 3, name: 'Carlos Ruiz', cedula: '112233445', email: 'carlos@example.com', rol: 'Administrador' },
+    { id: 2, name: 'Maria Gomez', cedula: '987654321', email: 'maria@example.com', rol: 'Admin' },
+    { id: 3, name: 'Carlos Mendez', cedula: '456123789', email: 'carlos@example.com', rol: 'Mecanico' },
+    // Agrega más usuarios aquí
   ]);
 
-  const navigate = useNavigate();
-
-  const handleModify = (id) => {
-    navigate(`/edit-user/${id}`);
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
   };
+
+  const filteredUsers = users.filter(user =>
+    user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    user.cedula.includes(searchTerm)
+  );
 
   return (
     <div className="user-list-container">
       <h2 className="user-list-title">Lista de Usuarios</h2>
+      
+      <input
+        type="text"
+        placeholder="Buscar por nombre o cédula"
+        value={searchTerm}
+        onChange={handleSearchChange}
+        className="search-bar"
+      />
+      
       <ul className="user-list">
-        {users.map(user => (
+        {filteredUsers.map(user => (
           <li key={user.id} className="user-list-item">
-            <div  className="user-info">
-              <p><strong>Nombre:</strong> {user.name}</p>
-              <p><strong>Cédula:</strong> {user.cedula}</p>
-              <p><strong>Email:</strong> {user.email}</p>
-              <p><strong>Rol:</strong> {user.rol}</p>
-            </div>
-            <button id='buttonmodi' 
-              className="modify-button" 
-              onClick={() => handleModify(user.id)}
+            <span>{user.name} - {user.cedula}</span>
+            <button 
+              onClick={() => navigate(`/edit-user/${user.id}`)} 
+              className="edit-button"
             >
               Modificar
             </button>

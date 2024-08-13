@@ -1,14 +1,12 @@
-
 .user-list-container {
-    max-width: 600px;
-    margin: 20px auto;
-    padding: 20px;
     background-color: #fff;
+    padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
   }
   
-
   .user-list-title {
     font-size: 24px;
     margin-bottom: 20px;
@@ -16,9 +14,17 @@
     color: #333;
   }
   
-
+  .search-bar {
+    padding: 10px;
+    margin-bottom: 20px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+  }
+  
   .user-list {
-    list-style: none;
+    list-style-type: none;
     padding: 0;
   }
   
@@ -26,22 +32,12 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px;
-    border-bottom: 1px solid #ccc;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
   }
-
-#buttonmodi{
-    width: 20%;
-}
   
-  .user-info p {
-    margin: 0;
-    font-size: 16px;
-    color: #555;
-  }
- 
-  .modify-button {
-    padding: 8px 12px;
+  .edit-button {
+    padding: 5px 10px;
     border: none;
     border-radius: 4px;
     background-color: #888;
@@ -51,7 +47,11 @@
     transition: background-color 0.3s ease;
   }
   
-  .modify-button:hover {
+  #buttonmodi{
+    width: 20%;
+}
+
+  .edit-button:hover {
     background-color: #555;
   }
   
