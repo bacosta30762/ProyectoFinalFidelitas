@@ -1,0 +1,17 @@
+.bg-rojizo {
+  background-color: #b22222 !important; /* Color rojizo */
+}
+
+.navbar .nav-link {
+  color: #ffffff !important; /* Color de los enlaces */
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.navbar .nav-link:hover {
+  background-color: #ff6347; /* Tonalidad más clara para el hover */
+  color: #f8f8ff; /* Color de texto en hover */
+}
+
+.navbar-brand {
+  color: #ffffff !important; /* Color de la marca en el navbar */
+}
