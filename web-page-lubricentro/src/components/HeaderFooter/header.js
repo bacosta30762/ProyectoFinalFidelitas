@@ -19,7 +19,6 @@ export default function AppHeader() {
             <Nav.Link as={NavLink} to="/">
               Inicio
             </Nav.Link>
-
             <Nav.Link as={NavLink} to="/calendario">
               Disponibilidad Citas
             </Nav.Link>
