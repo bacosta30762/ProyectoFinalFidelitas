@@ -16,9 +16,6 @@ export default function AppHeader() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">
-            <Nav.Link as={NavLink} to="/">
-              Inicio
-            </Nav.Link>
             <NavDropdown title="Administrador" id="basic-nav-dropdown">
               <NavDropdown.Item as={NavLink} to="/lista-ordenes">
                 Lista de Órdenes
@@ -31,6 +28,9 @@ export default function AppHeader() {
               </NavDropdown.Item>
               <NavDropdown.Item as={NavLink} to="/ListaUsuario">
                 Lista Usuario{" "}
+              </NavDropdown.Item>
+              <NavDropdown.Item as={NavLink} to="/calendario">
+                Calendario{" "}
               </NavDropdown.Item>
             </NavDropdown>
             <NavDropdown title="Mecanico" id="basic-nav-dropdown">
@@ -61,7 +61,6 @@ export default function AppHeader() {
             <Nav.Link as={NavLink} to="/inventarios">
               Inventarios
             </Nav.Link>
-            
             <Nav.Link as={NavLink} to="/Inicio">
               Inicio Sesion
             </Nav.Link>
