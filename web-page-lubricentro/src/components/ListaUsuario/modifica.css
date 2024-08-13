@@ -1,0 +1,52 @@
+/* Estilos para la página de edición del usuario */
+.edit-user-container {
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .edit-user-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #333;
+  }
+  
+  .edit-user-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .edit-user-input {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: #f7f7f7;
+    color: #333;
+  }
+  
+  .edit-user-input:focus {
+    border-color: #888;
+    outline: none;
+  }
+  
+  .save-button {
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #888;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .save-button:hover {
+    background-color: #555;
+  }
+  

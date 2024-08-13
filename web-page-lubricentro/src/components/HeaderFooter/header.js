@@ -29,6 +29,9 @@ export default function AppHeader() {
               <NavDropdown.Item as={NavLink} to="/marketing">
                 Marketing{" "}
               </NavDropdown.Item>
+              <NavDropdown.Item as={NavLink} to="/ListaUsuario">
+                Lista Usuario{" "}
+              </NavDropdown.Item>
             </NavDropdown>
             <NavDropdown title="Mecanico" id="basic-nav-dropdown">
               <NavDropdown.Item as={NavLink} to="/reporte-retroalimentacion">
@@ -58,6 +61,7 @@ export default function AppHeader() {
             <Nav.Link as={NavLink} to="/inventarios">
               Inventarios
             </Nav.Link>
+            
             <Nav.Link as={NavLink} to="/Inicio">
               Inicio Sesion
             </Nav.Link>

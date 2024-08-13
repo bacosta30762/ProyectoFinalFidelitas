@@ -18,6 +18,8 @@ import ReportesFinancieros from "./components/Contability/ReportesFinancieros";
 import ComentariosValoraciones from "./components/Comentarios/ComentariosValoraciones";
 import Inventarios from "./components/Inventarios/ListGroup";
 import Inicio from "./components/Inicio/login.jsx";
+import ListaUsuario from "./components/ListaUsuario/lista.jsx";
+import ModificaRol from "./components/ListaUsuario/modifica.jsx";
 import Footer from "./components/HeaderFooter/Footer";
 import ListaOrdenesPage from "./pages/ListaOrdenesPage.jsx";
 import ReporteOrdenesPage from "./pages/ReporteOrdenesPage.jsx";
@@ -90,6 +92,11 @@ function App() {
         <Routes>
           <Route path="/Inicio/" element={<Inicio />} />
           <Route path="/RecuperarContra/*" element={<RecuperarContra />} />
+
+          <Route path="/ListaUsuario/*" element={<ListaUsuario/>} />
+          
+          <Route path="/edit-user/:id" element={<ModificaRol />} />
+
           <Route path="/lista-ordenes/*" element={<ListaOrdenesPage />} />
           <Route path="/reporte-ordenes/*" element={<ReporteOrdenesPage />} />
           <Route
