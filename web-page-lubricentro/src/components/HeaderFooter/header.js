@@ -22,9 +22,14 @@ export default function AppHeader() {
             <Nav.Link as={NavLink} to="/calendario">
               Disponibilidad Citas
             </Nav.Link>
-            <Nav.Link as={NavLink} to="/mechanic">
-              Mecánico
-            </Nav.Link>
+            <NavDropdown title="Mecanico" id="basic-nav-dropdown">
+              <NavDropdown.Item as={NavLink} to="/mis-ordenes">
+                Mis Órdenes
+              </NavDropdown.Item>
+              <NavDropdown.Item as={NavLink} to="/reporte-retroalimentacion">
+                Reportes de Retroalimentacion
+              </NavDropdown.Item>
+            </NavDropdown>
             <NavDropdown title="Administrador" id="basic-nav-dropdown">
               <NavDropdown.Item as={NavLink} to="/lista-ordenes">
                 Lista de Órdenes

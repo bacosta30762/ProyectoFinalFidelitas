@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const MechanicFeedbackReportModule = () => {
+const MechanicFeedbackReportPage = () => {
   // Estado para manejar las valoraciones generadas
   const [feedbackList, setFeedbackList] = useState([]);
 
@@ -116,4 +116,4 @@ const MechanicFeedbackReportModule = () => {
   );
 };
 
-export default MechanicFeedbackReportModule;
+export default MechanicFeedbackReportPage;

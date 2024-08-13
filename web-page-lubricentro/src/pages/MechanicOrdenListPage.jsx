@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const MechanicOrdenList = () => {
+const MechanicOrdenListPage = () => {
   // Nombre del mecánico para el header (puedes cambiarlo dinámicamente según sea necesario)
   const mecanicoNombre = "Luis Martínez";
 
@@ -136,4 +136,4 @@ const MechanicOrdenList = () => {
   );
 };
 
-export default MechanicOrdenList;
+export default MechanicOrdenListPage;
