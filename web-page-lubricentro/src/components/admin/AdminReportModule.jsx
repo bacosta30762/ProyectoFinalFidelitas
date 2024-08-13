@@ -61,11 +61,28 @@ const AdminReportModule = () => {
   };
 
   return (
-    <div>
-      <h1>Módulo de Reportes de Órdenes</h1>
-      <div style={{ marginBottom: "20px" }}>
+    <div style={{ padding: "20px" }}>
+      <h1 style={{ textAlign: "center", marginBottom: "20px" }}>
+        Módulo de Reportes de Órdenes
+      </h1>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          marginBottom: "20px",
+          gap: "10px",
+        }}
+      >
         <button
           onClick={() => alert("Crear reporte funcionalidad próximamente")}
+          style={{
+            padding: "10px 20px",
+            borderRadius: "4px",
+            border: "none",
+            backgroundColor: "#007bff",
+            color: "#fff",
+            cursor: "pointer",
+          }}
         >
           Crear Reporte
         </button>
@@ -74,9 +91,24 @@ const AdminReportModule = () => {
           placeholder="Buscar reportes..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          style={{ marginLeft: "10px", padding: "10px" }}
+          style={{
+            padding: "10px",
+            width: "300px",
+            borderRadius: "4px",
+            border: "1px solid #ccc",
+          }}
         />
-        <button onClick={handleSearch} style={{ marginLeft: "10px" }}>
+        <button
+          onClick={handleSearch}
+          style={{
+            padding: "10px 20px",
+            borderRadius: "4px",
+            border: "none",
+            backgroundColor: "#28a745",
+            color: "#fff",
+            cursor: "pointer",
+          }}
+        >
           Buscar
         </button>
       </div>
@@ -85,6 +117,8 @@ const AdminReportModule = () => {
           display: "grid",
           gridTemplateColumns: "repeat(7, 1fr)",
           gap: "10px",
+          alignItems: "center",
+          textAlign: "center",
         }}
       >
         <div>
@@ -123,6 +157,14 @@ const AdminReportModule = () => {
                   onClick={() =>
                     alert(`Detalles del reporte ${reporte.numeroOrden}`)
                   }
+                  style={{
+                    padding: "5px 10px",
+                    borderRadius: "4px",
+                    border: "none",
+                    backgroundColor: "#17a2b8",
+                    color: "#fff",
+                    cursor: "pointer",
+                  }}
                 >
                   Ver Detalles
                 </button>

@@ -68,21 +68,32 @@ const MechanicOrdenList = () => {
   );
 
   return (
-    <div>
-      <h1>Mecánico: {mecanicoNombre}</h1>
-      <h2>Mis Órdenes</h2>
+    <div style={{ padding: "20px" }}>
+      <h1 style={{ textAlign: "center", marginBottom: "20px" }}>
+        Mecánico: {mecanicoNombre}
+      </h1>
+      <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Mis Órdenes</h2>
       <input
         type="text"
         placeholder="Buscar órdenes..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        style={{ marginBottom: "20px", padding: "10px", width: "100%" }}
+        style={{
+          marginBottom: "20px",
+          padding: "10px",
+          width: "100%",
+          boxSizing: "border-box",
+          borderRadius: "4px",
+          border: "1px solid #ccc",
+        }}
       />
       <div
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(6, 1fr)",
           gap: "10px",
+          alignItems: "center",
+          textAlign: "center",
         }}
       >
         <div>

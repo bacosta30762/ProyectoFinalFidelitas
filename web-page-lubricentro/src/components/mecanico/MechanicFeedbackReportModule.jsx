@@ -56,10 +56,22 @@ const MechanicFeedbackReportModule = () => {
   };
 
   return (
-    <div>
-      <h1>Reporte de Retroalimentación de Clientes</h1>
-      <div style={{ marginBottom: "20px" }}>
-        <button onClick={generateFeedbackReport}>
+    <div style={{ padding: "20px" }}>
+      <h1 style={{ textAlign: "center", marginBottom: "20px" }}>
+        Reporte de Retroalimentación de Clientes
+      </h1>
+      <div style={{ marginBottom: "20px", textAlign: "center" }}>
+        <button
+          onClick={generateFeedbackReport}
+          style={{
+            padding: "10px 20px",
+            borderRadius: "4px",
+            border: "none",
+            backgroundColor: "#007bff",
+            color: "#fff",
+            cursor: "pointer",
+          }}
+        >
           Generar Reporte de Retroalimentación
         </button>
       </div>
@@ -67,8 +79,10 @@ const MechanicFeedbackReportModule = () => {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(4, 1fr)",
+            gridTemplateColumns: "1fr 1fr 2fr 3fr",
             gap: "10px",
+            alignItems: "center",
+            textAlign: "center",
           }}
         >
           <div>

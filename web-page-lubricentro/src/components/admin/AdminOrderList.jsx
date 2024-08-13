@@ -81,20 +81,31 @@ const AdminOrderList = () => {
   );
 
   return (
-    <div>
-      <h2>Lista de Órdenes</h2>
+    <div style={{ padding: "20px" }}>
+      <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
+        Lista de Órdenes
+      </h2>
       <input
         type="text"
         placeholder="Buscar órdenes..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        style={{ marginBottom: "20px", padding: "10px", width: "100%" }}
+        style={{
+          marginBottom: "20px",
+          padding: "10px",
+          width: "100%",
+          boxSizing: "border-box",
+          borderRadius: "4px",
+          border: "1px solid #ccc",
+        }}
       />
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(7, 1fr)",
+          gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr 1fr 1fr",
           gap: "10px",
+          alignItems: "center",
+          textAlign: "center",
         }}
       >
         <div>
@@ -132,6 +143,13 @@ const AdminOrderList = () => {
                   onChange={(e) =>
                     handleMecanicoSelect(orden.id, e.target.value)
                   }
+                  style={{
+                    padding: "5px",
+                    width: "100%",
+                    boxSizing: "border-box",
+                    borderRadius: "4px",
+                    border: "1px solid #ccc",
+                  }}
                 >
                   <option value="">Seleccionar Mecánico</option>
                   {mecanicos.map((mecanico, index) => (
@@ -142,7 +160,17 @@ const AdminOrderList = () => {
                 </select>
               </div>
               <div>
-                <button onClick={() => handleMecanicoAssign(orden.id)}>
+                <button
+                  onClick={() => handleMecanicoAssign(orden.id)}
+                  style={{
+                    padding: "5px 10px",
+                    borderRadius: "4px",
+                    border: "none",
+                    backgroundColor: "#007bff",
+                    color: "#fff",
+                    cursor: "pointer",
+                  }}
+                >
                   Asignar
                 </button>
               </div>
