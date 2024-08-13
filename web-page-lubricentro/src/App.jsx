@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AppHeader from "./components/HeaderFooter/header";
-import AdminPage from "./pages/AdminPage";
 import MechanicPage from "./pages/MechanicPage";
 import UserPage from "./pages/UserPage";
 import UserNotificationsPage from "./pages/UserNotificationsPage";
@@ -20,8 +19,10 @@ import ReportesFinancieros from "./components/Contability/ReportesFinancieros";
 import ComentariosValoraciones from "./components/Comentarios/ComentariosValoraciones";
 import Inventarios from "./components/Inventarios/ListGroup";
 import Inicio from "./components/Inicio/login.jsx";
-import RecuperarContra from './components/Inicio/recuperarcontra.jsx';
-import Footer from "./components/HeaderFooter/Footer"; 
+import RecuperarContra from "./components/Inicio/recuperarcontra.jsx";
+import Footer from "./components/HeaderFooter/Footer";
+import ListaOrdenesPage from "./pages/ListaOrdenesPage.jsx";
+import ReporteOrdenesPage from "./pages/ReporteOrdenesPage.jsx";
 
 function App() {
   const [ingresos] = useState([
@@ -85,9 +86,10 @@ function App() {
           <AppHeader />
         </header>
         <Routes>
-        <Route path="/Inicio/" element={<Inicio />} />
-        <Route path="/RecuperarContra/*" element={<RecuperarContra />} />
-          <Route path="/admin/*" element={<AdminPage />} />
+          <Route path="/Inicio/" element={<Inicio />} />
+          <Route path="/RecuperarContra/*" element={<RecuperarContra />} />
+          <Route path="/lista-ordenes/*" element={<ListaOrdenesPage />} />
+          <Route path="/reporte-ordenes/*" element={<ReporteOrdenesPage />} />
           <Route path="/mechanic/*" element={<MechanicPage />} />
           <Route path="/user/*" element={<UserPage />} />
           <Route path="notifications" element={<UserNotificationsPage />} />
@@ -125,8 +127,8 @@ function App() {
         </Routes>
       </Router>
       <footer id="footer">
-          <Footer />
-        </footer>
+        <Footer />
+      </footer>
     </div>
   );
 }

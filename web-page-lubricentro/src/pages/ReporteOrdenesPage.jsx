@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const AdminReportModule = () => {
+const ReporteOrdenesPage = () => {
   // Datos fake para los reportes de órdenes
   const reportes = [
     {
@@ -181,4 +181,4 @@ const AdminReportModule = () => {
   );
 };
 
-export default AdminReportModule;
+export default ReporteOrdenesPage;

@@ -19,13 +19,24 @@ export default function AppHeader() {
             <Nav.Link as={NavLink} to="/">
               Inicio
             </Nav.Link>
-            
-            <Nav.Link as={NavLink} to="/admin">
+
+            {/* <Nav.Link as={NavLink} to="/admin">
               Administrador
-            </Nav.Link>
+            </Nav.Link> */}
             <Nav.Link as={NavLink} to="/mechanic">
               Mecánico
             </Nav.Link>
+            <NavDropdown title="Administrador" id="basic-nav-dropdown">
+              <NavDropdown.Item as={NavLink} to="/lista-ordenes">
+                Lista de Órdenes
+              </NavDropdown.Item>
+              <NavDropdown.Item as={NavLink} to="/reporte-ordenes">
+                Reportes de Órdenes
+              </NavDropdown.Item>
+              <NavDropdown.Item as={NavLink} to="/marketing">
+                Marketing{" "}
+              </NavDropdown.Item>
+            </NavDropdown>
             <NavDropdown title="Contabilidad" id="basic-nav-dropdown">
               <NavDropdown.Item as={NavLink} to="/ingresos">
                 Ingresos

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const AdminOrderList = () => {
+const ListaOrdenesPage = () => {
   // Datos fake de mecánicos
   const mecanicos = [
     "Luis Martínez",
@@ -187,4 +187,4 @@ const AdminOrderList = () => {
   );
 };
 
-export default AdminOrderList;
+export default ListaOrdenesPage;
