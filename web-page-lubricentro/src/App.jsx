@@ -22,6 +22,7 @@ import Inventarios from "./components/Inventarios/ListGroup";
 import Inicio from "./components/Inicio/login.jsx";
 import RecuperarContra from './components/Inicio/recuperarcontra.jsx';
 import Footer from "./components/HeaderFooter/Footer"; 
+import Calendario from "./components/Planificacion/Calendar"; 
 
 function App() {
   const [ingresos] = useState([
@@ -122,6 +123,7 @@ function App() {
             element={<ComentariosValoraciones />}
           />
           <Route path="/inventarios" element={<Inventarios />} />
+          <Route path="/calendario" element={<Calendario />} />
         </Routes>
       </Router>
       <footer id="footer">
