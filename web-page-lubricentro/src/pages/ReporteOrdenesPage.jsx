@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 
 const ReporteOrdenesPage = () => {
-  // Datos fake para los reportes de órdenes
   const reportes = [
+    // Datos fake para los reportes de órdenes
     {
       id: 1,
       numeroOrden: "001",
@@ -43,8 +43,10 @@ const ReporteOrdenesPage = () => {
 
   const [filteredReportes, setFilteredReportes] = useState(reportes);
   const [searchTerm, setSearchTerm] = useState("");
+  const [showMenu, setShowMenu] = useState(false);
+  const [fechaDesde, setFechaDesde] = useState("");
+  const [fechaHasta, setFechaHasta] = useState("");
 
-  // Función para buscar reportes
   const handleSearch = () => {
     const filtered = reportes.filter(
       (reporte) =>
@@ -60,6 +62,16 @@ const ReporteOrdenesPage = () => {
     setFilteredReportes(filtered);
   };
 
+  const handleExportPDF = () => {
+    alert(`Exportar en PDF desde ${fechaDesde} hasta ${fechaHasta}`);
+  };
+
+  const handleExportCSV = () => {
+    alert(`Exportar en CSV desde ${fechaDesde} hasta ${fechaHasta}`);
+  };
+
+  const today = new Date().toISOString().split("T")[0]; // Fecha actual en formato YYYY-MM-DD
+
   return (
     <div style={{ padding: "20px" }}>
       <h1 style={{ textAlign: "center", marginBottom: "20px" }}>
@@ -74,7 +86,7 @@ const ReporteOrdenesPage = () => {
         }}
       >
         <button
-          onClick={() => alert("Crear reporte funcionalidad próximamente")}
+          onClick={() => setShowMenu(!showMenu)}
           style={{
             padding: "10px 20px",
             borderRadius: "4px",
@@ -112,6 +124,84 @@ const ReporteOrdenesPage = () => {
           Buscar
         </button>
       </div>
+
+      {showMenu && (
+        <div
+          style={{
+            marginBottom: "20px",
+            padding: "20px",
+            border: "1px solid #ccc",
+            borderRadius: "4px",
+            backgroundColor: "#f9f9f9",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "10px",
+          }}
+        >
+          <h3>Crear Reporte</h3>
+          <div style={{ display: "flex", gap: "10px" }}>
+            <div>
+              <label>Desde:</label>
+              <input
+                type="date"
+                value={fechaDesde}
+                onChange={(e) => setFechaDesde(e.target.value)}
+                max={today} // No permitir fechas a futuro
+                style={{
+                  padding: "5px",
+                  borderRadius: "4px",
+                  border: "1px solid #ccc",
+                }}
+              />
+            </div>
+            <div>
+              <label>Hasta:</label>
+              <input
+                type="date"
+                value={fechaHasta}
+                onChange={(e) => setFechaHasta(e.target.value)}
+                max={today} // No permitir fechas a futuro
+                style={{
+                  padding: "5px",
+                  borderRadius: "4px",
+                  border: "1px solid #ccc",
+                }}
+              />
+            </div>
+          </div>
+          <div style={{ marginTop: "20px" }}>
+            <button
+              onClick={handleExportPDF}
+              style={{
+                padding: "10px 20px",
+                borderRadius: "4px",
+                border: "none",
+                backgroundColor: "#dc3545",
+                color: "#fff",
+                cursor: "pointer",
+                marginRight: "10px",
+              }}
+            >
+              Exportar PDF
+            </button>
+            <button
+              onClick={handleExportCSV}
+              style={{
+                padding: "10px 20px",
+                borderRadius: "4px",
+                border: "none",
+                backgroundColor: "#17a2b8",
+                color: "#fff",
+                cursor: "pointer",
+              }}
+            >
+              Exportar CSV
+            </button>
+          </div>
+        </div>
+      )}
+
       <div
         style={{
           display: "grid",
