@@ -26,9 +26,6 @@ export default function AppHeader() {
             <Nav.Link as={NavLink} to="/mechanic">
               Mecánico
             </Nav.Link>
-            <Nav.Link as={NavLink} to="/feedback">
-              Retroalimentación
-            </Nav.Link>
             <NavDropdown title="Contabilidad" id="basic-nav-dropdown">
               <NavDropdown.Item as={NavLink} to="/ingresos">
                 Ingresos
