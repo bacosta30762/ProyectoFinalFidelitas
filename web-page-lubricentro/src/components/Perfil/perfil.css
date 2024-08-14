@@ -1,0 +1,71 @@
+.profile-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: auto;
+    margin-top: 20px;
+  }
+  
+  .profile-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #333;
+  }
+  
+  .profile-info {
+    margin-bottom: 20px;
+  }
+  
+  .profile-field {
+    margin-bottom: 10px;
+  }
+  
+  .profile-field label {
+    font-weight: bold;
+  }
+  
+  .profile-field p {
+    margin: 5px 0;
+    color: #333;
+  }
+  
+  .contact-method {
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+  }
+  
+  .contact-method h3 {
+    margin-bottom: 10px;
+    color: #333;
+  }
+  
+  .contact-method p {
+    font-size: 16px;
+    color: #555;
+  }
+  
+  .edit-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: #2e353c;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+    display: block;
+    margin-right: auto;
+  }
+  
+  .edit-button:hover {
+    background-color: #a5a7aa;
+  }
+
+  #botonmodi{
+    width: 20%;
+  }
+  

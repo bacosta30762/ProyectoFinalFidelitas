@@ -27,6 +27,8 @@ import RecuperarContra from "./components/Inicio/recuperarcontra.jsx";
 import Calendario from "./components/Planificacion/Calendar";
 import MechanicOrdenListPage from "./pages/MechanicOrdenListPage.jsx";
 import MechanicFeedbackReportPage from "./pages/MechanicFeedbackReportPage.jsx";
+import Perfil from "./components/Perfil/perfil.jsx";
+import Perfileditar from "./components/Perfil/perfileditar.jsx";
 
 function App() {
   const [ingresos] = useState([
@@ -94,9 +96,9 @@ function App() {
           <Route path="/RecuperarContra/*" element={<RecuperarContra />} />
 
           <Route path="/ListaUsuario/*" element={<ListaUsuario/>} />
-          
+          <Route path="/Perfil/" element={<Perfil/>} />
           <Route path="/edit-user/:id" element={<ModificaRol />} />
-
+          <Route path="/perfileditar/:id" element={<Perfileditar />} />
           <Route path="/lista-ordenes/*" element={<ListaOrdenesPage />} />
           <Route path="/reporte-ordenes/*" element={<ReporteOrdenesPage />} />
           <Route

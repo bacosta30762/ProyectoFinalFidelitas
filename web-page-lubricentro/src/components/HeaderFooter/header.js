@@ -4,6 +4,8 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Navbar from "react-bootstrap/Navbar";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
 import "./AppHeader.css";
 
 export default function AppHeader() {
@@ -63,6 +65,9 @@ export default function AppHeader() {
             </Nav.Link>
             <Nav.Link as={NavLink} to="/Inicio">
               Inicio Sesion
+            </Nav.Link>
+            <Nav.Link as={NavLink} to="/Perfil">
+              <FontAwesomeIcon icon={faUser} className="profile-icon" />
             </Nav.Link>
           </Nav>
         </Navbar.Collapse>

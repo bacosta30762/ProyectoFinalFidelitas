@@ -47,8 +47,9 @@
     transition: background-color 0.3s ease;
   }
   
-  #buttonmodi{
+  #listbut{
     width: 20%;
+    margin-left: auto;
 }
 
   .edit-button:hover {

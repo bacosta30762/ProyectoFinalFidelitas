@@ -37,7 +37,7 @@ const UserList = () => {
         {filteredUsers.map(user => (
           <li key={user.id} className="user-list-item">
             <span>{user.name} - {user.cedula}</span>
-            <button 
+            <button id='listbut' 
               onClick={() => navigate(`/edit-user/${user.id}`)} 
               className="edit-button"
             >
