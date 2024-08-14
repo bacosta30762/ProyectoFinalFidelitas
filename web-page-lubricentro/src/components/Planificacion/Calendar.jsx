@@ -82,16 +82,18 @@ const Calendar = () => {
           filterDate={(date) => date.getDay() >= 1 && date.getDay() <= 5} // Lunes a Viernes
           inline
         />
-        {selectedDate && !blockedDates.has(selectedDate.toDateString()) && (
-          <Button variant="danger" onClick={handleBlockDate} className="mt-3">
-            Bloquear Día
-          </Button>
-        )}
-        {selectedDate && blockedDates.has(selectedDate.toDateString()) && (
-          <Button variant="success" onClick={handleUnblockDate} className="mt-3">
-            Desbloquear Día
-          </Button>
-        )}
+        <div className="button-container">
+          {selectedDate && !blockedDates.has(selectedDate.toDateString()) && (
+            <Button variant="danger" onClick={handleBlockDate} className="mt-3">
+              Bloquear Día
+            </Button>
+          )}
+          {selectedDate && blockedDates.has(selectedDate.toDateString()) && (
+            <Button variant="success" onClick={handleUnblockDate} className="mt-3">
+              Desbloquear Día
+            </Button>
+          )}
+        </div>
       </div>
 
       <div className="calendar-right">
