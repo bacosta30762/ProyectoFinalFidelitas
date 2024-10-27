@@ -4,6 +4,7 @@ import orderReducer from "./reducers/orderReducer";
 import reportReducer from "./reducers/reportReducer";
 import newsletterReducer from "./reducers/newsletterReducer";
 import userReducer from "./reducers/userReducer";
+import calendarReducer from "./reducers/calendarReducer";
 
 const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ const store = configureStore({
     reports: reportReducer,
     newsletters: newsletterReducer,
     users: userReducer,
+    calendar: calendarReducer,
   },
 });
 
