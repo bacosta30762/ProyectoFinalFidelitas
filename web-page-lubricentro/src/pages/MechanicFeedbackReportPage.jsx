@@ -1,48 +1,12 @@
-import React, { useState } from "react";
+// src/MechanicFeedbackReportPage.js
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { generateFeedbackReport } from "../redux/actions/feedbackActions";
 
 const MechanicFeedbackReportPage = () => {
-  // Estado para manejar las valoraciones generadas
-  const [feedbackList, setFeedbackList] = useState([]);
+  const dispatch = useDispatch();
+  const feedbackList = useSelector((state) => state.feedback.feedbackList);
 
-  // Función para generar una lista fake de valoraciones
-  const generateFeedbackReport = () => {
-    const fakeFeedback = [
-      {
-        id: 1,
-        cliente: "Juan Pérez",
-        valoracion: 5,
-        comentario: "Excelente servicio, muy profesional.",
-      },
-      {
-        id: 2,
-        cliente: "María López",
-        valoracion: 4,
-        comentario: "Buen trabajo, pero la entrega fue un poco tardía.",
-      },
-      {
-        id: 3,
-        cliente: "Carlos Gómez",
-        valoracion: 3,
-        comentario: "Servicio aceptable, pero esperaba más detalles.",
-      },
-      {
-        id: 4,
-        cliente: "Ana Fernández",
-        valoracion: 5,
-        comentario: "Trabajo impecable, volveré sin dudarlo.",
-      },
-      {
-        id: 5,
-        cliente: "Miguel Hernández",
-        valoracion: 2,
-        comentario: "El trabajo fue realizado, pero con algunos problemas.",
-      },
-    ];
-
-    setFeedbackList(fakeFeedback);
-  };
-
-  // Función para renderizar estrellas según la valoración
   const renderStars = (valoracion) => {
     const stars = [];
     for (let i = 1; i <= 5; i++) {
@@ -62,7 +26,7 @@ const MechanicFeedbackReportPage = () => {
       </h1>
       <div style={{ marginBottom: "20px", textAlign: "center" }}>
         <button
-          onClick={generateFeedbackReport}
+          onClick={() => dispatch(generateFeedbackReport())}
           style={{
             padding: "10px 20px",
             borderRadius: "4px",
