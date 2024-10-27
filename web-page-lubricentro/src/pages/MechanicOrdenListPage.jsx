@@ -1,11 +1,17 @@
-import React, { useState } from "react";
+// src/MechanicOrdenListPage.js
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setOrders, filterOrders } from "../redux/actions/reportOrderActions";
 
 const MechanicOrdenListPage = () => {
-  // Nombre del mecánico para el header (puedes cambiarlo dinámicamente según sea necesario)
-  const mecanicoNombre = "Luis Martínez";
+  const dispatch = useDispatch();
+  const filteredOrders = useSelector((state) => state.orders.filteredOrders);
+  const searchTerm = useSelector((state) => state.orders.searchTerm);
 
-  // Datos fake para las órdenes
-  const ordenes = [
+  const mecanicoNombre = "Luis Martínez"; // Nombre del mecánico
+
+  // Datos iniciales de las órdenes
+  const initialOrders = [
     {
       id: 1,
       numeroOrden: "001",
@@ -48,24 +54,14 @@ const MechanicOrdenListPage = () => {
     },
   ];
 
-  // Filtrar las órdenes para mostrar solo las asociadas al mecánico actual
-  const misOrdenes = ordenes.filter(
-    (orden) => orden.mecanico === mecanicoNombre
-  );
+  useEffect(() => {
+    dispatch(setOrders(initialOrders));
+    dispatch(filterOrders(mecanicoNombre, ""));
+  }, [dispatch, mecanicoNombre]);
 
-  // Estado para la búsqueda
-  const [searchTerm, setSearchTerm] = useState("");
-
-  // Función para filtrar las órdenes según el término de búsqueda
-  const filteredOrdenes = misOrdenes.filter(
-    (orden) =>
-      orden.numeroOrden.includes(searchTerm) ||
-      orden.placaVehiculo.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      orden.servicio.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      orden.cliente.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      orden.monto.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      orden.fecha.includes(searchTerm)
-  );
+  const handleSearchChange = (e) => {
+    dispatch(filterOrders(mecanicoNombre, e.target.value));
+  };
 
   return (
     <div style={{ padding: "20px" }}>
@@ -77,7 +73,7 @@ const MechanicOrdenListPage = () => {
         type="text"
         placeholder="Buscar órdenes..."
         value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
+        onChange={handleSearchChange}
         style={{
           marginBottom: "20px",
           padding: "10px",
@@ -115,8 +111,8 @@ const MechanicOrdenListPage = () => {
           <strong>Fecha</strong>
         </div>
 
-        {filteredOrdenes.length > 0 ? (
-          filteredOrdenes.map((orden) => (
+        {filteredOrders.length > 0 ? (
+          filteredOrders.map((orden) => (
             <React.Fragment key={orden.id}>
               <div>{orden.numeroOrden}</div>
               <div>{orden.placaVehiculo}</div>

@@ -36,10 +36,10 @@ export default function AppHeader() {
               </NavDropdown.Item>
             </NavDropdown>
             <NavDropdown title="Mecanico" id="basic-nav-dropdown">
-              <NavDropdown.Item as={NavLink} to="/reporte-retroalimentacion">
+              <NavDropdown.Item as={NavLink} to="/mis-ordenes">
                 Mis Órdenes
               </NavDropdown.Item>
-              <NavDropdown.Item as={NavLink} to="/mis-ordenes">
+              <NavDropdown.Item as={NavLink} to="/reporte-retroalimentacion">
                 Reportes de Retroalimentacion
               </NavDropdown.Item>
             </NavDropdown>

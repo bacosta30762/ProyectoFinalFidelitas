@@ -103,13 +103,10 @@ function App() {
           <Route path="/perfileditar/:id" element={<Perfileditar />} />
           <Route path="/lista-ordenes/*" element={<ListaOrdenesPage />} />
           <Route path="/reporte-ordenes/*" element={<ReporteOrdenesPage />} />
-          <Route
-            path="/mis-ordenes/*"
-            element={<MechanicFeedbackReportPage />}
-          />
+          <Route path="/mis-ordenes/*" element={<MechanicOrdenListPage />} />
           <Route
             path="/reporte-retroalimentacion/*"
-            element={<MechanicOrdenListPage />}
+            element={<MechanicFeedbackReportPage />}
           />
           <Route path="/user/*" element={<UserPage />} />
           <Route path="notifications" element={<UserNotificationsPage />} />
