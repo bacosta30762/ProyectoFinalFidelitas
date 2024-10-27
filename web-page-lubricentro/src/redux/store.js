@@ -10,6 +10,7 @@ import feedbackReducer from "./reducers/feedbackReducer";
 import financialReportReducer from "./reducers/financialReportReducer";
 import ingresosReducer from "./reducers/ingresosReducer";
 import { categoriesReducer } from "./reducers/categoriesReducer";
+import loginReducer from "./reducers/loginReducer";
 
 const store = configureStore({
   reducer: {
@@ -23,6 +24,7 @@ const store = configureStore({
     financialReport: financialReportReducer,
     ingresos: ingresosReducer,
     categoriesState: categoriesReducer,
+    loginState: loginReducer,
   },
 });
 
