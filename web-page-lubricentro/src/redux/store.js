@@ -7,6 +7,7 @@ import userReducer from "./reducers/userReducer";
 import calendarReducer from "./reducers/calendarReducer";
 import reportOrderReducer from "./reducers/reportOrderReducer";
 import feedbackReducer from "./reducers/feedbackReducer";
+import financialReportReducer from "./reducers/financialReportReducer";
 
 const store = configureStore({
   reducer: {
@@ -17,6 +18,7 @@ const store = configureStore({
     calendar: calendarReducer,
     orders: reportOrderReducer,
     feedback: feedbackReducer,
+    financialReport: financialReportReducer,
   },
 });
 
