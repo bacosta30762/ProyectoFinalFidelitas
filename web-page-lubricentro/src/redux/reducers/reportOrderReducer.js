@@ -1,5 +1,4 @@
 // src/redux/reducers/reportOrderReducer.js
-
 import { SET_ORDERS, FILTER_ORDERS } from "../actions/reportOrderActions";
 
 const initialState = {
@@ -7,6 +6,9 @@ const initialState = {
   filteredOrders: [],
   searchTerm: "",
 };
+
+const safeToLowerCase = (value) =>
+  typeof value === "string" ? value.toLowerCase() : "";
 
 const reportOrderReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -24,12 +26,18 @@ const reportOrderReducer = (state = initialState, action) => {
         .filter(
           (order) =>
             order.numeroOrden.includes(searchTerm) ||
-            order.placaVehiculo
-              .toLowerCase()
-              .includes(searchTerm.toLowerCase()) ||
-            order.servicio.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            order.cliente.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            order.monto.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            safeToLowerCase(order.placaVehiculo).includes(
+              safeToLowerCase(searchTerm)
+            ) ||
+            safeToLowerCase(order.servicio).includes(
+              safeToLowerCase(searchTerm)
+            ) ||
+            safeToLowerCase(order.cliente).includes(
+              safeToLowerCase(searchTerm)
+            ) ||
+            safeToLowerCase(`${order.monto}`).includes(
+              safeToLowerCase(searchTerm)
+            ) ||
             order.fecha.includes(searchTerm)
         );
       return { ...state, searchTerm, filteredOrders };

@@ -18,7 +18,7 @@ const store = configureStore({
     newsletters: newsletterReducer,
     users: userReducer,
     calendar: calendarReducer,
-    orders: reportOrderReducer,
+    ordersReort: reportOrderReducer,
     feedback: feedbackReducer,
     financialReport: financialReportReducer,
     ingresos: ingresosReducer,
