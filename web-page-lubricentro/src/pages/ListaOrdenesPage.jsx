@@ -1,84 +1,71 @@
-import React, { useState } from "react";
+// src/ListaOrdenesPage.js
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setOrders,
+  assignMechanic,
+  filterOrders,
+} from "../redux/actions/orderActions";
+
+const mecanicos = [
+  "Luis Martínez",
+  "Carlos Ruiz",
+  "Fernando Torres",
+  "Miguel Hernández",
+  "Ana Fernández",
+];
+
+const initialOrders = [
+  {
+    id: 1,
+    numeroOrden: "001",
+    placaVehiculo: "HGT652",
+    servicio: "Cambio de aceite",
+    cliente: "Juan Pérez",
+    mecanicoAsignado: "",
+  },
+  {
+    id: 2,
+    numeroOrden: "002",
+    placaVehiculo: "WFT584",
+    servicio: "Revisión de frenos",
+    cliente: "María López",
+    mecanicoAsignado: "",
+  },
+  {
+    id: 3,
+    numeroOrden: "003",
+    placaVehiculo: "GTY474",
+    servicio: "Alineación y balanceo",
+    cliente: "Carlos Gómez",
+    mecanicoAsignado: "",
+  },
+  {
+    id: 4,
+    numeroOrden: "004",
+    placaVehiculo: "FTR845",
+    servicio: "Cambio de batería",
+    cliente: "Ana Fernández",
+    mecanicoAsignado: "",
+  },
+];
 
 const ListaOrdenesPage = () => {
-  // Datos fake de mecánicos
-  const mecanicos = [
-    "Luis Martínez",
-    "Carlos Ruiz",
-    "Fernando Torres",
-    "Miguel Hernández",
-    "Ana Fernández",
-  ];
+  const dispatch = useDispatch();
+  const orders = useSelector((state) => state.orders.filteredOrders);
+  const searchTerm = useSelector((state) => state.orders.searchTerm);
 
-  // Datos fake para las órdenes
-  const ordenes = [
-    {
-      id: 1,
-      numeroOrden: "001",
-      placaVehiculo: "HGT652",
-      servicio: "Cambio de aceite",
-      cliente: "Juan Pérez",
-      mecanicoAsignado: "",
-    },
-    {
-      id: 2,
-      numeroOrden: "002",
-      placaVehiculo: "WFT584",
-      servicio: "Revisión de frenos",
-      cliente: "María López",
-      mecanicoAsignado: "",
-    },
-    {
-      id: 3,
-      numeroOrden: "003",
-      placaVehiculo: "GTY474",
-      servicio: "Alineación y balanceo",
-      cliente: "Carlos Gómez",
-      mecanicoAsignado: "",
-    },
-    {
-      id: 4,
-      numeroOrden: "004",
-      placaVehiculo: "FTR845",
-      servicio: "Cambio de batería",
-      cliente: "Ana Fernández",
-      mecanicoAsignado: "",
-    },
-  ];
+  useEffect(() => {
+    dispatch(setOrders(initialOrders));
+  }, [dispatch]);
 
-  // Estado para manejar las órdenes y la búsqueda
-  const [ordenesConMecanicos, setOrdenesConMecanicos] = useState(ordenes);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedMecanicos, setSelectedMecanicos] = useState({});
-
-  // Función para manejar el cambio de mecánico seleccionado
-  const handleMecanicoSelect = (id, mecanico) => {
-    setSelectedMecanicos({
-      ...selectedMecanicos,
-      [id]: mecanico,
-    });
+  const handleMecanicoSelect = (orderId, mecanico) => {
+    dispatch(assignMechanic(orderId, mecanico));
   };
 
-  // Función para confirmar la asignación del mecánico
-  const handleMecanicoAssign = (id) => {
-    const mecanico = selectedMecanicos[id];
-    if (mecanico) {
-      setOrdenesConMecanicos(
-        ordenesConMecanicos.map((orden) =>
-          orden.id === id ? { ...orden, mecanicoAsignado: mecanico } : orden
-        )
-      );
-    }
+  const handleSearch = (e) => {
+    dispatch(filterOrders(e.target.value));
   };
-
-  // Filtrar las órdenes según el término de búsqueda
-  const filteredOrdenes = ordenesConMecanicos.filter(
-    (orden) =>
-      orden.numeroOrden.includes(searchTerm) ||
-      orden.placaVehiculo.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      orden.servicio.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      orden.cliente.toLowerCase().includes(searchTerm.toLowerCase())
-  );
 
   return (
     <div style={{ padding: "20px" }}>
@@ -89,7 +76,7 @@ const ListaOrdenesPage = () => {
         type="text"
         placeholder="Buscar órdenes..."
         value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
+        onChange={handleSearch}
         style={{
           marginBottom: "20px",
           padding: "10px",
@@ -102,12 +89,13 @@ const ListaOrdenesPage = () => {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr 1fr 1fr",
+          gridTemplateColumns: "repeat(6, 1fr)", // 6 columnas (sin "Acciones")
           gap: "10px",
           alignItems: "center",
           textAlign: "center",
         }}
       >
+        {/* Encabezados */}
         <div>
           <strong>Número de Orden</strong>
         </div>
@@ -124,24 +112,22 @@ const ListaOrdenesPage = () => {
           <strong>Asignar Mecánico</strong>
         </div>
         <div>
-          <strong>Acciones</strong>
-        </div>
-        <div>
           <strong>Mecánico Asignado</strong>
         </div>
 
-        {filteredOrdenes.length > 0 ? (
-          filteredOrdenes.map((orden) => (
-            <React.Fragment key={orden.id}>
-              <div>{orden.numeroOrden}</div>
-              <div>{orden.placaVehiculo}</div>
-              <div>{orden.servicio}</div>
-              <div>{orden.cliente}</div>
+        {/* Órdenes */}
+        {orders.length > 0 ? (
+          orders.map((order) => (
+            <React.Fragment key={order.id}>
+              <div>{order.numeroOrden}</div>
+              <div>{order.placaVehiculo}</div>
+              <div>{order.servicio}</div>
+              <div>{order.cliente}</div>
               <div>
                 <select
-                  value={selectedMecanicos[orden.id] || ""}
+                  value={order.mecanicoAsignado || ""}
                   onChange={(e) =>
-                    handleMecanicoSelect(orden.id, e.target.value)
+                    handleMecanicoSelect(order.id, e.target.value)
                   }
                   style={{
                     padding: "5px",
@@ -159,26 +145,11 @@ const ListaOrdenesPage = () => {
                   ))}
                 </select>
               </div>
-              <div>
-                <button
-                  onClick={() => handleMecanicoAssign(orden.id)}
-                  style={{
-                    padding: "5px 10px",
-                    borderRadius: "4px",
-                    border: "none",
-                    backgroundColor: "#007bff",
-                    color: "#fff",
-                    cursor: "pointer",
-                  }}
-                >
-                  Asignar
-                </button>
-              </div>
-              <div>{orden.mecanicoAsignado || "No asignado"}</div>
+              <div>{order.mecanicoAsignado || "No asignado"}</div>
             </React.Fragment>
           ))
         ) : (
-          <div style={{ gridColumn: "span 7", textAlign: "center" }}>
+          <div style={{ gridColumn: "span 6", textAlign: "center" }}>
             No se encontraron órdenes.
           </div>
         )}
