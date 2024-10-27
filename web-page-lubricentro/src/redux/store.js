@@ -8,6 +8,7 @@ import calendarReducer from "./reducers/calendarReducer";
 import reportOrderReducer from "./reducers/reportOrderReducer";
 import feedbackReducer from "./reducers/feedbackReducer";
 import financialReportReducer from "./reducers/financialReportReducer";
+import ingresosReducer from "./reducers/ingresosReducer";
 
 const store = configureStore({
   reducer: {
@@ -19,6 +20,7 @@ const store = configureStore({
     orders: reportOrderReducer,
     feedback: feedbackReducer,
     financialReport: financialReportReducer,
+    ingresos: ingresosReducer,
   },
 });
 
