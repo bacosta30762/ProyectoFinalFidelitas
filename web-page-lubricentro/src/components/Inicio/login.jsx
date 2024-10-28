@@ -7,6 +7,7 @@ import {
   loginSuccess,
   loginFailure,
 } from "../../redux/actions/loginActions";
+import { API_ROUTES } from "../../api";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./login.css";
 
@@ -15,23 +16,43 @@ const Login = () => {
   const dispatch = useDispatch();
   const { loading, error } = useSelector((state) => state.loginState);
 
-  const [credentials, setCredentials] = useState({ cedula: "", password: "" });
+  const [credentials, setCredentials] = useState({ correo: "", password: "" });
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setCredentials({ ...credentials, [name]: value });
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    dispatch(loginRequest(credentials));
+    dispatch(loginRequest());
 
-    // Simular autenticación para esta demo
-    if (credentials.cedula === "123" && credentials.password === "admin") {
-      dispatch(loginSuccess({ cedula: credentials.cedula }));
-      navigate("/");
-    } else {
-      dispatch(loginFailure("Cédula o contraseña incorrecta"));
+    try {
+      const response = await fetch(`${API_ROUTES.users}/LoginAdmin`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          email: credentials.correo,
+          password: credentials.password,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        dispatch(
+          loginFailure(errorData.errors || "Cédula o contraseña incorrecta")
+        );
+      } else {
+        const data = await response.json();
+        localStorage.setItem("token", data.token); // Guardar token en localStorage
+        dispatch(loginSuccess(data));
+        navigate("/"); // Redirigir al inicio
+      }
+    } catch (error) {
+      dispatch(loginFailure("Error en la conexión."));
     }
   };
 
@@ -45,9 +66,9 @@ const Login = () => {
       <form className="login-form" onSubmit={handleLogin}>
         <input
           type="text"
-          name="cedula"
-          placeholder="Cédula"
-          value={credentials.cedula}
+          name="correo"
+          placeholder="Correo"
+          value={credentials.correo}
           onChange={handleInputChange}
           className="login-input"
         />
