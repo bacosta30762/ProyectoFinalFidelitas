@@ -1,65 +1,61 @@
-import React, { useState } from "react";
+// src/ReporteOrdenesPage.js
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setReports, filterReports } from "../redux/actions/reportActions";
+
+const initialReports = [
+  {
+    id: 1,
+    numeroOrden: "001",
+    placaVehiculo: "WTH459",
+    servicio: "Cambio de aceite",
+    cliente: "Juan Pérez",
+    mecanico: "Luis Martínez",
+    estado: "Asignado",
+  },
+  {
+    id: 2,
+    numeroOrden: "002",
+    placaVehiculo: "HHT848",
+    servicio: "Revisión de frenos",
+    cliente: "María López",
+    mecanico: "Carlos Ruiz",
+    estado: "En Progreso",
+  },
+  {
+    id: 3,
+    numeroOrden: "003",
+    placaVehiculo: "KYT972",
+    servicio: "Alineación y balanceo",
+    cliente: "Carlos Gómez",
+    mecanico: "Fernando Torres",
+    estado: "Terminado",
+  },
+  {
+    id: 4,
+    numeroOrden: "004",
+    placaVehiculo: "KHV875",
+    servicio: "Cambio de batería",
+    cliente: "Ana Fernández",
+    mecanico: "Miguel Hernández",
+    estado: "Terminado",
+  },
+];
 
 const ReporteOrdenesPage = () => {
-  const reportes = [
-    // Datos fake para los reportes de órdenes
-    {
-      id: 1,
-      numeroOrden: "001",
-      placaVehiculo: "WTH459",
-      servicio: "Cambio de aceite",
-      cliente: "Juan Pérez",
-      mecanico: "Luis Martínez",
-      estado: "Asignado",
-    },
-    {
-      id: 2,
-      numeroOrden: "002",
-      placaVehiculo: "HHT848",
-      servicio: "Revisión de frenos",
-      cliente: "María López",
-      mecanico: "Carlos Ruiz",
-      estado: "En Progreso",
-    },
-    {
-      id: 3,
-      numeroOrden: "003",
-      placaVehiculo: "KYT972",
-      servicio: "Alineación y balanceo",
-      cliente: "Carlos Gómez",
-      mecanico: "Fernando Torres",
-      estado: "Terminado",
-    },
-    {
-      id: 4,
-      numeroOrden: "004",
-      placaVehiculo: "KHV875",
-      servicio: "Cambio de batería",
-      cliente: "Ana Fernández",
-      mecanico: "Miguel Hernández",
-      estado: "Terminado",
-    },
-  ];
-
-  const [filteredReportes, setFilteredReportes] = useState(reportes);
-  const [searchTerm, setSearchTerm] = useState("");
+  const dispatch = useDispatch();
+  const reports = useSelector((state) => state.reports.filteredReports);
+  const searchTerm = useSelector((state) => state.reports.searchTerm);
   const [showMenu, setShowMenu] = useState(false);
   const [fechaDesde, setFechaDesde] = useState("");
   const [fechaHasta, setFechaHasta] = useState("");
 
-  const handleSearch = () => {
-    const filtered = reportes.filter(
-      (reporte) =>
-        reporte.numeroOrden.includes(searchTerm) ||
-        reporte.placaVehiculo
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase()) ||
-        reporte.servicio.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        reporte.cliente.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        reporte.mecanico.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        reporte.estado.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setFilteredReportes(filtered);
+  useEffect(() => {
+    dispatch(setReports(initialReports));
+  }, [dispatch]);
+
+  const handleSearch = (e) => {
+    dispatch(filterReports(e.target.value));
   };
 
   const handleExportPDF = () => {
@@ -70,13 +66,14 @@ const ReporteOrdenesPage = () => {
     alert(`Exportar en CSV desde ${fechaDesde} hasta ${fechaHasta}`);
   };
 
-  const today = new Date().toISOString().split("T")[0]; // Fecha actual en formato YYYY-MM-DD
+  const today = new Date().toISOString().split("T")[0];
 
   return (
     <div style={{ padding: "20px" }}>
       <h1 style={{ textAlign: "center", marginBottom: "20px" }}>
         Módulo de Reportes de Órdenes
       </h1>
+
       <div
         style={{
           display: "flex",
@@ -102,7 +99,7 @@ const ReporteOrdenesPage = () => {
           type="text"
           placeholder="Buscar reportes..."
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={handleSearch}
           style={{
             padding: "10px",
             width: "300px",
@@ -110,19 +107,6 @@ const ReporteOrdenesPage = () => {
             border: "1px solid #ccc",
           }}
         />
-        <button
-          onClick={handleSearch}
-          style={{
-            padding: "10px 20px",
-            borderRadius: "4px",
-            border: "none",
-            backgroundColor: "#28a745",
-            color: "#fff",
-            cursor: "pointer",
-          }}
-        >
-          Buscar
-        </button>
       </div>
 
       {showMenu && (
@@ -147,7 +131,7 @@ const ReporteOrdenesPage = () => {
                 type="date"
                 value={fechaDesde}
                 onChange={(e) => setFechaDesde(e.target.value)}
-                max={today} // No permitir fechas a futuro
+                max={today}
                 style={{
                   padding: "5px",
                   borderRadius: "4px",
@@ -161,7 +145,7 @@ const ReporteOrdenesPage = () => {
                 type="date"
                 value={fechaHasta}
                 onChange={(e) => setFechaHasta(e.target.value)}
-                max={today} // No permitir fechas a futuro
+                max={today}
                 style={{
                   padding: "5px",
                   borderRadius: "4px",
@@ -233,19 +217,19 @@ const ReporteOrdenesPage = () => {
           <strong>Acciones</strong>
         </div>
 
-        {filteredReportes.length > 0 ? (
-          filteredReportes.map((reporte) => (
-            <React.Fragment key={reporte.id}>
-              <div>{reporte.numeroOrden}</div>
-              <div>{reporte.placaVehiculo}</div>
-              <div>{reporte.servicio}</div>
-              <div>{reporte.cliente}</div>
-              <div>{reporte.mecanico}</div>
-              <div>{reporte.estado}</div>
+        {reports.length > 0 ? (
+          reports.map((report) => (
+            <React.Fragment key={report.id}>
+              <div>{report.numeroOrden}</div>
+              <div>{report.placaVehiculo}</div>
+              <div>{report.servicio}</div>
+              <div>{report.cliente}</div>
+              <div>{report.mecanico}</div>
+              <div>{report.estado}</div>
               <div>
                 <button
                   onClick={() =>
-                    alert(`Detalles del reporte ${reporte.numeroOrden}`)
+                    alert(`Detalles del reporte ${report.numeroOrden}`)
                   }
                   style={{
                     padding: "5px 10px",

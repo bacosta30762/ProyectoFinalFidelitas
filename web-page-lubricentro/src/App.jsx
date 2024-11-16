@@ -29,6 +29,7 @@ import MechanicOrdenListPage from "./pages/MechanicOrdenListPage.jsx";
 import MechanicFeedbackReportPage from "./pages/MechanicFeedbackReportPage.jsx";
 import Perfil from "./components/Perfil/perfil.jsx";
 import Perfileditar from "./components/Perfil/perfileditar.jsx";
+import UserList from "./components/ListaUsuario/lista.jsx";
 
 function App() {
   const [ingresos] = useState([
@@ -95,19 +96,17 @@ function App() {
           <Route path="/Inicio/" element={<Inicio />} />
           <Route path="/RecuperarContra/*" element={<RecuperarContra />} />
 
-          <Route path="/ListaUsuario/*" element={<ListaUsuario/>} />
-          <Route path="/Perfil/" element={<Perfil/>} />
+          <Route path="/ListaUsuario/*" element={<ListaUsuario />} />
+          <Route path="/Perfil/" element={<Perfil />} />
+          <Route path="/user-list" element={<UserList />} />
           <Route path="/edit-user/:id" element={<ModificaRol />} />
           <Route path="/perfileditar/:id" element={<Perfileditar />} />
           <Route path="/lista-ordenes/*" element={<ListaOrdenesPage />} />
           <Route path="/reporte-ordenes/*" element={<ReporteOrdenesPage />} />
-          <Route
-            path="/mis-ordenes/*"
-            element={<MechanicFeedbackReportPage />}
-          />
+          <Route path="/mis-ordenes/*" element={<MechanicOrdenListPage />} />
           <Route
             path="/reporte-retroalimentacion/*"
-            element={<MechanicOrdenListPage />}
+            element={<MechanicFeedbackReportPage />}
           />
           <Route path="/user/*" element={<UserPage />} />
           <Route path="notifications" element={<UserNotificationsPage />} />
