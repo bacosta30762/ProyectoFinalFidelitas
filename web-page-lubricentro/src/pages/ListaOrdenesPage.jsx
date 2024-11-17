@@ -1,4 +1,3 @@
-// src/ListaOrdenesPage.js
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -6,6 +5,8 @@ import {
   assignMechanic,
   filterOrders,
 } from "../redux/actions/orderActions";
+import { API_ROUTES } from "../api";
+import { getToken } from "../services/authService";
 
 const mecanicos = [
   "Luis Martínez",
@@ -15,48 +16,44 @@ const mecanicos = [
   "Ana Fernández",
 ];
 
-const initialOrders = [
-  {
-    id: 1,
-    numeroOrden: "001",
-    placaVehiculo: "HGT652",
-    servicio: "Cambio de aceite",
-    cliente: "Juan Pérez",
-    mecanicoAsignado: "",
-  },
-  {
-    id: 2,
-    numeroOrden: "002",
-    placaVehiculo: "WFT584",
-    servicio: "Revisión de frenos",
-    cliente: "María López",
-    mecanicoAsignado: "",
-  },
-  {
-    id: 3,
-    numeroOrden: "003",
-    placaVehiculo: "GTY474",
-    servicio: "Alineación y balanceo",
-    cliente: "Carlos Gómez",
-    mecanicoAsignado: "",
-  },
-  {
-    id: 4,
-    numeroOrden: "004",
-    placaVehiculo: "FTR845",
-    servicio: "Cambio de batería",
-    cliente: "Ana Fernández",
-    mecanicoAsignado: "",
-  },
-];
-
 const ListaOrdenesPage = () => {
   const dispatch = useDispatch();
   const orders = useSelector((state) => state.orders.filteredOrders);
   const searchTerm = useSelector((state) => state.orders.searchTerm);
 
   useEffect(() => {
-    dispatch(setOrders(initialOrders));
+    const fetchOrders = async () => {
+      try {
+        const token = getToken();
+        const response = await fetch(
+          `${API_ROUTES.ordenes}/listar-ordenes-usuario`,
+          {
+            method: "GET",
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        if (!response.ok) {
+          throw new Error("Error al obtener las órdenes.");
+        }
+        const data = await response.json();
+
+        console.log(data);
+        // Transformación de datos si es necesario
+        const formattedOrders = data.map((order) => ({
+          id: order.numeroOrden,
+          numeroOrden: order.numeroOrden,
+          placaVehiculo: order.placaVehiculo,
+          servicio: order.nombreServicio || "Sin especificar", // Ajusta según los datos reales
+          cliente: order.cliente || "Cliente no registrado",
+          mecanicoAsignado: order.mecanicoAsignado || "",
+        }));
+        dispatch(setOrders(formattedOrders));
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchOrders();
   }, [dispatch]);
 
   const handleMecanicoSelect = (orderId, mecanico) => {
