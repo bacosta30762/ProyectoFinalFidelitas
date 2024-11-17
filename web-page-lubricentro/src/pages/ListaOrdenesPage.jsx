@@ -26,7 +26,7 @@ const ListaOrdenesPage = () => {
       try {
         const token = getToken();
         const response = await fetch(
-          `${API_ROUTES.ordenes}/listar-ordenes-usuario`,
+          `${API_ROUTES.ordenes}/listar-todas-ordenes`,
           {
             method: "GET",
             headers: { Authorization: `Bearer ${token}` },
@@ -44,8 +44,8 @@ const ListaOrdenesPage = () => {
           numeroOrden: order.numeroOrden,
           placaVehiculo: order.placaVehiculo,
           servicio: order.nombreServicio || "Sin especificar", // Ajusta según los datos reales
-          cliente: order.cliente || "Cliente no registrado",
-          mecanicoAsignado: order.mecanicoAsignado || "",
+          cliente: order.nombreCliente || "Cliente no registrado",
+          mecanicoAsignado: order.nombre || "",
         }));
         dispatch(setOrders(formattedOrders));
       } catch (error) {
@@ -53,6 +53,8 @@ const ListaOrdenesPage = () => {
       }
     };
 
+    // fetchMecanicos();
+    // fetchClientes();
     fetchOrders();
   }, [dispatch]);
 
