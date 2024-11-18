@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setOrders,
@@ -18,46 +18,56 @@ const mecanicos = [
 
 const ListaOrdenesPage = () => {
   const dispatch = useDispatch();
-  const orders = useSelector((state) => state.orders.filteredOrders);
+  const orders = useSelector((state) => state.orders?.filteredOrders || []);
   const searchTerm = useSelector((state) => state.orders.searchTerm);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchOrders = async () => {
+    const fetchOrdersData = async () => {
       try {
-        const token = getToken();
-        const response = await fetch(
-          `${API_ROUTES.ordenes}/listar-todas-ordenes`,
-          {
-            method: "GET",
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-        if (!response.ok) {
-          throw new Error("Error al obtener las órdenes.");
-        }
-        const data = await response.json();
-
-        console.log(data);
-        // Transformación de datos si es necesario
-        const formattedOrders = data.map((order) => ({
-          id: order.numeroOrden,
-          numeroOrden: order.numeroOrden,
-          placaVehiculo: order.placaVehiculo,
-          servicio: order.nombreServicio || "Sin especificar", // Ajusta según los datos reales
-          cliente: order.nombreCliente || "Cliente no registrado",
-          mecanicoAsignado: order.nombre || "",
-        }));
-        dispatch(setOrders(formattedOrders));
-      } catch (error) {
-        console.error(error);
+        await fetchOrders();
+      } finally {
+        setLoading(false);
       }
     };
-
-    // fetchMecanicos();
-    // fetchClientes();
-    fetchOrders();
+    fetchOrdersData();
   }, [dispatch]);
 
+  const fetchOrders = async () => {
+    try {
+      const token = getToken();
+      const response = await fetch(
+        `${API_ROUTES.ordenes}/listar-todas-ordenes`,
+        {
+          method: "GET",
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Error al obtener las órdenes.");
+      }
+      const data = await response.json();
+
+      const formattedOrders = data.map((order) => ({
+        id: order.numeroOrden,
+        numeroOrden: order.numeroOrden,
+        estado: order.estado,
+        placaVehiculo: order.placaVehiculo,
+        nombreMecanico: order.nombreMecanico || "No asignado",
+        cliente: order.nombreCliente || "Cliente no registrado",
+        dia: order.dia || "Fecha no disponible",
+        hora: order.hora ? `${order.hora}:00` : "Hora no disponible",
+        servicio: order.nombreServicio || "Sin especificar",
+      }));
+
+      dispatch(setOrders(formattedOrders));
+    } catch (error) {
+      console.error("Error al obtener las órdenes:", error);
+    }
+  };
+  // fetchMecanicos();
+  // fetchClientes();
+  fetchOrders();
   const handleMecanicoSelect = (orderId, mecanico) => {
     dispatch(assignMechanic(orderId, mecanico));
   };
@@ -65,6 +75,10 @@ const ListaOrdenesPage = () => {
   const handleSearch = (e) => {
     dispatch(filterOrders(e.target.value));
   };
+
+  if (loading) {
+    return <div>Cargando órdenes...</div>;
+  }
 
   return (
     <div style={{ padding: "20px" }}>
@@ -88,7 +102,7 @@ const ListaOrdenesPage = () => {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(6, 1fr)", // 6 columnas (sin "Acciones")
+          gridTemplateColumns: "repeat(6, 1fr)",
           gap: "10px",
           alignItems: "center",
           textAlign: "center",
@@ -124,7 +138,7 @@ const ListaOrdenesPage = () => {
               <div>{order.cliente}</div>
               <div>
                 <select
-                  value={order.mecanicoAsignado || ""}
+                  value={order.nombreMecanico || ""}
                   onChange={(e) =>
                     handleMecanicoSelect(order.id, e.target.value)
                   }
@@ -144,7 +158,7 @@ const ListaOrdenesPage = () => {
                   ))}
                 </select>
               </div>
-              <div>{order.mecanicoAsignado || "No asignado"}</div>
+              <div>{order.nombreMecanico || "No asignado"}</div>
             </React.Fragment>
           ))
         ) : (
