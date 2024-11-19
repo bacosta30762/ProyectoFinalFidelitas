@@ -1,35 +1,35 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AppHeader from "./components/HeaderFooter/header";
-import UserPage from "./pages/UserPage";
-import UserNotificationsPage from "./pages/UserNotificationsPage";
-import MarketingPage from "./pages/MarketingPage";
-import NewsletterPage from "./pages/NewsletterPage";
-import FeedbackPage from "./pages/FeedbackPage";
-import SubscriptionPage from "./pages/SubscriptionPage";
-import FeedbackList from "./components/marketing/FeedbackList";
-import IngresosPage from "./components/Contability/Ingresos";
-import AgregarIngreso from "./components/Contability/AgregarIngreso";
-import EditarIngreso from "./components/Contability/EditarIngreso";
-import EgresosPage from "./components/Contability/Egresos";
-import AgregarEgreso from "./components/Contability/AgregarEgreso";
-import EditarEgreso from "./components/Contability/EditarEgreso";
-import ReportesFinancieros from "./components/Contability/ReportesFinancieros";
-import ComentariosValoraciones from "./components/Comentarios/ComentariosValoraciones";
-import Inventarios from "./components/Inventarios/ListGroup";
-import Inicio from "./components/Inicio/login.jsx";
-import ListaUsuario from "./components/ListaUsuario/lista.jsx";
-import ModificaRol from "./components/ListaUsuario/modifica.jsx";
 import Footer from "./components/HeaderFooter/Footer";
-import ListaOrdenesPage from "./pages/ListaOrdenesPage.jsx";
-import ReporteOrdenesPage from "./pages/ReporteOrdenesPage.jsx";
+import ProtectedRoute from "./hoc/ProtectedRoute.jsx";
+
+import Inicio from "./components/Inicio/login.jsx";
 import RecuperarContra from "./components/Inicio/recuperarcontra.jsx";
-import Calendario from "./components/Planificacion/Calendar";
-import MechanicOrdenListPage from "./pages/MechanicOrdenListPage.jsx";
-import MechanicFeedbackReportPage from "./pages/MechanicFeedbackReportPage.jsx";
+import ListaUsuario from "./components/ListaUsuario/lista.jsx";
 import Perfil from "./components/Perfil/perfil.jsx";
+import ModificaRol from "./components/ListaUsuario/modifica.jsx";
 import Perfileditar from "./components/Perfil/perfileditar.jsx";
 import UserList from "./components/ListaUsuario/lista.jsx";
+import ListaOrdenesPage from "./pages/ListaOrdenesPage.jsx";
+import ReporteOrdenesPage from "./pages/ReporteOrdenesPage.jsx";
+import MechanicOrdenListPage from "./pages/MechanicOrdenListPage.jsx";
+import MechanicFeedbackReportPage from "./pages/MechanicFeedbackReportPage.jsx";
+import MarketingPage from "./pages/MarketingPage.jsx";
+import NewsletterPage from "./pages/NewsletterPage.jsx";
+import FeedbackPage from "./pages/FeedbackPage.jsx";
+import SubscriptionPage from "./pages/SubscriptionPage.jsx";
+import FeedbackList from "./components/marketing/FeedbackList";
+import IngresosPage from "./components/Contability/Ingresos.jsx";
+import AgregarIngreso from "./components/Contability/AgregarIngreso.jsx";
+import EditarIngreso from "./components/Contability/EditarIngreso.jsx";
+import EgresosPage from "./components/Contability/Egresos.jsx";
+import AgregarEgreso from "./components/Contability/AgregarEgreso.jsx";
+import EditarEgreso from "./components/Contability/EditarEgreso.jsx";
+import ReportesFinancieros from "./components/Contability/ReportesFinancieros.jsx";
+import ComentariosValoraciones from "./components/Comentarios/ComentariosValoraciones.jsx";
+import Inventarios from "./components/Inventarios/ListGroup.jsx";
+import Calendario from "./components/Planificacion/Calendar.jsx";
 
 function App() {
   const [ingresos] = useState([
@@ -93,55 +93,203 @@ function App() {
           <AppHeader />
         </header>
         <Routes>
+          {/* Rutas públicas */}
           <Route path="/Inicio/" element={<Inicio />} />
           <Route path="/RecuperarContra/*" element={<RecuperarContra />} />
 
-          <Route path="/ListaUsuario/*" element={<ListaUsuario />} />
-          <Route path="/Perfil/" element={<Perfil />} />
-          <Route path="/user-list" element={<UserList />} />
-          <Route path="/edit-user/:id" element={<ModificaRol />} />
-          <Route path="/perfileditar/:id" element={<Perfileditar />} />
-          <Route path="/lista-ordenes/*" element={<ListaOrdenesPage />} />
-          <Route path="/reporte-ordenes/*" element={<ReporteOrdenesPage />} />
-          <Route path="/mis-ordenes/*" element={<MechanicOrdenListPage />} />
+          {/* Rutas protegidas */}
+          <Route
+            path="/ListaUsuario/*"
+            element={
+              <ProtectedRoute>
+                <ListaUsuario />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/Perfil/"
+            element={
+              <ProtectedRoute>
+                <Perfil />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/user-list"
+            element={
+              <ProtectedRoute>
+                <UserList />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/edit-user/:id"
+            element={
+              <ProtectedRoute>
+                <ModificaRol />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/perfileditar/:id"
+            element={
+              <ProtectedRoute>
+                <Perfileditar />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/lista-ordenes/*"
+            element={
+              <ProtectedRoute>
+                <ListaOrdenesPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/reporte-ordenes/*"
+            element={
+              <ProtectedRoute>
+                <ReporteOrdenesPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/mis-ordenes/*"
+            element={
+              <ProtectedRoute>
+                <MechanicOrdenListPage />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/reporte-retroalimentacion/*"
-            element={<MechanicFeedbackReportPage />}
+            element={
+              <ProtectedRoute>
+                <MechanicFeedbackReportPage />
+              </ProtectedRoute>
+            }
           />
-          <Route path="/user/*" element={<UserPage />} />
-          <Route path="notifications" element={<UserNotificationsPage />} />
-          <Route path="/marketing/*" element={<MarketingPage />} />
-          <Route path="/marketing/newsletters/*" element={<NewsletterPage />} />
-          <Route path="/marketing/feedback/*" element={<FeedbackPage />} />
+          <Route
+            path="/marketing/*"
+            element={
+              <ProtectedRoute>
+                <MarketingPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/marketing/newsletters/*"
+            element={
+              <ProtectedRoute>
+                <NewsletterPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/marketing/feedback/*"
+            element={
+              <ProtectedRoute>
+                <FeedbackPage />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/marketing/subscriptions/*"
-            element={<SubscriptionPage />}
+            element={
+              <ProtectedRoute>
+                <SubscriptionPage />
+              </ProtectedRoute>
+            }
           />
-          <Route path="/marketing/feedback" element={<FeedbackList />} />
-          <Route path="/ingresos" element={<IngresosPage />} />
-          <Route path="/agregar-ingreso" element={<AgregarIngreso />} />
+          <Route
+            path="/marketing/feedback"
+            element={
+              <ProtectedRoute>
+                <FeedbackList />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/ingresos"
+            element={
+              <ProtectedRoute>
+                <IngresosPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/agregar-ingreso"
+            element={
+              <ProtectedRoute>
+                <AgregarIngreso />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/editar-ingreso/:id"
-            element={<EditarIngreso ingresos={ingresos} />}
+            element={
+              <ProtectedRoute>
+                <EditarIngreso ingresos={ingresos} />
+              </ProtectedRoute>
+            }
           />
-          <Route path="/egresos" element={<EgresosPage />} />
-          <Route path="/agregar-egreso" element={<AgregarEgreso />} />
+          <Route
+            path="/egresos"
+            element={
+              <ProtectedRoute>
+                <EgresosPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/agregar-egreso"
+            element={
+              <ProtectedRoute>
+                <AgregarEgreso />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/editar-egreso/:id"
-            element={<EditarEgreso egresos={egresos} />}
+            element={
+              <ProtectedRoute>
+                <EditarEgreso egresos={egresos} />
+              </ProtectedRoute>
+            }
           />
           <Route
             path="/reportes-financieros"
             element={
-              <ReportesFinancieros ingresos={ingresos} egresos={egresos} />
+              <ProtectedRoute>
+                <ReportesFinancieros ingresos={ingresos} egresos={egresos} />
+              </ProtectedRoute>
             }
           />
           <Route
             path="/comentarios-valoraciones"
-            element={<ComentariosValoraciones />}
+            element={
+              <ProtectedRoute>
+                <ComentariosValoraciones />
+              </ProtectedRoute>
+            }
           />
-          <Route path="/inventarios" element={<Inventarios />} />
-          <Route path="/calendario" element={<Calendario />} />
+          <Route
+            path="/inventarios"
+            element={
+              <ProtectedRoute>
+                <Inventarios />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/calendario"
+            element={
+              <ProtectedRoute>
+                <Calendario />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </Router>
       <footer id="footer">

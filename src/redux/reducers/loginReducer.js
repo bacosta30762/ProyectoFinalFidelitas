@@ -1,10 +1,9 @@
-// src/redux/reducers/loginReducer.js
-
 import {
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
   LOGOUT,
+  SAVE_USER_DATA,
 } from "../actions/loginActions";
 
 const initialState = {
@@ -27,6 +26,8 @@ const loginReducer = (state = initialState, action) => {
       };
     case LOGIN_FAILURE:
       return { ...state, loading: false, error: action.payload };
+    case SAVE_USER_DATA:
+      return { ...state, user: action.payload };
     case LOGOUT:
       return { ...state, isAuthenticated: false, user: null };
     default:
