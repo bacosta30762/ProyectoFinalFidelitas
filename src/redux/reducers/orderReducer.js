@@ -1,4 +1,3 @@
-// src/redux/reducers/orderReducer.js
 import {
   SET_ORDERS,
   ASSIGN_MECHANIC,
@@ -23,10 +22,10 @@ const orderReducer = (state = initialState, action) => {
         filteredOrders: action.payload,
       };
 
-    case ASSIGN_MECHANIC:
+    case ASSIGN_MECHANIC: {
       const updatedOrders = state.orders.map((order) =>
         order.id === action.payload.orderId
-          ? { ...order, mecanicoAsignado: action.payload.mechanic }
+          ? { ...order, nombreMecanico: action.payload.mechanic }
           : order
       );
       return {
@@ -34,7 +33,7 @@ const orderReducer = (state = initialState, action) => {
         orders: updatedOrders,
         filteredOrders: updatedOrders.filter(
           (order) =>
-            order.numeroOrden.includes(state.searchTerm) ||
+            `${order.numeroOrden}`.includes(state.searchTerm) || // Convertir numeroOrden a string
             safeToLowerCase(order.placaVehiculo).includes(
               safeToLowerCase(state.searchTerm)
             ) ||
@@ -46,11 +45,12 @@ const orderReducer = (state = initialState, action) => {
             )
         ),
       };
+    }
 
-    case FILTER_ORDERS:
+    case FILTER_ORDERS: {
       const filteredOrders = state.orders.filter(
         (order) =>
-          order.numeroOrden.includes(action.payload) ||
+          `${order.numeroOrden}`.includes(action.payload) || // Convertir numeroOrden a string
           safeToLowerCase(order.placaVehiculo).includes(
             safeToLowerCase(action.payload)
           ) ||
@@ -62,6 +62,7 @@ const orderReducer = (state = initialState, action) => {
           )
       );
       return { ...state, searchTerm: action.payload, filteredOrders };
+    }
 
     default:
       return state;

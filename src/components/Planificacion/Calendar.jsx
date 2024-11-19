@@ -1,4 +1,3 @@
-// src/Calendar.js
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Table, Modal } from "react-bootstrap";
@@ -27,7 +26,9 @@ const hours = [
 const Calendar = () => {
   const dispatch = useDispatch();
   const appointments = useSelector((state) => state.calendar.appointments);
-  const blockedDates = useSelector((state) => state.calendar.blockedDates);
+  const blockedDates = useSelector(
+    (state) => state.calendar.blockedDates.map((date) => new Date(date)) // Convierte a Date temporalmente
+  );
 
   const [selectedDate, setSelectedDate] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -43,32 +44,35 @@ const Calendar = () => {
   };
 
   const handleBlockDate = () => {
-    const key = selectedDate?.toDateString();
-    const hasAppointments = Object.keys(appointments).some((appointment) =>
-      appointment.startsWith(key)
-    );
+    if (selectedDate) {
+      const hasAppointments = Object.keys(appointments).some((appointment) =>
+        appointment.startsWith(selectedDate.toDateString())
+      );
 
-    if (hasAppointments) {
-      setShowModal(true);
-      setConfirmAction("block");
-    } else {
-      dispatch(blockDate(key));
-      setSelectedDate(null);
+      if (hasAppointments) {
+        setShowModal(true);
+        setConfirmAction("block");
+      } else {
+        dispatch(blockDate(selectedDate)); // Envía el Date directamente
+        setSelectedDate(null);
+      }
     }
   };
 
   const handleUnblockDate = () => {
-    const key = selectedDate?.toDateString();
-    dispatch(unblockDate(key));
-    setSelectedDate(null);
+    if (selectedDate) {
+      dispatch(unblockDate(selectedDate)); // Envía el Date directamente
+      setSelectedDate(null);
+    }
   };
 
   const handleCancelAppointments = () => {
-    const key = selectedDate?.toDateString();
-    dispatch(cancelAppointments(key));
-    dispatch(blockDate(key));
-    setShowModal(false);
-    setSelectedDate(null);
+    if (selectedDate) {
+      dispatch(cancelAppointments(selectedDate)); // Envía el Date directamente
+      dispatch(blockDate(selectedDate)); // Bloquea después de cancelar
+      setShowModal(false);
+      setSelectedDate(null);
+    }
   };
 
   const handleCloseModal = () => {
@@ -90,60 +94,80 @@ const Calendar = () => {
           inline
         />
         <div className="button-container">
-          {selectedDate && !blockedDates.has(selectedDate.toDateString()) && (
-            <Button variant="danger" onClick={handleBlockDate} className="mt-3">
-              Bloquear Día
-            </Button>
-          )}
-          {selectedDate && blockedDates.has(selectedDate.toDateString()) && (
-            <Button
-              variant="success"
-              onClick={handleUnblockDate}
-              className="mt-3"
-            >
-              Desbloquear Día
-            </Button>
-          )}
+          {selectedDate &&
+            !blockedDates.some(
+              (blockedDate) =>
+                blockedDate.toDateString() === selectedDate.toDateString()
+            ) && (
+              <Button
+                variant="danger"
+                onClick={handleBlockDate}
+                className="mt-3"
+              >
+                Bloquear Día
+              </Button>
+            )}
+          {selectedDate &&
+            blockedDates.some(
+              (blockedDate) =>
+                blockedDate.toDateString() === selectedDate.toDateString()
+            ) && (
+              <Button
+                variant="success"
+                onClick={handleUnblockDate}
+                className="mt-3"
+              >
+                Desbloquear Día
+              </Button>
+            )}
         </div>
       </div>
 
       <div className="calendar-right">
-        {selectedDate && !blockedDates.has(selectedDate.toDateString()) && (
-          <>
-            <h3 className="mt-4">
-              Disponibilidad para {selectedDate.toDateString()}
-            </h3>
-            <Table bordered>
-              <thead>
-                <tr>
-                  <th>Hora</th>
-                  <th>Acción</th>
-                </tr>
-              </thead>
-              <tbody>
-                {hours.map((hour) => {
-                  const key = `${selectedDate?.toDateString()}-${hour}`;
-                  return (
-                    <tr key={hour}>
-                      <td>{hour}</td>
-                      <td className="text-center">
-                        <Button
-                          variant={appointments[key] ? "danger" : "success"}
-                          onClick={() => handleToggleAppointment(hour)}
-                        >
-                          {appointments[key] ? "Cancelar cita" : "Agendar cita"}
-                        </Button>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </Table>
-          </>
-        )}
-        {selectedDate && blockedDates.has(selectedDate.toDateString()) && (
-          <p>El día está bloqueado y no se pueden agendar citas.</p>
-        )}
+        {selectedDate &&
+          !blockedDates.some(
+            (blockedDate) =>
+              blockedDate.toDateString() === selectedDate.toDateString()
+          ) && (
+            <>
+              <h3 className="mt-4">
+                Disponibilidad para {selectedDate.toDateString()}
+              </h3>
+              <Table bordered>
+                <thead>
+                  <tr>
+                    <th>Hora</th>
+                    <th>Acción</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {hours.map((hour) => {
+                    const key = `${selectedDate?.toDateString()}-${hour}`;
+                    return (
+                      <tr key={hour}>
+                        <td>{hour}</td>
+                        <td className="text-center">
+                          <Button
+                            variant={appointments[key] ? "danger" : "success"}
+                            onClick={() => handleToggleAppointment(hour)}
+                          >
+                            {appointments[key]
+                              ? "Cancelar cita"
+                              : "Agendar cita"}
+                          </Button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </Table>
+            </>
+          )}
+        {selectedDate &&
+          blockedDates.some(
+            (blockedDate) =>
+              blockedDate.toDateString() === selectedDate.toDateString()
+          ) && <p>El día está bloqueado y no se pueden agendar citas.</p>}
       </div>
 
       <Modal show={showModal} onHide={handleCloseModal}>
