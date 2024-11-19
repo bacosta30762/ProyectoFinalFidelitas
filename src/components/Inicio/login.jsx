@@ -17,18 +17,36 @@ const Login = () => {
   const { loading, error } = useSelector((state) => state.loginState);
 
   const [credentials, setCredentials] = useState({ correo: "", password: "" });
+  const [validationError, setValidationError] = useState("");
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setCredentials({ ...credentials, [name]: value });
+    setValidationError(""); // Reset validation error on input change
+  };
+
+  const validatePassword = (password) => {
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{7,}$/;
+    return passwordRegex.test(password);
   };
 
   const handleLogin = async (e) => {
     e.preventDefault();
+
+    if (!credentials.correo || !credentials.password) {
+      setValidationError("Por favor, completa todos los campos.");
+      return;
+    }
+
+    if (!validatePassword(credentials.password)) {
+      setValidationError("La contraseña es incorrecta.");
+      return;
+    }
+
     dispatch(loginRequest());
 
     try {
-      // Realizar el login inicial
       const loginResponse = await fetch(`${API_ROUTES.users}/LoginAdmin`, {
         method: "POST",
         headers: {
@@ -44,15 +62,13 @@ const Login = () => {
       if (!loginResponse.ok) {
         const errorData = await loginResponse.json();
         dispatch(
-          loginFailure(errorData.errors || "Cédula o contraseña incorrecta")
+          loginFailure(errorData.errors || "Cédula o contraseña incorrecta.")
         );
         return;
       }
 
-      // Login exitoso, obtener token o datos preliminares
       const loginData = await loginResponse.json();
 
-      // Obtener la lista de usuarios para comparar credenciales
       const usersResponse = await fetch(`${API_ROUTES.users}/lista-usuarios`, {
         method: "GET",
         headers: {
@@ -67,7 +83,6 @@ const Login = () => {
 
       const usersData = await usersResponse.json();
 
-      // Buscar un usuario que coincida con las credenciales ingresadas
       const foundUser = usersData.find(
         (user) => user.email === credentials.correo
       );
@@ -79,11 +94,9 @@ const Login = () => {
         return;
       }
 
-      // Guardar los datos del usuario logueado en Redux
-      dispatch(loginSuccess(loginData)); // Datos obtenidos del login
-      dispatch(saveUserData(foundUser)); // Datos obtenidos de la lista de usuarios
+      dispatch(loginSuccess(loginData));
+      dispatch(saveUserData(foundUser));
 
-      // Redirigir al perfil
       navigate("/Perfil", { replace: true });
     } catch (error) {
       dispatch(loginFailure("Error en la conexión."));
@@ -118,7 +131,9 @@ const Login = () => {
           {loading ? "Cargando..." : "Iniciar Sesión"}
         </button>
       </form>
-      {error && <div className="error-message">{error}</div>}
+      {(validationError || error) && (
+        <div className="error-message">{validationError || error}</div>
+      )}
       <div className="login-options">
         <button
           className="forgot-password-link"
