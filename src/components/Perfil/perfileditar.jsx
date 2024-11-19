@@ -1,27 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import "./perfileditar.css"; 
+import "./perfileditar.css";
 
 const Perfileditar = () => {
-  const { id } = useParams(); 
-  const navigate = useNavigate(); 
+  const { id } = useParams();
+  const navigate = useNavigate();
   const [userData, setUserData] = useState({
-    name: '',
-    cedula: '',
-    email: '',
-    phone: '',
-    contactMethod: 'email' 
+    name: "",
+    cedula: "",
+    email: "",
+    phone: "",
+    contactMethod: "email",
   });
 
-  
   useEffect(() => {
-    
     const fetchedUser = {
-      name: 'Juan Perez',
-      cedula: '123456789',
-      email: 'juan@example.com',
-      phone: '555-1234',
-      contactMethod: 'phone'
+      name: "Admin",
+      cedula: "11223344",
+      email: "admin@admin.com",
+      phone: "N/A",
+      contactMethod: "N/A",
     };
     setUserData(fetchedUser);
   }, [id]);
@@ -33,18 +31,16 @@ const Perfileditar = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
-    
+
     for (const key in userData) {
-      if (userData[key] === '') {
-        alert('Todos los campos son obligatorios.');
+      if (userData[key] === "") {
+        alert("Todos los campos son obligatorios.");
         return;
       }
     }
-    
-  
-    alert('Su información ha sido actualizada');
-    navigate("/Perfil"); 
+
+    alert("Su información ha sido actualizada");
+    navigate("/Perfil");
   };
 
   return (
@@ -53,54 +49,54 @@ const Perfileditar = () => {
       <form className="edit-user-form" onSubmit={handleSubmit}>
         <label>
           Nombre:
-          <input 
-            type="text" 
-            name="name" 
-            value={userData.name} 
-            onChange={handleChange} 
+          <input
+            type="text"
+            name="name"
+            value={userData.name}
+            onChange={handleChange}
             className="edit-user-input"
             disabled
           />
         </label>
         <label>
           Cédula:
-          <input  
-            type="text" 
-            name="cedula" 
-            value={userData.cedula} 
-            onChange={handleChange} 
+          <input
+            type="text"
+            name="cedula"
+            value={userData.cedula}
+            onChange={handleChange}
             className="edit-user-input"
             disabled
           />
         </label>
         <label>
           Email:
-          <input 
-            type="email" 
-            name="email" 
-            value={userData.email} 
-            onChange={handleChange} 
+          <input
+            type="email"
+            name="email"
+            value={userData.email}
+            onChange={handleChange}
             className="edit-user-input"
             required
           />
         </label>
         <label>
           Teléfono:
-          <input 
-            type="text" 
-            name="phone" 
-            value={userData.phone} 
-            onChange={handleChange} 
+          <input
+            type="text"
+            name="phone"
+            value={userData.phone}
+            onChange={handleChange}
             className="edit-user-input"
             required
           />
         </label>
         <label>
           Método de Contacto:
-          <select 
-            name="contactMethod" 
-            value={userData.contactMethod} 
-            onChange={handleChange} 
+          <select
+            name="contactMethod"
+            value={userData.contactMethod}
+            onChange={handleChange}
             className="edit-user-input"
             required
           >
@@ -108,8 +104,9 @@ const Perfileditar = () => {
             <option value="phone">Teléfono</option>
           </select>
         </label>
-        <button type="submit" className="save-button">Guardar Cambios</button>
-        
+        <button type="submit" className="save-button">
+          Guardar Cambios
+        </button>
       </form>
     </div>
   );
