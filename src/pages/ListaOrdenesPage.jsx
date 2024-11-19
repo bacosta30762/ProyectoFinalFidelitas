@@ -8,77 +8,119 @@ import {
 import { API_ROUTES } from "../api";
 import { getToken } from "../services/authService";
 
-const mecanicos = [
-  "Luis Martínez",
-  "Carlos Ruiz",
-  "Fernando Torres",
-  "Miguel Hernández",
-  "Ana Fernández",
-];
-
 const ListaOrdenesPage = () => {
   const dispatch = useDispatch();
   const orders = useSelector((state) => state.orders?.filteredOrders || []);
   const searchTerm = useSelector((state) => state.orders.searchTerm);
-  const [loading, setLoading] = useState(true);
+
+  const [mecanicos, setMecanicos] = useState([]); // Estado para almacenar la lista de mecánicos
 
   useEffect(() => {
-    const fetchOrdersData = async () => {
+    const fetchOrders = async () => {
       try {
-        await fetchOrders();
-      } finally {
-        setLoading(false);
+        const token = getToken();
+        const response = await fetch(
+          `${API_ROUTES.ordenes}/listar-todas-ordenes`,
+          {
+            method: "GET",
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        if (!response.ok) {
+          throw new Error("Error al obtener las órdenes.");
+        }
+        const data = await response.json();
+
+        // Formatear datos y serializar fechas
+        const formattedOrders = data.map((order) => ({
+          id: order.numeroOrden,
+          numeroOrden: order.numeroOrden,
+          estado: order.estado,
+          placaVehiculo: order.placaVehiculo,
+          nombreMecanico: order.nombreMecanico || "No asignado",
+          cliente: order.nombreCliente || "Cliente no registrado",
+          dia: order.dia
+            ? new Date(order.dia).toISOString()
+            : "Fecha no disponible", // Serializar fecha
+          hora: order.hora ? `${order.hora}:00` : "Hora no disponible",
+          servicio: order.nombreServicio || "Sin especificar",
+        }));
+
+        dispatch(setOrders(formattedOrders));
+      } catch (error) {
+        console.error("Error al obtener las órdenes:", error);
       }
     };
-    fetchOrdersData();
-  }, [dispatch]);
 
-  const fetchOrders = async () => {
-    try {
-      const token = getToken();
-      const response = await fetch(
-        `${API_ROUTES.ordenes}/listar-todas-ordenes`,
-        {
+    const fetchMecanicos = async () => {
+      try {
+        const token = getToken();
+        const response = await fetch(`${API_ROUTES.ordenes}/lista-mecanicos`, {
           method: "GET",
           headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!response.ok) {
+          throw new Error("Error al obtener la lista de mecánicos.");
         }
-      );
-      if (!response.ok) {
-        throw new Error("Error al obtener las órdenes.");
+        const data = await response.json();
+        setMecanicos(data); // Almacenar la lista de mecánicos en el estado local
+      } catch (error) {
+        console.error("Error al obtener los mecánicos:", error);
       }
-      const data = await response.json();
+    };
 
-      const formattedOrders = data.map((order) => ({
-        id: order.numeroOrden,
-        numeroOrden: order.numeroOrden,
-        estado: order.estado,
-        placaVehiculo: order.placaVehiculo,
-        nombreMecanico: order.nombreMecanico || "No asignado",
-        cliente: order.nombreCliente || "Cliente no registrado",
-        dia: order.dia || "Fecha no disponible",
-        hora: order.hora ? `${order.hora}:00` : "Hora no disponible",
-        servicio: order.nombreServicio || "Sin especificar",
-      }));
+    fetchOrders(); // Llamar a la función para obtener órdenes
+    fetchMecanicos(); // Llamar a la función para obtener mecánicos
+  }, [dispatch]);
 
-      dispatch(setOrders(formattedOrders));
+  const handleMecanicoSelect = async (orderId, mecanicoId) => {
+    try {
+      if (!orderId || !mecanicoId) {
+        console.error(
+          "Error: Los valores de número de orden o mecánico son inválidos."
+        );
+        return;
+      }
+
+      const token = getToken();
+
+      // Crear la URL con los parámetros
+      const url = `${API_ROUTES.ordenes}/asignar-mecanico?numeroOrden=${orderId}&mecanicoId=${mecanicoId}`;
+
+      console.log("Enviando solicitud PUT a URL:", url);
+
+      const response = await fetch(url, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`, // Solo se envían encabezados, sin body
+        },
+      });
+
+      console.log("Respuesta del servidor:", response);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Error en el servidor:", errorText);
+        throw new Error("Error al asignar el mecánico.");
+      }
+
+      // Encontrar el nombre del mecánico asignado
+      const selectedMecanico = mecanicos.find(
+        (mecanico) => mecanico.mecanicoId === mecanicoId
+      );
+
+      // Actualizar el estado global con el mecánico asignado
+      dispatch(
+        assignMechanic(orderId, selectedMecanico?.nombre || "No asignado")
+      );
     } catch (error) {
-      console.error("Error al obtener las órdenes:", error);
+      console.error("Error al asignar el mecánico:", error);
     }
-  };
-  // fetchMecanicos();
-  // fetchClientes();
-  fetchOrders();
-  const handleMecanicoSelect = (orderId, mecanico) => {
-    dispatch(assignMechanic(orderId, mecanico));
   };
 
   const handleSearch = (e) => {
     dispatch(filterOrders(e.target.value));
   };
-
-  if (loading) {
-    return <div>Cargando órdenes...</div>;
-  }
 
   return (
     <div style={{ padding: "20px" }}>
@@ -102,7 +144,7 @@ const ListaOrdenesPage = () => {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(6, 1fr)",
+          gridTemplateColumns: "repeat(5, 1fr)",
           gap: "10px",
           alignItems: "center",
           textAlign: "center",
@@ -124,9 +166,6 @@ const ListaOrdenesPage = () => {
         <div>
           <strong>Asignar Mecánico</strong>
         </div>
-        <div>
-          <strong>Mecánico Asignado</strong>
-        </div>
 
         {/* Órdenes */}
         {orders.length > 0 ? (
@@ -138,9 +177,13 @@ const ListaOrdenesPage = () => {
               <div>{order.cliente}</div>
               <div>
                 <select
-                  value={order.nombreMecanico || ""}
+                  value={
+                    mecanicos.find(
+                      (mecanico) => mecanico.nombre === order.nombreMecanico
+                    )?.mecanicoId || ""
+                  }
                   onChange={(e) =>
-                    handleMecanicoSelect(order.id, e.target.value)
+                    handleMecanicoSelect(order.numeroOrden, e.target.value)
                   }
                   style={{
                     padding: "5px",
@@ -151,18 +194,20 @@ const ListaOrdenesPage = () => {
                   }}
                 >
                   <option value="">Seleccionar Mecánico</option>
-                  {mecanicos.map((mecanico, index) => (
-                    <option key={index} value={mecanico}>
-                      {mecanico}
+                  {mecanicos.map((mecanico) => (
+                    <option
+                      key={mecanico.mecanicoId}
+                      value={mecanico.mecanicoId}
+                    >
+                      {mecanico.nombre}
                     </option>
                   ))}
                 </select>
               </div>
-              <div>{order.nombreMecanico || "No asignado"}</div>
             </React.Fragment>
           ))
         ) : (
-          <div style={{ gridColumn: "span 6", textAlign: "center" }}>
+          <div style={{ gridColumn: "span 5", textAlign: "center" }}>
             No se encontraron órdenes.
           </div>
         )}

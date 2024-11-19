@@ -1,5 +1,3 @@
-// src/redux/reducers/calendarReducer.js
-
 import {
   TOGGLE_APPOINTMENT,
   BLOCK_DATE,
@@ -8,14 +6,14 @@ import {
 } from "../actions/calendarActions";
 
 const initialState = {
-  appointments: {},
-  blockedDates: new Set(),
+  appointments: {}, // Las claves son cadenas, los valores son booleanos
+  blockedDates: [], // Almacenar fechas como cadenas en formato ISO
 };
 
 const calendarReducer = (state = initialState, action) => {
   switch (action.type) {
     case TOGGLE_APPOINTMENT: {
-      const { payload: key } = action;
+      const key = action.payload; // Clave directamente como string
       return {
         ...state,
         appointments: {
@@ -25,14 +23,18 @@ const calendarReducer = (state = initialState, action) => {
       };
     }
     case BLOCK_DATE: {
-      const newBlockedDates = new Set(state.blockedDates);
-      newBlockedDates.add(action.payload);
-      return { ...state, blockedDates: newBlockedDates };
+      return {
+        ...state,
+        blockedDates: [...state.blockedDates, action.payload], // Agregar fecha como string
+      };
     }
     case UNBLOCK_DATE: {
-      const newBlockedDates = new Set(state.blockedDates);
-      newBlockedDates.delete(action.payload);
-      return { ...state, blockedDates: newBlockedDates };
+      return {
+        ...state,
+        blockedDates: state.blockedDates.filter(
+          (date) => date !== action.payload
+        ), // Filtrar por string
+      };
     }
     case CANCEL_APPOINTMENTS: {
       const newAppointments = { ...state.appointments };
