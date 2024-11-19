@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Router, Routes, Route } from "react-router-dom";
 import AppHeader from "./components/HeaderFooter/header";
 import Footer from "./components/HeaderFooter/Footer";
 import ProtectedRoute from "./hoc/ProtectedRoute.jsx";
@@ -88,6 +88,7 @@ function App() {
 
   return (
     <div className="App">
+    <BrowserRouter basename="/ProyectoFinalFidelitas">
       <Router>
         <header id="header">
           <AppHeader />
@@ -295,6 +296,7 @@ function App() {
       <footer id="footer">
         <Footer />
       </footer>
+      </BrowserRouter>
     </div>
   );
 }
