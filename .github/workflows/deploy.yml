@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main 
+      - main
 
 jobs:
   deploy:
@@ -26,13 +26,16 @@ jobs:
         env:
           CI: false
         run: npm install
-        
 
-      # 4. Construir la aplicación
-      - name: Build the React app
+      # 4. Lint y construcción (Ignorar advertencias de ESLint)
+      - name: Lint and Build
         env:
           CI: false
-        run: npm run build
+        run: |
+          # Permite advertencias en ESLint
+          npx eslint src --max-warnings=0 || true
+          # Construye la aplicación incluso con advertencias
+          npm run build
 
       # 5. Desplegar a GitHub Pages
       - name: Deploy to GitHub Pages
