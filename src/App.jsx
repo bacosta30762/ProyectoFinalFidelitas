@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BrowserRouter, Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AppHeader from "./components/HeaderFooter/header";
 import Footer from "./components/HeaderFooter/Footer";
 import ProtectedRoute from "./hoc/ProtectedRoute.jsx";
@@ -88,8 +88,7 @@ function App() {
 
   return (
     <div className="App">
-    <BrowserRouter basename="/ProyectoFinalFidelitas">
-      <Router>
+      <BrowserRouter basename="/ProyectoFinalFidelitas">
         <header id="header">
           <AppHeader />
         </header>
@@ -204,14 +203,6 @@ function App() {
             }
           />
           <Route
-            path="/marketing/feedback"
-            element={
-              <ProtectedRoute>
-                <FeedbackList />
-              </ProtectedRoute>
-            }
-          />
-          <Route
             path="/ingresos"
             element={
               <ProtectedRoute>
@@ -269,11 +260,7 @@ function App() {
           />
           <Route
             path="/comentarios-valoraciones"
-            element={
-              <ProtectedRoute>
-                <ComentariosValoraciones />
-              </ProtectedRoute>
-            }
+            element={<ComentariosValoraciones />}
           />
           <Route
             path="/inventarios"
@@ -292,10 +279,9 @@ function App() {
             }
           />
         </Routes>
-      </Router>
-      <footer id="footer">
-        <Footer />
-      </footer>
+        <footer id="footer">
+          <Footer />
+        </footer>
       </BrowserRouter>
     </div>
   );
