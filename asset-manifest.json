@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/ProyectoFinalFidelitas/static/css/main.653184ff.css",
-    "main.js": "/ProyectoFinalFidelitas/static/js/main.f6e5a15e.js",
+    "main.js": "/ProyectoFinalFidelitas/static/js/main.f1fcd76c.js",
     "index.html": "/ProyectoFinalFidelitas/index.html",
     "main.653184ff.css.map": "/ProyectoFinalFidelitas/static/css/main.653184ff.css.map",
-    "main.f6e5a15e.js.map": "/ProyectoFinalFidelitas/static/js/main.f6e5a15e.js.map"
+    "main.f1fcd76c.js.map": "/ProyectoFinalFidelitas/static/js/main.f1fcd76c.js.map"
   },
   "entrypoints": [
     "static/css/main.653184ff.css",
-    "static/js/main.f6e5a15e.js"
+    "static/js/main.f1fcd76c.js"
   ]
 }
