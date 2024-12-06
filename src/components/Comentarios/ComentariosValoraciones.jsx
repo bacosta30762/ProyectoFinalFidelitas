@@ -1,198 +1,198 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaStar, FaEdit, FaTrashAlt } from "react-icons/fa";
+import { API_ROUTES } from "../../api";
+import { getToken } from "../../services/authService";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./ComentariosValoraciones.css";
 
 const ComentariosValoraciones = () => {
-  const [comentarios, setComentarios] = useState([
-    {
-      id: 1,
-      texto: "Excelente servicio!",
-      valoracion: 5,
-      respuestas: [],
-    },
-    {
-      id: 2,
-      texto: "Muy satisfecho con la compra.",
-      valoracion: 4,
-      respuestas: [],
-    },
-  ]);
-
+  const [comentarios, setComentarios] = useState([]);
   const [nuevoTexto, setNuevoTexto] = useState("");
-  const [respuestaTexto, setRespuestaTexto] = useState("");
   const [comentarioSeleccionado, setComentarioSeleccionado] = useState(null);
-  const [respuestaEditando, setRespuestaEditando] = useState(null);
-  const [esRespuesta, setEsRespuesta] = useState(false);
 
-  const handleAgregarComentario = () => {
-    if (nuevoTexto.trim() !== "") {
-      if (comentarioSeleccionado) {
-        setComentarios(
-          comentarios.map((comentario) =>
-            comentario.id === comentarioSeleccionado.id
-              ? { ...comentario, texto: nuevoTexto }
-              : comentario
-          )
-        );
-        setComentarioSeleccionado(null);
-      } else {
-        setComentarios([
-          ...comentarios,
-          {
-            id: Date.now(),
-            texto: nuevoTexto,
-            valoracion: 0,
-            respuestas: [],
-          },
-        ]);
+  const fetchComentarios = async () => {
+    try {
+      const token = getToken();
+      const response = await fetch(`${API_ROUTES.marketing}/ObtenerResenas`, {
+        method: "GET",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (!response.ok) {
+        throw new Error("Error al obtener las reseñas.");
       }
-      setNuevoTexto("");
+
+      const data = await response.json();
+      setComentarios(data);
+    } catch (error) {
+      console.error("Error al obtener las reseñas:", error);
     }
   };
 
-  const handleEliminarComentario = (id) => {
-    setComentarios(comentarios.filter((comentario) => comentario.id !== id));
+  const crearComentario = async () => {
+    if (nuevoTexto.trim() === "") return;
+
+    try {
+      const token = getToken();
+      const payload = {
+        id: 0,
+        contenido: nuevoTexto,
+        fechaCreacion: new Date().toISOString(),
+        boletinId: 0, // Update this if boletinId is dynamic
+        boletin: {
+          id: 0,
+          titulo: "Boletín relacionado",
+          contenido: "Contenido relacionado",
+          fechaEnvio: new Date().toISOString(),
+          esPromocional: true,
+        },
+      };
+
+      const response = await fetch(`${API_ROUTES.marketing}/CrearResena`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error("Error al crear la reseña.");
+      }
+
+      fetchComentarios();
+      setNuevoTexto("");
+    } catch (error) {
+      console.error("Error al crear la reseña:", error);
+    }
+  };
+
+  const modificarComentario = async (id, nuevoContenido) => {
+    try {
+      const token = getToken();
+      const comentario = comentarios.find((c) => c.id === id);
+
+      if (!comentario) return;
+
+      const payload = {
+        ...comentario,
+        contenido: nuevoContenido,
+      };
+
+      const response = await fetch(
+        `${API_ROUTES.marketing}/ModificarResena/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Error al modificar la reseña.");
+      }
+
+      fetchComentarios();
+    } catch (error) {
+      console.error("Error al modificar la reseña:", error);
+    }
+  };
+
+  const eliminarComentario = async (id) => {
+    try {
+      const token = getToken();
+      const response = await fetch(
+        `${API_ROUTES.marketing}/EliminarResena/${id}`,
+        {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Error al eliminar la reseña.");
+      }
+
+      fetchComentarios();
+    } catch (error) {
+      console.error("Error al eliminar la reseña:", error);
+    }
   };
 
   const handleEditarComentario = (comentario) => {
-    setNuevoTexto(comentario.texto);
+    setNuevoTexto(comentario.contenido);
     setComentarioSeleccionado(comentario);
-    setEsRespuesta(false);
   };
 
-  const handleResponderComentario = (comentario) => {
-    setComentarioSeleccionado(comentario);
-    setRespuestaTexto("");
-    setEsRespuesta(true);
-  };
-
-  const handleAgregarRespuesta = () => {
-    if (respuestaTexto.trim() !== "") {
-      const comentarioActualizado = comentarios.map((comentario) =>
-        comentario.id === comentarioSeleccionado.id
-          ? {
-              ...comentario,
-              respuestas: [...comentario.respuestas, { id: Date.now(), texto: respuestaTexto }],
-            }
-          : comentario
-      );
-      setComentarios(comentarioActualizado);
+  const handleGuardarComentario = () => {
+    if (comentarioSeleccionado) {
+      modificarComentario(comentarioSeleccionado.id, nuevoTexto);
       setComentarioSeleccionado(null);
-      setRespuestaTexto("");
+      setNuevoTexto("");
+    } else {
+      crearComentario();
     }
   };
 
-  const handleEditarRespuesta = (comentarioId, respuestaId) => {
-    const comentario = comentarios.find((c) => c.id === comentarioId);
-    const respuesta = comentario.respuestas.find((r) => r.id === respuestaId);
-    setRespuestaTexto(respuesta.texto);
-    setRespuestaEditando(respuesta);
-    setComentarioSeleccionado(comentario);
-    setEsRespuesta(true);
-  };
-
-  const handleGuardarRespuesta = () => {
-    const comentarioActualizado = comentarios.map((comentario) =>
-      comentario.id === comentarioSeleccionado.id
-        ? {
-            ...comentario,
-            respuestas: comentario.respuestas.map((respuesta) =>
-              respuesta.id === respuestaEditando.id
-                ? { ...respuesta, texto: respuestaTexto }
-                : respuesta
-            ),
-          }
-        : comentario
-    );
-    setComentarios(comentarioActualizado);
-    setRespuestaEditando(null);
-    setComentarioSeleccionado(null);
-    setRespuestaTexto("");
-  };
-
-  const handleEliminarRespuesta = (comentarioId, respuestaId) => {
-    const comentarioActualizado = comentarios.map((comentario) =>
-      comentario.id === comentarioId
-        ? {
-            ...comentario,
-            respuestas: comentario.respuestas.filter((r) => r.id !== respuestaId),
-          }
-        : comentario
-    );
-    setComentarios(comentarioActualizado);
-  };
+  useEffect(() => {
+    fetchComentarios();
+  }, []);
 
   return (
     <div className="comentarios-container">
-      <h1>Comentarios y Valoraciones</h1>
+      <h1 style={{ textAlign: "center", marginBottom: "20px" }}>
+        Comentarios y Valoraciones
+      </h1>
+
       <div className="comentarios-lista">
         {comentarios.map((comentario) => (
-          <div key={comentario.id} className="comentario">
+          <div key={comentario.id} className="comentario-card">
             <div className="comentario-header">
               <FaTrashAlt
-                className="eliminar-icon"
-                onClick={() => handleEliminarComentario(comentario.id)}
+                className="icon eliminar-icon"
+                title="Eliminar"
+                onClick={() => eliminarComentario(comentario.id)}
               />
               <FaEdit
-                className="editar-icon"
+                className="icon editar-icon"
+                title="Editar"
                 onClick={() => handleEditarComentario(comentario)}
               />
             </div>
-            <p>{comentario.texto}</p>
+            <p className="comentario-texto">{comentario.contenido}</p>
             <div className="valoracion-container">
               {Array.from({ length: 5 }, (_, index) => (
                 <FaStar
                   key={index}
-                  className={`star ${index < comentario.valoracion ? "filled" : ""}`}
+                  className={`star ${
+                    index < comentario.valoracion ? "filled" : ""
+                  }`}
                 />
-              ))}
-            </div>
-            <button
-              className="btn btn-link responder-button"
-              onClick={() => handleResponderComentario(comentario)}
-            >
-              Responder
-            </button>
-            <div className="respuestas-container">
-              {comentario.respuestas.map((respuesta) => (
-                <div key={respuesta.id} className="respuesta">
-                  <div className="comentario-header">
-                    <FaTrashAlt
-                      className="eliminar-icon"
-                      onClick={() =>
-                        handleEliminarRespuesta(comentario.id, respuesta.id)
-                      }
-                    />
-                    <FaEdit
-                      className="editar-icon"
-                      onClick={() =>
-                        handleEditarRespuesta(comentario.id, respuesta.id)
-                      }
-                    />
-                  </div>
-                  <p>{respuesta.texto}</p>
-                </div>
               ))}
             </div>
           </div>
         ))}
       </div>
 
-      {comentarioSeleccionado && esRespuesta && (
-        <div className="respuesta-form">
-          <textarea
-            value={respuestaTexto}
-            onChange={(e) => setRespuestaTexto(e.target.value)}
-            placeholder="Escribe tu respuesta"
-          />
-          {respuestaEditando ? (
-            <button onClick={handleGuardarRespuesta}>Guardar Cambios</button>
-          ) : (
-            <button onClick={handleAgregarRespuesta}>Agregar Respuesta</button>
-          )}
-        </div>
-      )}
+      <div className="nuevo-comentario-form">
+        <textarea
+          className="comentario-textarea"
+          value={nuevoTexto}
+          onChange={(e) => setNuevoTexto(e.target.value)}
+          placeholder="Escribe tu comentario"
+        />
+        <button
+          className="btn btn-primary"
+          onClick={handleGuardarComentario}
+          style={{ marginTop: "10px" }}
+        >
+          {comentarioSeleccionado ? "Guardar Cambios" : "Agregar Comentario"}
+        </button>
+      </div>
     </div>
   );
 };
