@@ -5,7 +5,6 @@ import reportReducer from "./reducers/reportReducer";
 import newsletterReducer from "./reducers/newsletterReducer";
 import userReducer from "./reducers/userReducer";
 import calendarReducer from "./reducers/calendarReducer";
-import reportOrderReducer from "./reducers/reportOrderReducer";
 import feedbackReducer from "./reducers/feedbackReducer";
 import financialReportReducer from "./reducers/financialReportReducer";
 import ingresosReducer from "./reducers/ingresosReducer";
@@ -20,7 +19,6 @@ const store = configureStore({
     newsletters: newsletterReducer,
     users: userReducer,
     calendar: calendarReducer,
-    ordersReort: reportOrderReducer,
     feedback: feedbackReducer,
     financialReport: financialReportReducer,
     ingresos: ingresosReducer,
