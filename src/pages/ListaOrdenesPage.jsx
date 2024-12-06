@@ -7,13 +7,18 @@ import {
 } from "../redux/actions/orderActions";
 import { API_ROUTES } from "../api";
 import { getToken } from "../services/authService";
+import * as XLSX from "xlsx";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 const ListaOrdenesPage = () => {
   const dispatch = useDispatch();
   const orders = useSelector((state) => state.orders?.filteredOrders || []);
   const searchTerm = useSelector((state) => state.orders.searchTerm);
 
-  const [mecanicos, setMecanicos] = useState([]); // Estado para almacenar la lista de mecánicos
+  const [mecanicos, setMecanicos] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const ORDERS_PER_PAGE = 5;
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -26,27 +31,32 @@ const ListaOrdenesPage = () => {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
+
         if (!response.ok) {
           throw new Error("Error al obtener las órdenes.");
         }
+
         const data = await response.json();
 
-        // Formatear datos y serializar fechas
-        const formattedOrders = data.map((order) => ({
-          id: order.numeroOrden,
-          numeroOrden: order.numeroOrden,
-          estado: order.estado,
-          placaVehiculo: order.placaVehiculo,
-          nombreMecanico: order.nombreMecanico || "No asignado",
-          cliente: order.nombreCliente || "Cliente no registrado",
-          dia: order.dia
-            ? new Date(order.dia).toISOString()
-            : "Fecha no disponible", // Serializar fecha
-          hora: order.hora ? `${order.hora}:00` : "Hora no disponible",
-          servicio: order.nombreServicio || "Sin especificar",
-        }));
+        if (Array.isArray(data)) {
+          const formattedOrders = data.map((order) => ({
+            id: order.numeroOrden,
+            numeroOrden: order.numeroOrden,
+            estado: order.estado || "Sin estado",
+            placaVehiculo: order.placaVehiculo || "Sin placa",
+            nombreMecanico: order.nombreMecanico || "No asignado",
+            cliente: order.nombreCliente || "Cliente no registrado",
+            dia: order.dia
+              ? new Date(order.dia).toLocaleDateString()
+              : "Fecha no disponible",
+            hora: order.hora ? `${order.hora}:00` : "Hora no disponible",
+            servicio: order.nombreServicio || "Sin especificar",
+          }));
 
-        dispatch(setOrders(formattedOrders));
+          dispatch(setOrders(formattedOrders));
+        } else {
+          console.error("El formato de las órdenes no es válido.");
+        }
       } catch (error) {
         console.error("Error al obtener las órdenes:", error);
       }
@@ -59,57 +69,44 @@ const ListaOrdenesPage = () => {
           method: "GET",
           headers: { Authorization: `Bearer ${token}` },
         });
+
         if (!response.ok) {
           throw new Error("Error al obtener la lista de mecánicos.");
         }
+
         const data = await response.json();
-        setMecanicos(data); // Almacenar la lista de mecánicos en el estado local
+        setMecanicos(data);
       } catch (error) {
         console.error("Error al obtener los mecánicos:", error);
       }
     };
 
-    fetchOrders(); // Llamar a la función para obtener órdenes
-    fetchMecanicos(); // Llamar a la función para obtener mecánicos
+    fetchOrders();
+    fetchMecanicos();
   }, [dispatch]);
 
   const handleMecanicoSelect = async (orderId, mecanicoId) => {
     try {
       if (!orderId || !mecanicoId) {
-        console.error(
-          "Error: Los valores de número de orden o mecánico son inválidos."
-        );
+        console.error("Valores inválidos para el mecánico o la orden.");
         return;
       }
 
       const token = getToken();
-
-      // Crear la URL con los parámetros
       const url = `${API_ROUTES.ordenes}/asignar-mecanico?numeroOrden=${orderId}&mecanicoId=${mecanicoId}`;
-
-      console.log("Enviando solicitud PUT a URL:", url);
-
       const response = await fetch(url, {
         method: "PUT",
-        headers: {
-          Authorization: `Bearer ${token}`, // Solo se envían encabezados, sin body
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
 
-      console.log("Respuesta del servidor:", response);
-
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error("Error en el servidor:", errorText);
         throw new Error("Error al asignar el mecánico.");
       }
 
-      // Encontrar el nombre del mecánico asignado
       const selectedMecanico = mecanicos.find(
         (mecanico) => mecanico.mecanicoId === mecanicoId
       );
 
-      // Actualizar el estado global con el mecánico asignado
       dispatch(
         assignMechanic(orderId, selectedMecanico?.nombre || "No asignado")
       );
@@ -120,6 +117,45 @@ const ListaOrdenesPage = () => {
 
   const handleSearch = (e) => {
     dispatch(filterOrders(e.target.value));
+    setCurrentPage(1);
+  };
+
+  const totalPages = Math.ceil(orders.length / ORDERS_PER_PAGE);
+
+  const currentOrders = orders.slice(
+    (currentPage - 1) * ORDERS_PER_PAGE,
+    currentPage * ORDERS_PER_PAGE
+  );
+
+  const handlePrevPage = () => {
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+  };
+
+  const handleNextPage = () => {
+    setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
+  };
+
+  const exportToExcel = () => {
+    const ws = XLSX.utils.json_to_sheet(orders);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Órdenes");
+    XLSX.writeFile(wb, "ordenes.xlsx");
+  };
+
+  const exportToPDF = () => {
+    const doc = new jsPDF();
+    doc.text("Lista de Órdenes", 10, 10);
+    doc.autoTable({
+      head: [["Número de Orden", "Placa", "Servicio", "Cliente", "Estado"]],
+      body: orders.map((order) => [
+        order.numeroOrden,
+        order.placaVehiculo,
+        order.servicio,
+        order.cliente,
+        order.estado,
+      ]),
+    });
+    doc.save("ordenes.pdf");
   };
 
   return (
@@ -127,6 +163,10 @@ const ListaOrdenesPage = () => {
       <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
         Lista de Órdenes
       </h2>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <button onClick={exportToExcel}>Exportar a Excel</button>
+        <button onClick={exportToPDF}>Exportar a PDF</button>
+      </div>
       <input
         type="text"
         placeholder="Buscar órdenes..."
@@ -150,12 +190,11 @@ const ListaOrdenesPage = () => {
           textAlign: "center",
         }}
       >
-        {/* Encabezados */}
         <div>
           <strong>Número de Orden</strong>
         </div>
         <div>
-          <strong>Placa del Vehículo</strong>
+          <strong>Placa</strong>
         </div>
         <div>
           <strong>Servicio</strong>
@@ -166,10 +205,8 @@ const ListaOrdenesPage = () => {
         <div>
           <strong>Asignar Mecánico</strong>
         </div>
-
-        {/* Órdenes */}
-        {orders.length > 0 ? (
-          orders.map((order) => (
+        {currentOrders.length > 0 ? (
+          currentOrders.map((order) => (
             <React.Fragment key={order.id}>
               <div>{order.numeroOrden}</div>
               <div>{order.placaVehiculo}</div>
@@ -185,13 +222,6 @@ const ListaOrdenesPage = () => {
                   onChange={(e) =>
                     handleMecanicoSelect(order.numeroOrden, e.target.value)
                   }
-                  style={{
-                    padding: "5px",
-                    width: "100%",
-                    boxSizing: "border-box",
-                    borderRadius: "4px",
-                    border: "1px solid #ccc",
-                  }}
                 >
                   <option value="">Seleccionar Mecánico</option>
                   {mecanicos.map((mecanico) => (
@@ -212,6 +242,28 @@ const ListaOrdenesPage = () => {
           </div>
         )}
       </div>
+      {totalPages > 1 && (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "20px",
+          }}
+        >
+          <button onClick={handlePrevPage} disabled={currentPage === 1}>
+            Anterior
+          </button>
+          <span style={{ margin: "0 10px" }}>
+            Página {currentPage} de {totalPages}
+          </span>
+          <button
+            onClick={handleNextPage}
+            disabled={currentPage === totalPages}
+          >
+            Siguiente
+          </button>
+        </div>
+      )}
     </div>
   );
 };

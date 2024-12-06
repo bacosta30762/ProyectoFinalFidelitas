@@ -12,7 +12,6 @@ import ModificaRol from "./components/ListaUsuario/modifica.jsx";
 import Perfileditar from "./components/Perfil/perfileditar.jsx";
 import UserList from "./components/ListaUsuario/lista.jsx";
 import ListaOrdenesPage from "./pages/ListaOrdenesPage.jsx";
-import ReporteOrdenesPage from "./pages/ReporteOrdenesPage.jsx";
 import MechanicOrdenListPage from "./pages/MechanicOrdenListPage.jsx";
 import MechanicFeedbackReportPage from "./pages/MechanicFeedbackReportPage.jsx";
 import MarketingPage from "./pages/MarketingPage.jsx";
@@ -143,14 +142,6 @@ function App() {
             element={
               <ProtectedRoute>
                 <ListaOrdenesPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/reporte-ordenes/*"
-            element={
-              <ProtectedRoute>
-                <ReporteOrdenesPage />
               </ProtectedRoute>
             }
           />
