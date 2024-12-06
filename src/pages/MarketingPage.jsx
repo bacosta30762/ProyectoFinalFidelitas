@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { API_ROUTES } from "../api";
 import { getToken } from "../services/authService";
 
@@ -12,6 +11,10 @@ const MarketingPage = () => {
   const [newContent, setNewContent] = useState("");
   const [newIsPromotional, setNewIsPromotional] = useState(false);
   const [newDate, setNewDate] = useState("");
+
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const NEWSLETTERS_PER_PAGE = 5;
 
   const fetchNewsletters = async () => {
     try {
@@ -134,6 +137,22 @@ const MarketingPage = () => {
     updateNewsletter(id, newTitle);
   };
 
+  // Pagination logic
+  const totalPages = Math.ceil(newsletters.length / NEWSLETTERS_PER_PAGE);
+
+  const currentNewsletters = newsletters.slice(
+    (currentPage - 1) * NEWSLETTERS_PER_PAGE,
+    currentPage * NEWSLETTERS_PER_PAGE
+  );
+
+  const handlePrevPage = () => {
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+  };
+
+  const handleNextPage = () => {
+    setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
+  };
+
   return (
     <div style={{ padding: "20px" }}>
       <h1 style={{ textAlign: "center" }}>Marketing</h1>
@@ -173,7 +192,7 @@ const MarketingPage = () => {
       </div>
 
       <h2 style={{ textAlign: "center" }}>Boletines Creados</h2>
-      {newsletters.length > 0 ? (
+      {currentNewsletters.length > 0 ? (
         <div
           style={{
             maxWidth: "800px",
@@ -183,7 +202,7 @@ const MarketingPage = () => {
             gap: "10px",
           }}
         >
-          {newsletters.map((newsletter) => (
+          {currentNewsletters.map((newsletter) => (
             <React.Fragment key={newsletter.id}>
               <div>
                 {newsletter.esPromocional ? "Promocional" : "Informativo"}
@@ -222,6 +241,34 @@ const MarketingPage = () => {
         </div>
       ) : (
         <div style={{ textAlign: "center" }}>No hay boletines creados.</div>
+      )}
+
+      {totalPages > 1 && (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "20px",
+          }}
+        >
+          <button
+            onClick={handlePrevPage}
+            disabled={currentPage === 1}
+            className="btn btn-secondary"
+          >
+            Anterior
+          </button>
+          <span style={{ margin: "0 10px" }}>
+            Página {currentPage} de {totalPages}
+          </span>
+          <button
+            onClick={handleNextPage}
+            disabled={currentPage === totalPages}
+            className="btn btn-secondary"
+          >
+            Siguiente
+          </button>
+        </div>
       )}
     </div>
   );
