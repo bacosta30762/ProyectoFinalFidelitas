@@ -10,6 +10,10 @@ const ComentariosValoraciones = () => {
   const [nuevoTexto, setNuevoTexto] = useState("");
   const [comentarioSeleccionado, setComentarioSeleccionado] = useState(null);
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const COMMENTS_PER_PAGE = 5;
+
   const fetchComentarios = async () => {
     try {
       const token = getToken();
@@ -38,7 +42,7 @@ const ComentariosValoraciones = () => {
         id: 0,
         contenido: nuevoTexto,
         fechaCreacion: new Date().toISOString(),
-        boletinId: 0, // Update this if boletinId is dynamic
+        boletinId: 0,
         boletin: {
           id: 0,
           titulo: "Boletín relacionado",
@@ -138,6 +142,22 @@ const ComentariosValoraciones = () => {
     }
   };
 
+  // Pagination handlers
+  const totalPages = Math.ceil(comentarios.length / COMMENTS_PER_PAGE);
+
+  const currentComments = comentarios.slice(
+    (currentPage - 1) * COMMENTS_PER_PAGE,
+    currentPage * COMMENTS_PER_PAGE
+  );
+
+  const handlePrevPage = () => {
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+  };
+
+  const handleNextPage = () => {
+    setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
+  };
+
   useEffect(() => {
     fetchComentarios();
   }, []);
@@ -149,7 +169,7 @@ const ComentariosValoraciones = () => {
       </h1>
 
       <div className="comentarios-lista">
-        {comentarios.map((comentario) => (
+        {currentComments.map((comentario) => (
           <div key={comentario.id} className="comentario-card">
             <div className="comentario-header">
               <FaTrashAlt
@@ -177,6 +197,28 @@ const ComentariosValoraciones = () => {
           </div>
         ))}
       </div>
+
+      {totalPages > 1 && (
+        <div className="pagination-controls">
+          <button
+            onClick={handlePrevPage}
+            disabled={currentPage === 1}
+            className="btn btn-secondary"
+          >
+            Anterior
+          </button>
+          <span style={{ margin: "0 10px" }}>
+            Página {currentPage} de {totalPages}
+          </span>
+          <button
+            onClick={handleNextPage}
+            disabled={currentPage === totalPages}
+            className="btn btn-secondary"
+          >
+            Siguiente
+          </button>
+        </div>
+      )}
 
       <div className="nuevo-comentario-form">
         <textarea
