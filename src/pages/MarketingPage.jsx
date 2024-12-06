@@ -136,63 +136,7 @@ const MarketingPage = () => {
 
   return (
     <div style={{ padding: "20px" }}>
-      <h1 style={{ textAlign: "center" }}>Módulo de Marketing</h1>
-
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          marginBottom: "20px",
-        }}
-      >
-        <button onClick={toggleInformativeExample}>
-          Ver Ejemplo de Boletín Informativo
-        </button>
-        <button
-          onClick={togglePromotionalExample}
-          style={{ marginLeft: "10px" }}
-        >
-          Ver Ejemplo de Boletín Promocional
-        </button>
-      </div>
-
-      {showInformativeExample && (
-        <div
-          style={{
-            margin: "20px auto",
-            padding: "10px",
-            border: "1px solid #ccc",
-            backgroundColor: "#f9f9f9",
-            maxWidth: "600px",
-          }}
-        >
-          <h3>Ejemplo de Boletín Informativo</h3>
-          <p>
-            <strong>Horarios:</strong> Lunes a Viernes de 8:00 AM a 5:00 PM
-          </p>
-          <p>
-            <strong>Feriados:</strong> 25 de Diciembre, 1 de Enero
-          </p>
-        </div>
-      )}
-
-      {showPromotionalExample && (
-        <div
-          style={{
-            margin: "20px auto",
-            padding: "10px",
-            border: "1px solid #ccc",
-            backgroundColor: "#f9f9f9",
-            maxWidth: "600px",
-          }}
-        >
-          <h3>Ejemplo de Boletín Promocional</h3>
-          <p>
-            <strong>Promoción:</strong> 20% de descuento en cambio de aceite
-            durante Agosto
-          </p>
-        </div>
-      )}
+      <h1 style={{ textAlign: "center" }}>Marketing</h1>
 
       <h2 style={{ textAlign: "center" }}>Crear Nuevo Boletín</h2>
       <div style={{ maxWidth: "600px", margin: "0 auto" }}>
