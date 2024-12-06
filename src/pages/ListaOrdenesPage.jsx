@@ -14,6 +14,8 @@ const ListaOrdenesPage = () => {
   const searchTerm = useSelector((state) => state.orders.searchTerm);
 
   const [mecanicos, setMecanicos] = useState([]); // Estado para almacenar la lista de mecánicos
+  const [currentPage, setCurrentPage] = useState(1);
+  const ORDERS_PER_PAGE = 5; // Número de órdenes por página
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -120,6 +122,23 @@ const ListaOrdenesPage = () => {
 
   const handleSearch = (e) => {
     dispatch(filterOrders(e.target.value));
+    setCurrentPage(1); // Reiniciar a la primera página al cambiar la búsqueda
+  };
+
+  // Cálculo de paginación
+  const totalPages = Math.ceil(orders.length / ORDERS_PER_PAGE);
+
+  const currentOrders = orders.slice(
+    (currentPage - 1) * ORDERS_PER_PAGE,
+    currentPage * ORDERS_PER_PAGE
+  );
+
+  const handlePrevPage = () => {
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+  };
+
+  const handleNextPage = () => {
+    setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
   };
 
   return (
@@ -168,8 +187,8 @@ const ListaOrdenesPage = () => {
         </div>
 
         {/* Órdenes */}
-        {orders.length > 0 ? (
-          orders.map((order) => (
+        {currentOrders.length > 0 ? (
+          currentOrders.map((order) => (
             <React.Fragment key={order.id}>
               <div>{order.numeroOrden}</div>
               <div>{order.placaVehiculo}</div>
@@ -212,6 +231,30 @@ const ListaOrdenesPage = () => {
           </div>
         )}
       </div>
+      {/* Controles de paginación */}
+      {totalPages > 1 && (
+        <div
+          style={{
+            marginTop: "20px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <button onClick={handlePrevPage} disabled={currentPage === 1}>
+            Anterior
+          </button>
+          <span style={{ margin: "0 10px" }}>
+            Página {currentPage} de {totalPages}
+          </span>
+          <button
+            onClick={handleNextPage}
+            disabled={currentPage === totalPages}
+          >
+            Siguiente
+          </button>
+        </div>
+      )}
     </div>
   );
 };
