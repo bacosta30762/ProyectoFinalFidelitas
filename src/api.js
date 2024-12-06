@@ -6,4 +6,5 @@ export const API_ROUTES = {
   users: `${BASE_URL}/Usuarios`,
   ordenes: `${BASE_URL}/Ordenes`,
   mecanicos: `${BASE_URL}/Mecanicos`,
+  marketing: `${BASE_URL}/Marketing`,
 };

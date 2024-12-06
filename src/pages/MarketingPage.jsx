@@ -1,29 +1,121 @@
-// src/MarketingPage.js
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  setNewsletters,
-  deleteNewsletter,
-  updateNewsletter,
-} from "../redux/actions/newsletterActions";
-
-const initialNewsletters = [
-  { id: 1, tipo: "Informativo", titulo: "Horarios y Feriados" },
-  { id: 2, tipo: "Promocional", titulo: "Promociones de Agosto" },
-];
+import { API_ROUTES } from "../api";
+import { getToken } from "../services/authService";
 
 const MarketingPage = () => {
-  const dispatch = useDispatch();
-  const newsletters = useSelector((state) => state.newsletters.newsletters);
-
+  const [newsletters, setNewsletters] = useState([]);
   const [showInformativeExample, setShowInformativeExample] = useState(false);
   const [showPromotionalExample, setShowPromotionalExample] = useState(false);
   const [editingNewsletter, setEditingNewsletter] = useState(null);
   const [newTitle, setNewTitle] = useState("");
+  const [newContent, setNewContent] = useState("");
+  const [newIsPromotional, setNewIsPromotional] = useState(false);
+  const [newDate, setNewDate] = useState("");
+
+  const fetchNewsletters = async () => {
+    try {
+      const token = getToken();
+      const response = await fetch(`${API_ROUTES.marketing}/ObtenerBoletines`, {
+        method: "GET",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (!response.ok) {
+        throw new Error("Error fetching newsletters.");
+      }
+
+      const data = await response.json();
+      setNewsletters(data);
+    } catch (error) {
+      console.error("Error fetching newsletters:", error);
+    }
+  };
+
+  const createNewsletter = async () => {
+    try {
+      const token = getToken();
+      const response = await fetch(`${API_ROUTES.marketing}/CrearBoletin`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          id: 0,
+          titulo: newTitle,
+          contenido: newContent,
+          fechaEnvio: newDate,
+          esPromocional: newIsPromotional,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Error creating newsletter.");
+      }
+
+      fetchNewsletters();
+      setNewTitle("");
+      setNewContent("");
+      setNewDate("");
+      setNewIsPromotional(false);
+    } catch (error) {
+      console.error("Error creating newsletter:", error);
+    }
+  };
+
+  const updateNewsletter = async (id, updatedTitle) => {
+    try {
+      const token = getToken();
+      const newsletterToUpdate = newsletters.find((n) => n.id === id);
+      const response = await fetch(`${API_ROUTES.marketing}/ModificarBoletin`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          ...newsletterToUpdate,
+          titulo: updatedTitle,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Error updating newsletter.");
+      }
+
+      fetchNewsletters();
+      setEditingNewsletter(null);
+      setNewTitle("");
+    } catch (error) {
+      console.error("Error updating newsletter:", error);
+    }
+  };
+
+  const deleteNewsletter = async (id) => {
+    try {
+      const token = getToken();
+      const response = await fetch(
+        `${API_ROUTES.marketing}/EliminarBoletin/${id}`,
+        {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Error deleting newsletter.");
+      }
+
+      fetchNewsletters();
+    } catch (error) {
+      console.error("Error deleting newsletter:", error);
+    }
+  };
 
   useEffect(() => {
-    dispatch(setNewsletters(initialNewsletters));
-  }, [dispatch]);
+    fetchNewsletters();
+  }, []);
 
   const toggleInformativeExample = () => {
     setShowInformativeExample(!showInformativeExample);
@@ -39,9 +131,7 @@ const MarketingPage = () => {
   };
 
   const saveNewsletter = (id) => {
-    dispatch(updateNewsletter(id, newTitle));
-    setEditingNewsletter(null);
-    setNewTitle("");
+    updateNewsletter(id, newTitle);
   };
 
   return (
@@ -104,6 +194,40 @@ const MarketingPage = () => {
         </div>
       )}
 
+      <h2 style={{ textAlign: "center" }}>Crear Nuevo Boletín</h2>
+      <div style={{ maxWidth: "600px", margin: "0 auto" }}>
+        <input
+          type="text"
+          placeholder="Título"
+          value={newTitle}
+          onChange={(e) => setNewTitle(e.target.value)}
+          style={{ width: "100%", marginBottom: "10px" }}
+        />
+        <textarea
+          placeholder="Contenido"
+          value={newContent}
+          onChange={(e) => setNewContent(e.target.value)}
+          style={{ width: "100%", marginBottom: "10px" }}
+        />
+        <input
+          type="date"
+          value={newDate}
+          onChange={(e) => setNewDate(e.target.value)}
+          style={{ width: "100%", marginBottom: "10px" }}
+        />
+        <div>
+          <label>
+            <input
+              type="checkbox"
+              checked={newIsPromotional}
+              onChange={(e) => setNewIsPromotional(e.target.checked)}
+            />
+            Es Promocional
+          </label>
+        </div>
+        <button onClick={createNewsletter}>Crear</button>
+      </div>
+
       <h2 style={{ textAlign: "center" }}>Boletines Creados</h2>
       {newsletters.length > 0 ? (
         <div
@@ -117,7 +241,9 @@ const MarketingPage = () => {
         >
           {newsletters.map((newsletter) => (
             <React.Fragment key={newsletter.id}>
-              <div>{newsletter.tipo}</div>
+              <div>
+                {newsletter.esPromocional ? "Promocional" : "Informativo"}
+              </div>
               <div>
                 {editingNewsletter === newsletter.id ? (
                   <input
@@ -141,7 +267,7 @@ const MarketingPage = () => {
                   </button>
                 )}
                 <button
-                  onClick={() => dispatch(deleteNewsletter(newsletter.id))}
+                  onClick={() => deleteNewsletter(newsletter.id)}
                   style={{ marginLeft: "10px" }}
                 >
                   Eliminar
