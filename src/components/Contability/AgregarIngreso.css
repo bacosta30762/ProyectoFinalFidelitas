@@ -1,56 +1,79 @@
 .agregar-ingreso-container {
-    width: 50%;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f7f7f7;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    font-family: Arial, sans-serif;
+  max-width: 600px; /* Adjusted for better responsiveness */
+  margin: 50px auto; /* Added spacing from the top for a centered layout */
+  padding: 30px; /* Increased padding for a spacious layout */
+  background-color: #ffffff; /* Pure white for a clean, professional look */
+  border-radius: 10px; /* Softer rounded corners */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); /* Subtle shadow for depth */
+  font-family: "Arial", sans-serif;
+  transition: transform 0.2s ease, box-shadow 0.2s ease; /* Smooth hover effect */
+}
+
+.agregar-ingreso-container:hover {
+  transform: scale(1.02); /* Slight zoom effect on hover */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25); /* Stronger shadow on hover */
 }
 
 h2 {
-    text-align: center;
-    margin-bottom: 20px;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333333; /* Darker text for better readability */
+  font-size: 24px; /* Slightly larger font size */
+  font-weight: bold;
+  letter-spacing: 0.5px; /* Slight spacing for a polished look */
 }
 
 .agregar-ingreso-form {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Uniform spacing between form elements */
 }
 
 .form-group {
-    margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Consistent spacing between label and input */
 }
 
 .form-group label {
-    margin-bottom: 5px;
-    font-weight: bold;
+  font-weight: bold;
+  font-size: 14px;
+  color: #555555; /* Subtle dark gray for contrast */
 }
 
 .form-control {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 100%;
-    box-sizing: border-box;
+  padding: 12px; /* Increased padding for better usability */
+  border: 1px solid #dddddd; /* Lighter border for a softer look */
+  border-radius: 6px; /* Slightly rounder corners */
+  font-size: 16px; /* Increased font size for readability */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth focus animation */
 }
 
 .form-control:focus {
-    border-color: #66afe9;
-    outline: none;
+  border-color: #0056b3; /* Blue border for focus state */
+  box-shadow: 0 0 8px rgba(0, 86, 179, 0.5); /* Glow effect on focus */
+  outline: none;
 }
 
 .submit-button {
-    background-color: green;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    text-align: center;
-    font-size: 16px;
+  background-color: #28a745; /* Green for a successful action */
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .submit-button:hover {
-    background-color: darkgreen;
+  background-color: #218838; /* Slightly darker green on hover */
+  transform: scale(1.03); /* Slight enlargement for interactivity */
+}
+
+.submit-button:active {
+  background-color: #1e7e34; /* Darkest green for active state */
+  transform: scale(0.98); /* Slight shrink for active click effect */
 }

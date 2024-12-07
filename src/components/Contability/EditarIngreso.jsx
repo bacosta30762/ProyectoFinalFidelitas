@@ -1,5 +1,3 @@
-// src/EditarIngreso.js
-
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { editarIngreso } from "../../redux/actions/ingresosActions";
@@ -36,21 +34,34 @@ const EditarIngreso = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="agregar-ingreso-form">
-      <input
-        type="text"
-        value={descripcion}
-        onChange={(e) => setDescripcion(e.target.value)}
-        required
-      />
-      <input
-        type="number"
-        value={total}
-        onChange={(e) => setTotal(e.target.value)}
-        required
-      />
-      <button type="submit">Actualizar</button>
-    </form>
+    <div className="agregar-ingreso-container">
+      <h2>Editar Ingreso</h2>
+      <form onSubmit={handleSubmit} className="agregar-ingreso-form">
+        <div className="form-group">
+          <label>Descripción</label>
+          <input
+            type="text"
+            className="form-control"
+            value={descripcion}
+            onChange={(e) => setDescripcion(e.target.value)}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label>Total</label>
+          <input
+            type="number"
+            className="form-control"
+            value={total}
+            onChange={(e) => setTotal(e.target.value)}
+            required
+          />
+        </div>
+        <button type="submit" className="submit-button">
+          Actualizar
+        </button>
+      </form>
+    </div>
   );
 };
 
