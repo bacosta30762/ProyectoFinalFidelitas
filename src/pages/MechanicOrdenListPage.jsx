@@ -1,72 +1,67 @@
-// src/MechanicOrdenListPage.js
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setOrders, filterOrders } from "../redux/actions/reportOrderActions";
+import { API_ROUTES } from "../api";
+import { getToken } from "../services/authService";
 
 const MechanicOrdenListPage = () => {
   const dispatch = useDispatch();
   const filteredOrders = useSelector((state) => state.orders.filteredOrders);
   const searchTerm = useSelector((state) => state.orders.searchTerm);
 
-  const mecanicoNombre = "Luis Martínez"; // Nombre del mecánico
+  const [mecanicoNombre, setMecanicoNombre] = useState(""); // Dynamically fetched mechanic name
 
-  // Datos iniciales de las órdenes
-  const initialOrders = [
-    {
-      id: 1,
-      numeroOrden: "001",
-      placaVehiculo: "TTG854",
-      servicio: "Cambio de aceite",
-      cliente: "Juan Pérez",
-      monto: "₡18000",
-      fecha: "2024-08-10",
-      mecanico: "Luis Martínez",
-    },
-    {
-      id: 2,
-      numeroOrden: "002",
-      placaVehiculo: "GHB548",
-      servicio: "Revisión de frenos",
-      cliente: "María López",
-      monto: "₡8000",
-      fecha: "2024-08-09",
-      mecanico: "Carlos Ruiz",
-    },
-    {
-      id: 3,
-      numeroOrden: "003",
-      placaVehiculo: "JHT358",
-      servicio: "Alineación y balanceo",
-      cliente: "Carlos Gómez",
-      monto: "₡12000",
-      fecha: "2024-08-08",
-      mecanico: "Luis Martínez",
-    },
-    {
-      id: 4,
-      numeroOrden: "004",
-      placaVehiculo: "GHI341",
-      servicio: "Cambio de batería",
-      cliente: "Ana Fernández",
-      monto: "₡7000",
-      fecha: "2024-08-07",
-      mecanico: "Miguel Hernández",
-    },
-  ];
+  const fetchOrders = async () => {
+    try {
+      const token = getToken();
+      const response = await fetch(
+        `${API_ROUTES.ordenes}/listar-ordenes-usuario`,
+        {
+          method: "GET",
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
-  useEffect(() => {
-    dispatch(setOrders(initialOrders));
-    dispatch(filterOrders(mecanicoNombre, ""));
-  }, [dispatch, mecanicoNombre]);
+      if (!response.ok) {
+        throw new Error("Error fetching mechanic orders.");
+      }
+
+      const data = await response.json();
+
+      // Format orders
+      const formattedOrders = data.map((order) => ({
+        id: order.numeroOrden,
+        numeroOrden: order.numeroOrden,
+        placaVehiculo: order.placaVehiculo || "Sin placa",
+        servicio: order.nombreServicio || "Sin servicio",
+        cliente: order.nombreCliente || "No registrado",
+        monto: "₡" + (order.monto || "0"),
+        fecha: order.dia || "Sin fecha",
+        mecanico: order.nombreMecanico || "No asignado",
+      }));
+
+      dispatch(setOrders(formattedOrders));
+
+      if (formattedOrders.length > 0) {
+        setMecanicoNombre(formattedOrders[0].mecanico);
+      }
+    } catch (error) {
+      console.error("Error fetching mechanic orders:", error);
+    }
+  };
 
   const handleSearchChange = (e) => {
     dispatch(filterOrders(mecanicoNombre, e.target.value));
   };
 
+  useEffect(() => {
+    fetchOrders();
+  }, []);
+
   return (
     <div style={{ padding: "20px" }}>
       <h1 style={{ textAlign: "center", marginBottom: "20px" }}>
-        Mecánico: {mecanicoNombre}
+        Mecánico: {mecanicoNombre || "Desconocido"}
       </h1>
       <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Mis Órdenes</h2>
       <input
