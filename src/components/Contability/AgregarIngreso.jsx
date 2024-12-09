@@ -1,5 +1,3 @@
-// src/AgregarIngreso.js
-
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { agregarIngreso } from "../../redux/actions/ingresosActions";
@@ -24,23 +22,36 @@ const AgregarIngreso = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="agregar-ingreso-form">
-      <input
-        type="text"
-        placeholder="Descripción"
-        value={descripcion}
-        onChange={(e) => setDescripcion(e.target.value)}
-        required
-      />
-      <input
-        type="number"
-        placeholder="Total"
-        value={total}
-        onChange={(e) => setTotal(e.target.value)}
-        required
-      />
-      <button type="submit">Agregar</button>
-    </form>
+    <div className="agregar-ingreso-container">
+      <h2>Agregar Nuevo Ingreso</h2>
+      <form onSubmit={handleSubmit} className="agregar-ingreso-form">
+        <div className="form-group">
+          <label>Descripción</label>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Descripción"
+            value={descripcion}
+            onChange={(e) => setDescripcion(e.target.value)}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label>Total</label>
+          <input
+            type="number"
+            className="form-control"
+            placeholder="Total"
+            value={total}
+            onChange={(e) => setTotal(e.target.value)}
+            required
+          />
+        </div>
+        <button type="submit" className="submit-button">
+          Agregar
+        </button>
+      </form>
+    </div>
   );
 };
 

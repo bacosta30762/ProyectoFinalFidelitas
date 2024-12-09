@@ -1,26 +1,41 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { FaEdit, FaTrashAlt, FaFilePdf, FaFileExcel } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { PDFDownloadLink, Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
+import {
+  PDFDownloadLink,
+  Document,
+  Page,
+  Text,
+  View,
+  StyleSheet,
+} from "@react-pdf/renderer";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import { fetchEgresos, deleteEgreso } from "../../redux/actions/egresosActions";
 import "./EgresosPage.css";
 
 const EgresosPage = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const egresos = useSelector((state) => state.egresos.egresos);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [selectedEgreso, setSelectedEgreso] = useState(null);
 
-  const handleSearch = () => {
-    console.log("Buscando egresos desde:", startDate, "hasta:", endDate);
-  };
+  useEffect(() => {
+    dispatch(fetchEgresos());
+  }, [dispatch]);
 
   const handleAgregarClick = () => {
     navigate("/agregar-egreso");
+  };
+
+  const handleEditClick = (id) => {
+    navigate(`/editar-egreso/${id}`);
   };
 
   const handleDeleteClick = (egreso) => {
@@ -28,52 +43,17 @@ const EgresosPage = () => {
     setShowDeletePopup(true);
   };
 
-  const handleEditClick = (id) => {
-    navigate(`/editar-egreso/${id}`);
-  };
-
   const handleConfirmDelete = () => {
-    // Lógica para eliminar el egreso seleccionado
-    console.log("Egreso eliminado:", selectedEgreso);
-    setShowDeletePopup(false);
-    alert("Eliminado con éxito");
-  };
-
-  const handleCancelDelete = () => {
+    dispatch(deleteEgreso(selectedEgreso.id));
     setShowDeletePopup(false);
   };
-
-  const [egresos] = useState([
-    {
-      id: 1,
-      fecha: "2023-08-01",
-      categoria: "Compra de Materiales",
-      descripcion: "Compra de cemento",
-      monto: 1500.00,
-      metodoPago: "Transferencia",
-      proveedor: "Cementos XYZ",
-      numeroFactura: "F12345",
-      comentarios: "Ninguno",
-    },
-    {
-      id: 2,
-      fecha: "2023-08-02",
-      categoria: "Salarios",
-      descripcion: "Pago de salario Julio",
-      monto: 2500.00,
-      metodoPago: "Efectivo",
-      proveedor: "Juan Pérez",
-      numeroFactura: "-",
-      comentarios: "Ninguno",
-    },
-  ]);
 
   const generatePDF = () => (
     <Document>
       <Page style={styles.page}>
         <View style={styles.section}>
           <Text style={styles.title}>Informe de Egresos</Text>
-          {egresos.map(egreso => (
+          {egresos.map((egreso) => (
             <View key={egreso.id} style={styles.item}>
               <Text>Fecha: {egreso.fecha}</Text>
               <Text>Categoría: {egreso.categoria}</Text>
@@ -96,7 +76,10 @@ const EgresosPage = () => {
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Egresos");
     const wbout = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-    saveAs(new Blob([wbout], { type: "application/octet-stream" }), "reporte-egresos.xlsx");
+    saveAs(
+      new Blob([wbout], { type: "application/octet-stream" }),
+      "reporte-egresos.xlsx"
+    );
   };
 
   return (
@@ -112,34 +95,20 @@ const EgresosPage = () => {
             fileName="reporte-egresos.pdf"
             className="pdf-button"
           >
-            {({ loading }) => (loading ? "Cargando documento..." : <><FaFilePdf /> Generar Informe PDF</>)}
+            {({ loading }) =>
+              loading ? (
+                "Cargando documento..."
+              ) : (
+                <>
+                  <FaFilePdf /> Generar Informe PDF
+                </>
+              )
+            }
           </PDFDownloadLink>
           <button className="excel-button" onClick={handleExcelExport}>
             <FaFileExcel /> Generar Informe Excel
           </button>
         </div>
-      </div>
-      <div className="date-picker-container">
-        <DatePicker
-          selected={startDate}
-          onChange={(date) => setStartDate(date)}
-          selectsStart
-          startDate={startDate}
-          endDate={endDate}
-          placeholderText="Fecha de inicio"
-        />
-        <DatePicker
-          selected={endDate}
-          onChange={(date) => setEndDate(date)}
-          selectsEnd
-          startDate={startDate}
-          endDate={endDate}
-          minDate={startDate}
-          placeholderText="Fecha de fin"
-        />
-        <button className="search-button" onClick={handleSearch}>
-          Buscar
-        </button>
       </div>
       <table className="egresos-table">
         <thead>
@@ -180,14 +149,13 @@ const EgresosPage = () => {
           ))}
         </tbody>
       </table>
-
       {showDeletePopup && (
         <div className="popup-overlay">
           <div className="popup-content">
             <h3>¿Está seguro que desea eliminar el egreso?</h3>
             <div className="popup-buttons">
               <button onClick={handleConfirmDelete}>Sí</button>
-              <button onClick={handleCancelDelete}>No</button>
+              <button onClick={() => setShowDeletePopup(false)}>No</button>
             </div>
           </div>
         </div>
@@ -197,26 +165,11 @@ const EgresosPage = () => {
 };
 
 const styles = StyleSheet.create({
-  page: {
-    flexDirection: 'column',
-    padding: 20,
-  },
-  section: {
-    marginBottom: 20,
-  },
-  title: {
-    fontSize: 20,
-    marginBottom: 10,
-    textAlign: 'center',
-  },
-  item: {
-    marginBottom: 10,
-  },
-  separator: {
-    height: 1,
-    backgroundColor: '#000',
-    marginVertical: 10,
-  },
+  page: { padding: 20 },
+  section: { marginBottom: 20 },
+  title: { fontSize: 20, marginBottom: 10, textAlign: "center" },
+  item: { marginBottom: 10 },
+  separator: { height: 1, backgroundColor: "#000", marginVertical: 10 },
 });
 
 export default EgresosPage;

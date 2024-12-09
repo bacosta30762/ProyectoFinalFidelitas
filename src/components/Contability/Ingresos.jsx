@@ -1,5 +1,3 @@
-// src/IngresosPage.js
-
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
@@ -19,9 +17,14 @@ const IngresosPage = () => {
   return (
     <div className="ingresos-container">
       <h1>Ingresos</h1>
-      <button onClick={() => navigate("/agregar-ingreso")}>
-        Agregar Ingreso
-      </button>
+      <div className="button-container">
+        <button
+          className="add-button"
+          onClick={() => navigate("/agregar-ingreso")}
+        >
+          Agregar Ingreso
+        </button>
+      </div>
       <table className="ingresos-table">
         <thead>
           <tr>
@@ -36,12 +39,16 @@ const IngresosPage = () => {
             <tr key={ingreso.id}>
               <td>{ingreso.fecha}</td>
               <td>{ingreso.descripcion}</td>
-              <td>{ingreso.total.toFixed(2)}</td>
-              <td>
+              <td>₡{ingreso.total.toFixed(2)}</td>
+              <td className="icon-group">
                 <FaEdit
+                  className="edit-icon"
                   onClick={() => navigate(`/editar-ingreso/${ingreso.id}`)}
                 />
-                <FaTrashAlt onClick={() => handleDeleteClick(ingreso.id)} />
+                <FaTrashAlt
+                  className="delete-icon"
+                  onClick={() => handleDeleteClick(ingreso.id)}
+                />
               </td>
             </tr>
           ))}
