@@ -1,60 +1,35 @@
+// src/components/Inventarios.js
+
 import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  setCategory,
+  addItem,
+  modifyItem,
+  setSearchTerm,
+} from "../../redux/actions/inventariosActions";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./inventario.css";
 
-const CATEGORIES = {
-  lubricantes: [
-    "Aceites de motor (sintéticos, semi-sintéticos y minerales)",
-    "Aceites para transmisiones automáticas y manuales",
-    "Aceites hidráulicos",
-    "Aceites para motos",
-    "Grasas lubricantes",
-  ],
-  filtros: [
-    "Filtros de aceite",
-    "Filtros de aire",
-    "Filtros de combustible",
-    "Filtros de cabina",
-  ],
-  repuestos: [
-    "Bujías",
-    "Correás de distribución",
-    "Discos de freno",
-    "Bombas de agua",
-    "Amortiguadores",
-  ],
-};
+const Inventarios = () => {
+  const dispatch = useDispatch();
+  const { categories, selectedCategory, searchTerm } = useSelector(
+    (state) => state.inventarios
+  );
 
-function Inventarios() {
-  const [categories, setCategories] = useState(CATEGORIES);
-  const [selectedCategory, setSelectedCategory] = useState("lubricantes");
-  const [selectedIndex, setSelectedIndex] = useState(-1);
   const [newItem, setNewItem] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedIndex, setSelectedIndex] = useState(-1);
 
   const handleAddItem = () => {
-    if (newItem.trim() !== "" && categories[selectedCategory]) {
-      setCategories({
-        ...categories,
-        [selectedCategory]: [...categories[selectedCategory], newItem],
-      });
+    if (newItem.trim()) {
+      dispatch(addItem(selectedCategory, newItem));
       setNewItem("");
     }
   };
 
   const handleModifyItem = () => {
-    if (
-      selectedIndex !== -1 &&
-      newItem.trim() !== "" &&
-      categories[selectedCategory]
-    ) {
-      const updatedItems = categories[selectedCategory].map((item, index) =>
-        index === selectedIndex ? newItem : item
-      );
-      setCategories({
-        ...categories,
-        [selectedCategory]: updatedItems,
-      });
+    if (selectedIndex !== -1 && newItem.trim()) {
+      dispatch(modifyItem(selectedCategory, selectedIndex, newItem));
       setNewItem("");
       setSelectedIndex(-1);
     }
@@ -68,11 +43,13 @@ function Inventarios() {
     <div className="container">
       <h1>Inventario</h1>
       <div className="category-select">
-        <button onClick={() => setSelectedCategory("lubricantes")}>
+        <button onClick={() => dispatch(setCategory("lubricantes"))}>
           Lubricantes
         </button>
-        <button onClick={() => setSelectedCategory("filtros")}>Filtros</button>
-        <button onClick={() => setSelectedCategory("repuestos")}>
+        <button onClick={() => dispatch(setCategory("filtros"))}>
+          Filtros
+        </button>
+        <button onClick={() => dispatch(setCategory("repuestos"))}>
           Repuestos y componentes
         </button>
       </div>
@@ -81,7 +58,7 @@ function Inventarios() {
           type="text"
           placeholder="Buscar..."
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={(e) => dispatch(setSearchTerm(e.target.value))}
         />
       </div>
       {filteredItems.length === 0 && (
@@ -118,6 +95,6 @@ function Inventarios() {
       </div>
     </div>
   );
-}
+};
 
 export default Inventarios;
