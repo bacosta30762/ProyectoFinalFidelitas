@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./ListGroup.css";
+import "./inventario.css";
 
 const CATEGORIES = {
   lubricantes: [
@@ -25,7 +25,7 @@ const CATEGORIES = {
   ],
 };
 
-function ListGroup() {
+function Inventarios() {
   const [categories, setCategories] = useState(CATEGORIES);
   const [selectedCategory, setSelectedCategory] = useState("lubricantes");
   const [selectedIndex, setSelectedIndex] = useState(-1);
@@ -43,7 +43,11 @@ function ListGroup() {
   };
 
   const handleModifyItem = () => {
-    if (selectedIndex !== -1 && newItem.trim() !== "" && categories[selectedCategory]) {
+    if (
+      selectedIndex !== -1 &&
+      newItem.trim() !== "" &&
+      categories[selectedCategory]
+    ) {
       const updatedItems = categories[selectedCategory].map((item, index) =>
         index === selectedIndex ? newItem : item
       );
@@ -56,7 +60,7 @@ function ListGroup() {
     }
   };
 
-  const filteredItems = categories[selectedCategory].filter(item =>
+  const filteredItems = categories[selectedCategory].filter((item) =>
     item.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -64,9 +68,13 @@ function ListGroup() {
     <div className="container">
       <h1>Inventario</h1>
       <div className="category-select">
-        <button onClick={() => setSelectedCategory("lubricantes")}>Lubricantes</button>
+        <button onClick={() => setSelectedCategory("lubricantes")}>
+          Lubricantes
+        </button>
         <button onClick={() => setSelectedCategory("filtros")}>Filtros</button>
-        <button onClick={() => setSelectedCategory("repuestos")}>Repuestos y componentes</button>
+        <button onClick={() => setSelectedCategory("repuestos")}>
+          Repuestos y componentes
+        </button>
       </div>
       <div className="input-group">
         <input
@@ -76,12 +84,18 @@ function ListGroup() {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
-      {filteredItems.length === 0 && <p>No se encontró ningún producto con este nombre</p>}
+      {filteredItems.length === 0 && (
+        <p>No se encontró ningún producto con este nombre</p>
+      )}
       <div className="list-container">
         <ul className="list-group">
           {filteredItems.map((item, index) => (
             <li
-              className={selectedIndex === index ? "list-group-item active" : "list-group-item"}
+              className={
+                selectedIndex === index
+                  ? "list-group-item active"
+                  : "list-group-item"
+              }
               key={index}
               onClick={() => setSelectedIndex(index)}
             >
@@ -106,4 +120,4 @@ function ListGroup() {
   );
 }
 
-export default ListGroup;
+export default Inventarios;

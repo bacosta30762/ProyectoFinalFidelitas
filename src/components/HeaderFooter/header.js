@@ -42,8 +42,14 @@ export default function AppHeader() {
                   <NavDropdown.Item as={NavLink} to="/ListaUsuario">
                     Lista Usuario
                   </NavDropdown.Item>
+                  <NavDropdown.Item as={NavLink} to="/comentarios-valoraciones">
+                    Opiniones
+                  </NavDropdown.Item>
                   <NavDropdown.Item as={NavLink} to="/calendario">
                     Calendario
+                  </NavDropdown.Item>
+                  <NavDropdown.Item as={NavLink} to="/inventarios">
+                    Inventarios
                   </NavDropdown.Item>
                 </NavDropdown>
 
@@ -59,7 +65,7 @@ export default function AppHeader() {
                   </NavDropdown.Item>
                 </NavDropdown>
 
-                <NavDropdown title="Contabilidad" id="accounting-nav-dropdown">
+                <NavDropdown title="Contador" id="accounting-nav-dropdown">
                   <NavDropdown.Item as={NavLink} to="/ingresos">
                     Ingresos
                   </NavDropdown.Item>
@@ -73,13 +79,6 @@ export default function AppHeader() {
                     Disponibilidad Citas
                   </Nav.Link>
                 </NavDropdown>
-
-                <Nav.Link as={NavLink} to="/comentarios-valoraciones">
-                  Opiniones
-                </Nav.Link>
-                <Nav.Link as={NavLink} to="/inventarios">
-                  Inventarios
-                </Nav.Link>
 
                 <NavDropdown title={user.nombre} id="user-nav-dropdown">
                   <NavDropdown.Item as={NavLink} to="/Perfil">
