@@ -27,7 +27,7 @@ import AgregarEgreso from "./components/Contability/AgregarEgreso.jsx";
 import EditarEgreso from "./components/Contability/EditarEgreso.jsx";
 import ReportesFinancieros from "./components/Contability/ReportesFinancieros.jsx";
 import ComentariosValoraciones from "./components/Comentarios/ComentariosValoraciones.jsx";
-import Inventarios from "./components/Inventarios/ListGroup.jsx";
+import Inventarios from "./components/Inventarios/Inventarios.jsx";
 import Calendario from "./components/Planificacion/Calendar.jsx";
 
 function App() {

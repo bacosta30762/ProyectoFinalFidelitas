@@ -12,6 +12,7 @@ import egresosReducer from "./reducers/egresosReducer";
 import { categoriesReducer } from "./reducers/categoriesReducer";
 import loginReducer from "./reducers/loginReducer";
 import recoverPasswordReducer from "./reducers/recoverPasswordReducer";
+import { inventariosReducer } from "./reducers/inventariosReducer";
 
 const store = configureStore({
   reducer: {
@@ -27,6 +28,7 @@ const store = configureStore({
     categoriesState: categoriesReducer,
     loginState: loginReducer,
     recoverPassword: recoverPasswordReducer,
+    inventarios: inventariosReducer,
   },
 });
 
