@@ -10,6 +10,7 @@ import {
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./login.css";
 import { API_ROUTES } from "../../api";
+import apiClient from "../../apiClient";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -47,43 +48,24 @@ const Login = () => {
     dispatch(loginRequest());
 
     try {
-      const loginResponse = await fetch(`${API_ROUTES.users}/LoginAdmin`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
+      const loginResponse = await apiClient.post(
+        `${API_ROUTES.users}/LoginAdmin`,
+        {
           email: credentials.correo,
           password: credentials.password,
-        }),
-      });
+        }
+      );
+      console.log(loginResponse);
 
-      if (!loginResponse.ok) {
-        const errorData = await loginResponse.json();
-        dispatch(
-          loginFailure(errorData.errors || "Cédula o contraseña incorrecta.")
-        );
-        return;
-      }
+      const { token } = loginResponse.data;
 
-      const loginData = await loginResponse.json();
+      localStorage.setItem("token", token);
 
-      const usersResponse = await fetch(`${API_ROUTES.users}/lista-usuarios`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      });
+      const usersResponse = await apiClient.get(
+        `${API_ROUTES.users}/lista-usuarios`
+      );
 
-      if (!usersResponse.ok) {
-        throw new Error("Error al obtener la lista de usuarios.");
-      }
-
-      const usersData = await usersResponse.json();
-
-      const foundUser = usersData.find(
+      const foundUser = usersResponse.data.find(
         (user) => user.email === credentials.correo
       );
 
@@ -94,7 +76,8 @@ const Login = () => {
         return;
       }
 
-      dispatch(loginSuccess(loginData));
+      dispatch(loginSuccess(loginResponse.data));
+      console.log(foundUser);
       dispatch(saveUserData(foundUser));
 
       navigate("/Perfil", { replace: true });

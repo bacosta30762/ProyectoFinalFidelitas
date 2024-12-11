@@ -17,6 +17,7 @@ export default function AppHeader() {
   const { isAuthenticated, user } = useSelector((state) => state.loginState);
 
   const handleLogout = () => {
+    localStorage.removeItem("token");
     dispatch(logout());
     navigate("/Inicio", { replace: true });
   };
