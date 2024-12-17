@@ -1,51 +1,68 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import "./perfileditar.css"; 
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import {
+  fetchUserProfile,
+  updateUserProfile,
+} from "../../redux/actions/loginActions";
+import "./perfileditar.css";
 
 const Perfileditar = () => {
-  const { id } = useParams(); 
-  const navigate = useNavigate(); 
-  const [userData, setUserData] = useState({
-    name: '',
-    cedula: '',
-    email: '',
-    phone: '',
-    contactMethod: 'email' 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  // Obtener usuario desde Redux
+  const { user, loading, error } = useSelector((state) => state.loginState);
+
+  const [updatedData, setUpdatedData] = useState({
+    nombre: "",
+    apellidos: "",
+    correo: "",
   });
 
-  
+  // Al montar el componente, cargar los datos del usuario
   useEffect(() => {
-    
-    const fetchedUser = {
-      name: 'Juan Perez',
-      cedula: '123456789',
-      email: 'juan@example.com',
-      phone: '555-1234',
-      contactMethod: 'phone'
-    };
-    setUserData(fetchedUser);
-  }, [id]);
+    if (!user) {
+      dispatch(fetchUserProfile());
+    }
+  }, [dispatch, user]);
+
+  // Sincronizar el estado local con los datos del usuario
+  useEffect(() => {
+    if (user) {
+      setUpdatedData({
+        nombre: user.nombre || "",
+        apellidos: user.apellidos || "",
+        correo: user.email || "",
+      });
+    }
+  }, [user]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setUserData({ ...userData, [name]: value });
+    setUpdatedData({ ...updatedData, [name]: value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
-    
-    for (const key in userData) {
-      if (userData[key] === '') {
-        alert('Todos los campos son obligatorios.');
-        return;
-      }
-    }
-    
-  
-    alert('Su información ha sido actualizada');
-    navigate("/Perfil"); 
+    dispatch(updateUserProfile(user.cedula, updatedData));
+    navigate("/Perfil");
   };
+
+  // Mostrar mensaje mientras carga
+  if (loading) {
+    return <div className="loading">Cargando...</div>;
+  }
+
+  // Mostrar error si ocurre
+  if (error) {
+    return <div className="error">Error: {error}</div>;
+  }
+
+  // Validación adicional si no hay datos
+  if (!user) {
+    return <div className="error">No se encontraron datos del usuario.</div>;
+  }
 
   return (
     <div className="edit-user-container">
@@ -53,63 +70,39 @@ const Perfileditar = () => {
       <form className="edit-user-form" onSubmit={handleSubmit}>
         <label>
           Nombre:
-          <input 
-            type="text" 
-            name="name" 
-            value={userData.name} 
-            onChange={handleChange} 
+          <input
+            type="text"
+            name="nombre"
+            value={updatedData.nombre}
+            onChange={handleChange}
             className="edit-user-input"
             disabled
           />
         </label>
         <label>
-          Cédula:
-          <input  
-            type="text" 
-            name="cedula" 
-            value={userData.cedula} 
-            onChange={handleChange} 
+          Apellidos:
+          <input
+            type="text"
+            name="apellidos"
+            value={updatedData.apellidos}
+            onChange={handleChange}
             className="edit-user-input"
-            disabled
           />
         </label>
         <label>
-          Email:
-          <input 
-            type="email" 
-            name="email" 
-            value={userData.email} 
-            onChange={handleChange} 
+          Correo:
+          <input
+            type="email"
+            name="correo"
+            value={updatedData.correo}
+            onChange={handleChange}
             className="edit-user-input"
             required
           />
         </label>
-        <label>
-          Teléfono:
-          <input 
-            type="text" 
-            name="phone" 
-            value={userData.phone} 
-            onChange={handleChange} 
-            className="edit-user-input"
-            required
-          />
-        </label>
-        <label>
-          Método de Contacto:
-          <select 
-            name="contactMethod" 
-            value={userData.contactMethod} 
-            onChange={handleChange} 
-            className="edit-user-input"
-            required
-          >
-            <option value="email">Email</option>
-            <option value="phone">Teléfono</option>
-          </select>
-        </label>
-        <button type="submit" className="save-button">Guardar Cambios</button>
-        
+        <button type="submit" className="save-button">
+          Guardar Cambios
+        </button>
       </form>
     </div>
   );

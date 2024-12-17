@@ -1,44 +1,47 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { fetchUserProfile } from "../../redux/actions/loginActions";
 import "./perfil.css";
 
 const Profile = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  // Obtener el usuario logueado desde el estado de Redux
   const { user } = useSelector((state) => state.loginState);
 
+  useEffect(() => {
+    if (user?.cedula) {
+      dispatch(fetchUserProfile(user.cedula));
+    }
+  }, [dispatch, user?.cedula]);
+
   const handleEdit = () => {
-    navigate(`/perfileditar/${user.id}`); // Redirigir a la página de edición con el ID del usuario
+    console.log("editar call");
+    console.log(user);
+    navigate(`/perfileditar`);
   };
 
   return (
     <div className="profile-container">
-      <h2 className="profile-title">Perfil de Administrador</h2>
-      <div className="profile-info">
-        <div className="profile-field">
-          <label>Nombre:</label>
-          <p>{user?.nombre || "N/A"}</p>
+      <h2 className="profile-title">Perfil</h2>
+      {user ? (
+        <div className="profile-info">
+          <div className="profile-field">
+            <label>Nombre:</label>
+            <p>{user.nombre}</p>
+          </div>
+          <div className="profile-field">
+            <label>Cédula:</label>
+            <p>{user.cedula}</p>
+          </div>
+          <div className="profile-field">
+            <label>Correo:</label>
+            <p>{user.email}</p>
+          </div>
         </div>
-        <div className="profile-field">
-          <label>Cédula:</label>
-          <p>{user?.cedula || "N/A"}</p>
-        </div>
-        <div className="profile-field">
-          <label>Correo:</label>
-          <p>{user?.email || "N/A"}</p>
-        </div>
-        <div className="profile-field">
-          <label>Teléfono:</label>
-          <p>{user?.telefono || "N/A"}</p>
-        </div>
-        <div className="profile-field">
-          <label>Método de Contacto:</label>
-          <p>{user?.contactMethod || "N/A"}</p>
-        </div>
-      </div>
-
+      ) : (
+        <p>Cargando perfil...</p>
+      )}
       <button id="botonmodi" className="edit-button" onClick={handleEdit}>
         Modificar
       </button>
