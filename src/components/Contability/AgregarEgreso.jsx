@@ -1,38 +1,45 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { createEgreso } from "../../redux/actions/egresosActions";
+import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { useNavigate } from "react-router-dom";
 import "./AgregarEgreso.css";
 
 const AgregarEgreso = () => {
   const [fecha, setFecha] = useState(null);
   const [descripcion, setDescripcion] = useState("");
-  const [categoria, setCategoria] = useState("");
   const [monto, setMonto] = useState("");
   const [metodoPago, setMetodoPago] = useState("");
-  const [proveedor, setProveedor] = useState("");
   const [numeroFactura, setNumeroFactura] = useState("");
-  const [comentarios, setComentarios] = useState("");
-
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    
     const nuevoEgreso = {
-      fecha: fecha.toISOString().split("T")[0],
+      fecha: fecha ? fecha.toISOString().split("T")[0] : null,
       descripcion,
-      categoria,
       monto: parseFloat(monto),
       metodoPago,
-      proveedor,
       numeroFactura,
-      comentarios,
     };
-    dispatch(createEgreso(nuevoEgreso));
-    navigate("/egresos");
+    
+    try {
+      const response = await fetch("https://apirymlubricentro-dddjebcxhyf6hse7.centralus-01.azurewebsites.net/api/Egreso/Crear", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(nuevoEgreso),
+      });
+      
+      if (!response.ok) {
+        throw new Error("Error al agregar el egreso");
+      }
+      
+      navigate("/egresos");
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   return (
@@ -54,23 +61,41 @@ const AgregarEgreso = () => {
             value={descripcion}
             onChange={(e) => setDescripcion(e.target.value)}
             className="form-control"
+            required
           />
         </div>
         <div className="form-group">
-          <label>Categoría</label>
-          <select
-            value={categoria}
-            onChange={(e) => setCategoria(e.target.value)}
+          <label>Monto</label>
+          <input
+            type="number"
+            value={monto}
+            onChange={(e) => setMonto(e.target.value)}
             className="form-control"
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label>Método de Pago</label>
+          <select
+            value={metodoPago}
+            onChange={(e) => setMetodoPago(e.target.value)}
+            className="form-control"
+            required
           >
-            <option value="">Seleccione una categoría</option>
-            <option value="Compra de materiales">Compra de materiales</option>
-            <option value="Salarios">Salarios</option>
-            <option value="Mantenimiento y reparaciones">
-              Mantenimiento y reparaciones
-            </option>
-            <option value="Gastos Operativos">Gastos Operativos</option>
+            <option value="">Seleccione un método</option>
+            <option value="Efectivo">Efectivo</option>
+            <option value="Tarjeta">Tarjeta de crédito</option>
+            <option value="Transferencia">Transferencia bancaria</option>
           </select>
+        </div>
+        <div className="form-group">
+          <label>Número de Factura</label>
+          <input
+            type="text"
+            value={numeroFactura}
+            onChange={(e) => setNumeroFactura(e.target.value)}
+            className="form-control"
+          />
         </div>
         <button type="submit" className="submit-button">
           Agregar Egreso

@@ -1,34 +1,32 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { FaEdit, FaTrashAlt, FaFilePdf, FaFileExcel } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import {
-  PDFDownloadLink,
-  Document,
-  Page,
-  Text,
-  View,
-  StyleSheet,
-} from "@react-pdf/renderer";
+import { PDFDownloadLink, Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
-import { fetchEgresos, deleteEgreso } from "../../redux/actions/egresosActions";
+import axios from "axios";
 import "./EgresosPage.css";
 
+const API_URL = "https://apirymlubricentro-dddjebcxhyf6hse7.centralus-01.azurewebsites.net/api/Egreso";
+
 const EgresosPage = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const egresos = useSelector((state) => state.egresos.egresos);
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
+  const [egresos, setEgresos] = useState([]);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [selectedEgreso, setSelectedEgreso] = useState(null);
 
   useEffect(() => {
-    dispatch(fetchEgresos());
-  }, [dispatch]);
+    fetchEgresos();
+  }, []);
+
+  const fetchEgresos = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/Listar`);
+      setEgresos(response.data);
+    } catch (error) {
+      console.error("Error al obtener los egresos", error);
+    }
+  };
 
   const handleAgregarClick = () => {
     navigate("/agregar-egreso");
@@ -43,9 +41,14 @@ const EgresosPage = () => {
     setShowDeletePopup(true);
   };
 
-  const handleConfirmDelete = () => {
-    dispatch(deleteEgreso(selectedEgreso.id));
-    setShowDeletePopup(false);
+  const handleConfirmDelete = async () => {
+    try {
+      await axios.delete(`${API_URL}/Eliminar/${selectedEgreso.id}`);
+      setEgresos(egresos.filter(e => e.id !== selectedEgreso.id));
+      setShowDeletePopup(false);
+    } catch (error) {
+      console.error("Error al eliminar el egreso", error);
+    }
   };
 
   const generatePDF = () => (
@@ -56,13 +59,10 @@ const EgresosPage = () => {
           {egresos.map((egreso) => (
             <View key={egreso.id} style={styles.item}>
               <Text>Fecha: {egreso.fecha}</Text>
-              <Text>Categoría: {egreso.categoria}</Text>
               <Text>Descripción: {egreso.descripcion}</Text>
               <Text>Monto: {egreso.monto.toFixed(2)}</Text>
               <Text>Método de Pago: {egreso.metodoPago}</Text>
-              <Text>Proveedor/Empleado: {egreso.proveedor}</Text>
               <Text>Número de Factura/Recibo: {egreso.numeroFactura}</Text>
-              <Text>Comentarios: {egreso.comentarios}</Text>
               <View style={styles.separator} />
             </View>
           ))}
@@ -76,34 +76,17 @@ const EgresosPage = () => {
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Egresos");
     const wbout = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-    saveAs(
-      new Blob([wbout], { type: "application/octet-stream" }),
-      "reporte-egresos.xlsx"
-    );
+    saveAs(new Blob([wbout], { type: "application/octet-stream" }), "reporte-egresos.xlsx");
   };
 
   return (
     <div className="egresos-container">
       <h1>Egresos</h1>
       <div className="buttons-container">
-        <button className="add-button" onClick={handleAgregarClick}>
-          Agregar
-        </button>
+        <button className="add-button" onClick={handleAgregarClick}>Agregar</button>
         <div className="generate-buttons">
-          <PDFDownloadLink
-            document={generatePDF()}
-            fileName="reporte-egresos.pdf"
-            className="pdf-button"
-          >
-            {({ loading }) =>
-              loading ? (
-                "Cargando documento..."
-              ) : (
-                <>
-                  <FaFilePdf /> Generar Informe PDF
-                </>
-              )
-            }
+          <PDFDownloadLink document={generatePDF()} fileName="reporte-egresos.pdf" className="pdf-button">
+            {({ loading }) => loading ? "Cargando documento..." : (<><FaFilePdf /> Generar Informe PDF</>)}
           </PDFDownloadLink>
           <button className="excel-button" onClick={handleExcelExport}>
             <FaFileExcel /> Generar Informe Excel
@@ -114,36 +97,24 @@ const EgresosPage = () => {
         <thead>
           <tr>
             <th>Fecha</th>
-            <th>Categoría</th>
             <th>Descripción</th>
             <th>Monto</th>
             <th>Método de Pago</th>
-            <th>Proveedor/Empleado</th>
-            <th>Número de Factura/Recibo</th>
-            <th>Comentarios</th>
+            <th>Número de Factura</th>
             <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
           {egresos.map((egreso) => (
             <tr key={egreso.id}>
-              <td>{egreso.fecha}</td>
-              <td>{egreso.categoria}</td>
+              <td>{new Date(egreso.fecha).toISOString().split("T")[0]}</td>
               <td>{egreso.descripcion}</td>
               <td>{egreso.monto.toFixed(2)}</td>
               <td>{egreso.metodoPago}</td>
-              <td>{egreso.proveedor}</td>
               <td>{egreso.numeroFactura}</td>
-              <td>{egreso.comentarios}</td>
               <td className="icon-group">
-                <FaEdit
-                  className="edit-icon"
-                  onClick={() => handleEditClick(egreso.id)}
-                />
-                <FaTrashAlt
-                  className="delete-icon"
-                  onClick={() => handleDeleteClick(egreso)}
-                />
+                <FaEdit className="edit-icon" onClick={() => handleEditClick(egreso.id)} />
+                <FaTrashAlt className="delete-icon" onClick={() => handleDeleteClick(egreso)} />
               </td>
             </tr>
           ))}
@@ -173,3 +144,4 @@ const styles = StyleSheet.create({
 });
 
 export default EgresosPage;
+

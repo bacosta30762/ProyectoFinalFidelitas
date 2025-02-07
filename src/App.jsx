@@ -18,7 +18,6 @@ import MarketingPage from "./pages/MarketingPage.jsx";
 import NewsletterPage from "./pages/NewsletterPage.jsx";
 import FeedbackPage from "./pages/FeedbackPage.jsx";
 import SubscriptionPage from "./pages/SubscriptionPage.jsx";
-import FeedbackList from "./components/marketing/FeedbackList";
 import IngresosPage from "./components/Contability/Ingresos.jsx";
 import AgregarIngreso from "./components/Contability/AgregarIngreso.jsx";
 import EditarIngreso from "./components/Contability/EditarIngreso.jsx";
@@ -31,60 +30,6 @@ import Inventarios from "./components/Inventarios/Inventarios.jsx";
 import Calendario from "./components/Planificacion/Calendar.jsx";
 
 function App() {
-  const [ingresos] = useState([
-    {
-      id: 1,
-      fecha: "2023-08-01",
-      descripcion: "Venta de lubricante",
-      tipo: "Venta",
-      cantidad: 10,
-      precioUnitario: 15000.0,
-      total: 150000.0,
-      metodoPago: "Efectivo",
-      cliente: "Juan Pérez",
-      factura: "F12345",
-      comentarios: "Ninguno",
-    },
-    {
-      id: 2,
-      fecha: "2023-08-02",
-      descripcion: "Servicio de cambio de aceite",
-      tipo: "Servicio",
-      cantidad: 1,
-      precioUnitario: 20000.0,
-      total: 20000.0,
-      metodoPago: "Tarjeta",
-      cliente: "María López",
-      factura: "F12346",
-      comentarios: "Ninguno",
-    },
-  ]);
-
-  const [egresos] = useState([
-    {
-      id: 1,
-      fecha: "2023-08-01",
-      categoria: "Compra de Materiales",
-      descripcion: "Compra de cemento",
-      monto: 1500.0,
-      metodoPago: "Transferencia",
-      proveedor: "Cementos XYZ",
-      numeroFactura: "F12345",
-      comentarios: "Ninguno",
-    },
-    {
-      id: 2,
-      fecha: "2023-08-02",
-      categoria: "Salarios",
-      descripcion: "Pago de salario Julio",
-      monto: 2500.0,
-      metodoPago: "Efectivo",
-      proveedor: "Juan Pérez",
-      numeroFactura: "-",
-      comentarios: "Ninguno",
-    },
-  ]);
-
   return (
     <div className="App">
       <HashRouter>
@@ -213,7 +158,7 @@ function App() {
             path="/editar-ingreso/:id"
             element={
               <ProtectedRoute>
-                <EditarIngreso ingresos={ingresos} />
+                <EditarIngreso/>
               </ProtectedRoute>
             }
           />
@@ -237,7 +182,7 @@ function App() {
             path="/editar-egreso/:id"
             element={
               <ProtectedRoute>
-                <EditarEgreso egresos={egresos} />
+                <EditarEgreso/>
               </ProtectedRoute>
             }
           />
@@ -245,7 +190,7 @@ function App() {
             path="/reportes-financieros"
             element={
               <ProtectedRoute>
-                <ReportesFinancieros ingresos={ingresos} egresos={egresos} />
+                <ReportesFinancieros />
               </ProtectedRoute>
             }
           />

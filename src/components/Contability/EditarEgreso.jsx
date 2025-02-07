@@ -3,55 +3,68 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateEgreso } from "../../redux/actions/egresosActions";
 import { useParams, useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
+import axios from "axios";
 import "react-datepicker/dist/react-datepicker.css";
 import "./AgregarEgreso.css";
+
+const API_URL = "https://apirymlubricentro-dddjebcxhyf6hse7.centralus-01.azurewebsites.net/api/Egreso";
 
 const EditarEgreso = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const egreso = useSelector((state) =>
+
+  // Intentamos obtener el egreso desde Redux
+  const egresoRedux = useSelector((state) =>
     state.egresos.egresos.find((e) => e.id === parseInt(id))
   );
 
-  const [fecha, setFecha] = useState(null);
-  const [descripcion, setDescripcion] = useState("");
-  const [categoria, setCategoria] = useState("");
-  const [monto, setMonto] = useState("");
-  const [metodoPago, setMetodoPago] = useState("");
-  const [proveedor, setProveedor] = useState("");
-  const [numeroFactura, setNumeroFactura] = useState("");
-  const [comentarios, setComentarios] = useState("");
+  // Estados locales
+  const [egreso, setEgreso] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (egreso) {
-      setFecha(new Date(egreso.fecha));
-      setDescripcion(egreso.descripcion);
-      setCategoria(egreso.categoria);
-      setMonto(egreso.monto);
-      setMetodoPago(egreso.metodoPago);
-      setProveedor(egreso.proveedor);
-      setNumeroFactura(egreso.numeroFactura);
-      setComentarios(egreso.comentarios);
+    if (egresoRedux) {
+      setEgreso(egresoRedux);
+      setLoading(false);
+    } else {
+      fetchEgreso();
     }
-  }, [egreso]);
+  }, [id, egresoRedux]);
 
-  const handleSubmit = (e) => {
+  // Obtener el egreso desde la API
+  const fetchEgreso = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/Obtener/${id}`);
+      setEgreso(response.data);
+    } catch (error) {
+      console.error("Error al obtener el egreso", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const egresoActualizado = {
       id: parseInt(id),
-      fecha: fecha.toISOString().split("T")[0],
-      descripcion,
-      categoria,
-      monto: parseFloat(monto),
-      metodoPago,
-      proveedor,
-      numeroFactura,
-      comentarios,
+      fecha: egreso.fecha,
+      descripcion: egreso.descripcion,
+      monto: parseFloat(egreso.monto),
+      metodoPago: egreso.metodoPago,
+      numeroFactura: egreso.numeroFactura,
     };
-    dispatch(updateEgreso(egresoActualizado));
-    navigate("/egresos");
+
+    try {
+      await axios.put(`${API_URL}/Actualizar/${id}`, egresoActualizado);
+      dispatch(updateEgreso(egresoActualizado));
+      navigate("/egresos");
+    } catch (error) {
+      console.error("Error al actualizar el egreso", error);
+    }
   };
+
+  if (loading) return <p>Cargando...</p>;
 
   return (
     <div className="agregar-egreso-container">
@@ -60,36 +73,67 @@ const EditarEgreso = () => {
         <div className="form-group">
           <label>Fecha</label>
           <DatePicker
-            selected={fecha}
-            onChange={(date) => setFecha(date)}
+            selected={new Date(egreso.fecha)}
+            onChange={(date) =>
+              setEgreso({ ...egreso, fecha: date.toISOString().split("T")[0] })
+            }
             className="form-control"
           />
         </div>
+
         <div className="form-group">
           <label>Descripción</label>
           <input
             type="text"
-            value={descripcion}
-            onChange={(e) => setDescripcion(e.target.value)}
+            value={egreso.descripcion}
+            onChange={(e) =>
+              setEgreso({ ...egreso, descripcion: e.target.value })
+            }
             className="form-control"
           />
         </div>
+
         <div className="form-group">
-          <label>Categoría</label>
-          <select
-            value={categoria}
-            onChange={(e) => setCategoria(e.target.value)}
+          <label>Monto</label>
+          <input
+            type="number"
+            value={egreso.monto}
+            onChange={(e) =>
+              setEgreso({ ...egreso, monto: e.target.value })
+            }
             className="form-control"
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Método de Pago</label>
+          <select
+            value={egreso.metodoPago}
+            onChange={(e) =>
+              setEgreso({ ...egreso, metodoPago: e.target.value })
+            }
+            className="form-control"
+            required
           >
-            <option value="">Seleccione una categoría</option>
-            <option value="Compra de materiales">Compra de materiales</option>
-            <option value="Salarios">Salarios</option>
-            <option value="Mantenimiento y reparaciones">
-              Mantenimiento y reparaciones
-            </option>
-            <option value="Gastos Operativos">Gastos Operativos</option>
+            <option value="">Seleccione un método</option>
+            <option value="Efectivo">Efectivo</option>
+            <option value="Tarjeta">Tarjeta de crédito</option>
+            <option value="Transferencia">Transferencia bancaria</option>
           </select>
         </div>
+
+        <div className="form-group">
+          <label>Número de Factura</label>
+          <input
+            type="text"
+            value={egreso.numeroFactura}
+            onChange={(e) =>
+              setEgreso({ ...egreso, numeroFactura: e.target.value })
+            }
+            className="form-control"
+          />
+        </div>
+
         <button type="submit" className="submit-button">
           Actualizar Egreso
         </button>

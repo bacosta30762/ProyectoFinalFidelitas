@@ -6,7 +6,6 @@ import newsletterReducer from "./reducers/newsletterReducer";
 import userReducer from "./reducers/userReducer";
 import calendarReducer from "./reducers/calendarReducer";
 import feedbackReducer from "./reducers/feedbackReducer";
-import financialReportReducer from "./reducers/financialReportReducer";
 import ingresosReducer from "./reducers/ingresosReducer";
 import egresosReducer from "./reducers/egresosReducer";
 import { categoriesReducer } from "./reducers/categoriesReducer";
@@ -22,7 +21,6 @@ const store = configureStore({
     users: userReducer,
     calendar: calendarReducer,
     feedback: feedbackReducer,
-    financialReport: financialReportReducer,
     ingresos: ingresosReducer,
     egresos: egresosReducer,
     categoriesState: categoriesReducer,

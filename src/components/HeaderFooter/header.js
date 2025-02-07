@@ -52,12 +52,6 @@ export default function AppHeader() {
                   <NavDropdown.Item as={NavLink} to="/inventarios">
                     Inventarios
                   </NavDropdown.Item>
-                  <NavDropdown.Item
-                    as={NavLink}
-                    to="/reporte-retroalimentacion"
-                  >
-                    Reportes de Retroalimentación
-                  </NavDropdown.Item>
                 </NavDropdown>
 
                 <NavDropdown title="Mecánico" id="mechanic-nav-dropdown">
@@ -73,12 +67,6 @@ export default function AppHeader() {
                   <NavDropdown.Item as={NavLink} to="/egresos">
                     Egresos
                   </NavDropdown.Item>
-                  <NavDropdown.Item as={NavLink} to="/reportes-financieros">
-                    Reportes Financieros
-                  </NavDropdown.Item>
-                  <Nav.Link as={NavLink} to="/calendario">
-                    Disponibilidad Citas
-                  </Nav.Link>
                 </NavDropdown>
 
                 <NavDropdown title={user.nombre} id="user-nav-dropdown">

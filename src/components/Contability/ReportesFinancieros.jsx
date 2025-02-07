@@ -1,6 +1,4 @@
-// src/ReportesFinancieros.js
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { CSVLink } from "react-csv";
 import {
@@ -11,27 +9,75 @@ import {
   View,
   StyleSheet,
 } from "@react-pdf/renderer";
-import {
-  setFechaInicio,
-  setFechaFin,
-  calcularReporte,
-} from "../../redux/actions/financialReportActions";
+import axios from "axios";
 import "./ReportesFinancieros.css";
 
-const ReportesFinancieros = ({ ingresos, egresos }) => {
-  const dispatch = useDispatch();
-  const reporte = useSelector((state) => state.financialReport);
+const API_URL = "https://apirymlubricentro-dddjebcxhyf6hse7.centralus-01.azurewebsites.net/api/ReporteFinanciero";
 
+const ReportesFinancieros = () => {
+  const [reporte, setReporte] = useState({
+    fechaInicio: new Date(),
+    fechaFin: new Date(),
+    ingresosTotal: 0,
+    egresosTotal: 0,
+    balance: 0,
+  });
+  const [loading, setLoading] = useState(true);
+
+  // Obtener el reporte del backend
   useEffect(() => {
-    dispatch(calcularReporte(ingresos, egresos));
-  }, [dispatch, ingresos, egresos, reporte.fechaInicio, reporte.fechaFin]);
+    const fetchReporte = async () => {
+      try {
+        const fechaInicioFormateada = format(reporte.fechaInicio, "yyyy-MM-dd");
+        const fechaFinFormateada = format(reporte.fechaFin, "yyyy-MM-dd");
+
+        // Verifica si las fechas son válidas antes de hacer la llamada a la API
+        if (isNaN(new Date(fechaInicioFormateada).getTime()) || isNaN(new Date(fechaFinFormateada).getTime())) {
+          console.error("Las fechas no son válidas");
+          return;
+        }
+
+        const response = await axios.get(API_URL, {
+          params: {
+            fechaInicio: fechaInicioFormateada,
+            fechaFin: fechaFinFormateada,
+          },
+        });
+        setReporte(response.data);
+      } catch (error) {
+        console.error("Error al obtener el reporte financiero", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchReporte();
+  }, [reporte.fechaInicio, reporte.fechaFin]);
 
   const handleFechaInicioChange = (e) => {
-    dispatch(setFechaInicio(new Date(e.target.value)));
+    const nuevaFechaInicio = new Date(e.target.value);
+    // Verifica si la fecha es válida
+    if (!isNaN(nuevaFechaInicio.getTime())) {
+      setReporte((prevState) => ({
+        ...prevState,
+        fechaInicio: nuevaFechaInicio,
+      }));
+    } else {
+      console.error("Fecha de inicio inválida");
+    }
   };
 
   const handleFechaFinChange = (e) => {
-    dispatch(setFechaFin(new Date(e.target.value)));
+    const nuevaFechaFin = new Date(e.target.value);
+    // Verifica si la fecha es válida
+    if (!isNaN(nuevaFechaFin.getTime())) {
+      setReporte((prevState) => ({
+        ...prevState,
+        fechaFin: nuevaFechaFin,
+      }));
+    } else {
+      console.error("Fecha de fin inválida");
+    }
   };
 
   const ReportePDF = () => (
@@ -50,6 +96,8 @@ const ReportesFinancieros = ({ ingresos, egresos }) => {
       </Page>
     </Document>
   );
+
+  if (loading) return <p>Cargando...</p>;
 
   return (
     <div className="reportes-financieros-container">
