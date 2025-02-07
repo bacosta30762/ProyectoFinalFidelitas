@@ -16,7 +16,7 @@ const Inventarios = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get("https://localhost:7180/api/categoria/Listar");
+        const response = await axios.get("https://apirymlubricentro-dddjebcxhyf6hse7.centralus-01.azurewebsites.net/api/categoria/Listar");
         setCategories(response.data);
       } catch (error) {
         console.error("Error al obtener categorías:", error);
@@ -31,7 +31,7 @@ const Inventarios = () => {
       if (selectedCategory) {
         try {
           const response = await axios.get(
-            `https://localhost:7180/api/Articulo/ListarPorCategoria/${selectedCategory}`
+            `https://apirymlubricentro-dddjebcxhyf6hse7.centralus-01.azurewebsites.net/api/Articulo/ListarPorCategoria/${selectedCategory}`
           );
           setItems(response.data);
         } catch (error) {
@@ -51,7 +51,7 @@ const Inventarios = () => {
   const handleAddItem = () => {
     if (newItem.trim() && newQuantity.trim() && !isNaN(newQuantity) && newQuantity > 0) {
       const newArticulo = { nombre: newItem, categoriaId: selectedCategory, cantidad: parseInt(newQuantity) };
-      axios.post("https://localhost:7180/api/articulo/Agregar", newArticulo)
+      axios.post("https://apirymlubricentro-dddjebcxhyf6hse7.centralus-01.azurewebsites.net/api/articulo/Agregar", newArticulo)
         .then(response => {
           setItems([...items, response.data]); // Agregar el artículo al estado local
           setNewItem(""); // Limpiar el campo de entrada
@@ -66,7 +66,7 @@ const Inventarios = () => {
   const handleModifyItem = () => {
     if (selectedIndex !== -1 && newItem.trim() && newQuantity.trim() && !isNaN(newQuantity) && newQuantity > 0) {
       const updatedItem = { ...items[selectedIndex], nombre: newItem, cantidad: parseInt(newQuantity) };
-      axios.put(`https://localhost:7180/api/articulo/Actualizar${updatedItem.id}`, updatedItem)
+      axios.put(`https://apirymlubricentro-dddjebcxhyf6hse7.centralus-01.azurewebsites.net/api/articulo/Actualizar${updatedItem.id}`, updatedItem)
         .then(() => {
           const updatedItems = [...items];
           updatedItems[selectedIndex] = updatedItem;
@@ -82,7 +82,7 @@ const Inventarios = () => {
   };
 
   const handleDeleteItem = (id) => {
-    axios.delete(`https://localhost:7180/api/articulo/Eliminar${id}`)
+    axios.delete(`https://apirymlubricentro-dddjebcxhyf6hse7.centralus-01.azurewebsites.net/api/articulo/Eliminar${id}`)
       .then(() => {
         setItems(items.filter(item => item.id !== id)); // Eliminar artículo del estado local
       })
