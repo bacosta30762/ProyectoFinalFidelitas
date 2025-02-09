@@ -28,6 +28,7 @@ import ReportesFinancieros from "./components/Contability/ReportesFinancieros.js
 import ComentariosValoraciones from "./components/Comentarios/ComentariosValoraciones.jsx";
 import Inventarios from "./components/Inventarios/Inventarios.jsx";
 import Calendario from "./components/Planificacion/Calendar.jsx";
+import ComentariosAdmin from "./components/Comentarios/AdminComentarios.jsx";
 
 function App() {
   return (
@@ -193,6 +194,14 @@ function App() {
                 <ReportesFinancieros />
               </ProtectedRoute>
             }
+          />
+          <Route
+            path="/comentarios-admin"
+            element={
+            <ProtectedRoute>
+                <ComentariosAdmin  />
+              </ProtectedRoute>
+              }
           />
           <Route
             path="/comentarios-valoraciones"
