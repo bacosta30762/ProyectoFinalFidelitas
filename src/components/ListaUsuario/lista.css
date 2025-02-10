@@ -1,9 +1,9 @@
 .user-list-container {
   background-color: #fff;
-  padding: 20px;
+  padding: 15px;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  max-width: 900px; /* Incrementa el ancho total */
+  width: 65%; /* Incrementa el ancho total */
   margin: 20px auto;
   font-family: Arial, sans-serif;
 }
