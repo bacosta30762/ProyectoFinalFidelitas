@@ -1,83 +1,103 @@
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Button, Table, Modal } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Button, Modal } from "react-bootstrap";
 import DatePicker from "react-datepicker";
-import {
-  toggleAppointment,
-  blockDate,
-  unblockDate,
-  cancelAppointments,
-} from "../../redux/actions/calendarActions";
 import "react-datepicker/dist/react-datepicker.css";
 import "./Calendar.css";
 
-const hours = [
-  "8:00 AM",
-  "9:00 AM",
-  "10:00 AM",
-  "11:00 AM",
-  "12:00 PM",
-  "1:00 PM",
-  "2:00 PM",
-  "3:00 PM",
-  "4:00 PM",
-];
+// Función para obtener los días bloqueados del backend
+const fetchBlockedDates = async () => {
+  const response = await fetch("https://apirymlubricentro-dddjebcxhyf6hse7.centralus-01.azurewebsites.net/api/Ordenes/obtener-dias-bloqueados");
+  const data = await response.json();
+  return data.map(date => {
+    const normalizedDate = new Date(date);
+    normalizedDate.setMinutes(normalizedDate.getMinutes() + normalizedDate.getTimezoneOffset()); // Corrige desfases
+    return normalizedDate;
+  });
+};
+
+// Función para bloquear o desbloquear el día
+const toggleDateStatus = async (selectedDate, action) => {
+  const url = action === "block"
+    ? "https://apirymlubricentro-dddjebcxhyf6hse7.centralus-01.azurewebsites.net/api/Ordenes/bloquear-dia"
+    : "https://apirymlubricentro-dddjebcxhyf6hse7.centralus-01.azurewebsites.net/api/Ordenes/desbloquear-dia";
+
+  // Convertimos la fecha a formato ISO (yyyy-MM-dd)
+  const dia = selectedDate.toISOString().split("T")[0]; // Formato 'yyyy-MM-dd'
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ Dia: dia }), // Enviamos el día en el formato requerido por el backend
+  });
+
+  const data = await response.json();
+  return data;
+};
 
 const Calendar = () => {
-  const dispatch = useDispatch();
-  const appointments = useSelector((state) => state.calendar.appointments);
-  const blockedDates = useSelector(
-    (state) => state.calendar.blockedDates.map((date) => new Date(date)) // Convierte a Date temporalmente
-  );
-
+  const [blockedDates, setBlockedDates] = useState([]); // Estado para las fechas bloqueadas
   const [selectedDate, setSelectedDate] = useState(null);
-  const [showModal, setShowModal] = useState(false);
-  const [confirmAction, setConfirmAction] = useState(null);
+  const [message, setMessage] = useState(""); // Mensaje para mostrar la respuesta del backend
+  const [showModal, setShowModal] = useState(false); // Estado del modal
+  const [confirmAction, setConfirmAction] = useState(null); // Acción confirmada (block o unblock)
 
   const today = new Date();
   const oneMonthFromNow = new Date();
   oneMonthFromNow.setMonth(today.getMonth() + 1);
 
-  const handleToggleAppointment = (hour) => {
-    const key = `${selectedDate?.toDateString()}-${hour}`;
-    dispatch(toggleAppointment(key));
+  // Obtener las fechas bloqueadas cuando el componente se monta
+  useEffect(() => {
+    const fetchData = async () => {
+      const dates = await fetchBlockedDates();
+      setBlockedDates(dates);
+    };
+    fetchData();
+  }, []);
+
+  // Normalizar la fecha seleccionada
+  const normalizeDate = (date) => {
+    const normalizedDate = new Date(date);
+    // Aseguramos que la fecha esté normalizada en UTC para evitar desfases por zona horaria
+    normalizedDate.setHours(0, 0, 0, 0); // Ajusta la fecha a medianoche
+    return normalizedDate;
   };
 
-  const handleBlockDate = () => {
+  const handleBlockDate = async () => {
     if (selectedDate) {
-      const hasAppointments = Object.keys(appointments).some((appointment) =>
-        appointment.startsWith(selectedDate.toDateString())
-      );
-
-      if (hasAppointments) {
-        setShowModal(true);
-        setConfirmAction("block");
-      } else {
-        dispatch(blockDate(selectedDate)); // Envía el Date directamente
-        setSelectedDate(null);
-      }
+      const normalizedSelectedDate = normalizeDate(selectedDate);
+      const result = await toggleDateStatus(normalizedSelectedDate, "block");
+      setMessage(result.mensaje); // Mostrar el mensaje de respuesta
+      setBlockedDates([...blockedDates, normalizedSelectedDate]); // Actualiza las fechas bloqueadas
+      setSelectedDate(null);
+      handleCloseModal();
     }
   };
 
-  const handleUnblockDate = () => {
+  const handleUnblockDate = async () => {
     if (selectedDate) {
-      dispatch(unblockDate(selectedDate)); // Envía el Date directamente
-      setSelectedDate(null);
-    }
-  };
+      const normalizedSelectedDate = normalizeDate(selectedDate);
+      const result = await toggleDateStatus(normalizedSelectedDate, "unblock");
+      setMessage(result.mensaje); // Mostrar el mensaje de respuesta
 
-  const handleCancelAppointments = () => {
-    if (selectedDate) {
-      dispatch(cancelAppointments(selectedDate)); // Envía el Date directamente
-      dispatch(blockDate(selectedDate)); // Bloquea después de cancelar
-      setShowModal(false);
+      // Eliminar el día desbloqueado de la lista de fechas bloqueadas
+      setBlockedDates(blockedDates.filter(
+        (blockedDate) => blockedDate.toDateString() !== normalizedSelectedDate.toDateString()
+      ));
+
       setSelectedDate(null);
+      handleCloseModal();
     }
   };
 
   const handleCloseModal = () => {
     setShowModal(false);
     setConfirmAction(null);
+  };
+
+  const handleShowModal = (action) => {
+    setConfirmAction(action);
+    setShowModal(true);
   };
 
   return (
@@ -90,18 +110,18 @@ const Calendar = () => {
           dateFormat="dd/MM/yyyy"
           minDate={today}
           maxDate={oneMonthFromNow}
-          filterDate={(date) => date.getDay() >= 1 && date.getDay() <= 5}
+          filterDate={() => true}
           inline
         />
         <div className="button-container">
           {selectedDate &&
             !blockedDates.some(
               (blockedDate) =>
-                blockedDate.toDateString() === selectedDate.toDateString()
+                blockedDate.toDateString() === normalizeDate(selectedDate).toDateString()
             ) && (
               <Button
                 variant="danger"
-                onClick={handleBlockDate}
+                onClick={() => handleShowModal("block")}
                 className="mt-3"
               >
                 Bloquear Día
@@ -110,66 +130,29 @@ const Calendar = () => {
           {selectedDate &&
             blockedDates.some(
               (blockedDate) =>
-                blockedDate.toDateString() === selectedDate.toDateString()
+                blockedDate.toDateString() === normalizeDate(selectedDate).toDateString()
             ) && (
               <Button
                 variant="success"
-                onClick={handleUnblockDate}
+                onClick={() => handleShowModal("unblock")}
                 className="mt-3"
               >
                 Desbloquear Día
               </Button>
             )}
         </div>
+        {message && <p>{message}</p>} {/* Mostrar mensaje de la respuesta */}
       </div>
 
       <div className="calendar-right">
         {selectedDate &&
-          !blockedDates.some(
-            (blockedDate) =>
-              blockedDate.toDateString() === selectedDate.toDateString()
-          ) && (
-            <>
-              <h3 className="mt-4">
-                Disponibilidad para {selectedDate.toDateString()}
-              </h3>
-              <Table bordered>
-                <thead>
-                  <tr>
-                    <th>Hora</th>
-                    <th>Acción</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {hours.map((hour) => {
-                    const key = `${selectedDate?.toDateString()}-${hour}`;
-                    return (
-                      <tr key={hour}>
-                        <td>{hour}</td>
-                        <td className="text-center">
-                          <Button
-                            variant={appointments[key] ? "danger" : "success"}
-                            onClick={() => handleToggleAppointment(hour)}
-                          >
-                            {appointments[key]
-                              ? "Cancelar cita"
-                              : "Agendar cita"}
-                          </Button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </Table>
-            </>
-          )}
-        {selectedDate &&
           blockedDates.some(
             (blockedDate) =>
-              blockedDate.toDateString() === selectedDate.toDateString()
-          ) && <p>El día está bloqueado y no se pueden agendar citas.</p>}
+              blockedDate.toDateString() === normalizeDate(selectedDate).toDateString()
+          ) && <p>El día está bloqueado.</p>}
       </div>
 
+      {/* Modal de confirmación */}
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
           <Modal.Title>Confirmación</Modal.Title>
@@ -178,18 +161,30 @@ const Calendar = () => {
           {confirmAction === "block" ? (
             <>
               <p>
-                Hay citas agendadas. ¿Desea cancelar todas las citas y bloquear
+                Sí hay citas agendadas estas se cancelan. ¿Desea cancelar todas las citas y bloquear
                 el día?
               </p>
-              <Button variant="danger" onClick={handleCancelAppointments}>
-                Sí, cancelar y bloquear
+              <Button variant="danger" onClick={handleBlockDate}>
+                Sí, bloquear el día
+              </Button>
+              <Button variant="secondary" onClick={handleCloseModal}>
+                No, regresar
+              </Button>
+            </>
+          ) : confirmAction === "unblock" ? (
+            <>
+              <p>
+                El día ha sido desbloqueado exitosamente.
+              </p>
+              <Button variant="success" onClick={handleUnblockDate}>
+                Sí, desbloquear el día
               </Button>
               <Button variant="secondary" onClick={handleCloseModal}>
                 No, regresar
               </Button>
             </>
           ) : (
-            <p>El día ha sido bloqueado.</p>
+            <p>Operación no válida.</p>
           )}
         </Modal.Body>
       </Modal>
@@ -198,3 +193,4 @@ const Calendar = () => {
 };
 
 export default Calendar;
+

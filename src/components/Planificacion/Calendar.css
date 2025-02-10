@@ -3,33 +3,27 @@
   justify-content: center;
   align-items: flex-start;
   padding: 20px;
-  gap: 20px; /* Espacio entre el calendario y la disponibilidad */
+  gap: 20px;
 }
 
 .calendar-left, .calendar-right {
   flex: 1;
-  max-width: 45%; /* Controla el ancho de los contenedores */
+  max-width: 45%;
+  text-align: center; /* Para centrar el contenido de cada lado */
 }
 
 .calendar-left {
-  text-align: center;
+  display: flex;
+  flex-direction: column; /* Aseguramos que el calendario y el botón estén apilados */
+  align-items: center;
 }
 
-.calendar-right {
-  text-align: center;
-}
-
-.calendar-left .btn {
-  margin-top: 30px; /* Ajusta el margen superior para que el botón esté más abajo */
-}
-
-table {
-  width: 100%;
-  text-align: center;
+.button-container {
+  margin-top: 20px; /* Ajusta el margen superior del contenedor del botón */
 }
 
 button {
-  width: 35%;
+  width: 100%; /* Hace que el botón ocupe todo el espacio disponible */
+  max-width: 200px; /* Opción para limitar el ancho del botón */
 }
-
 
