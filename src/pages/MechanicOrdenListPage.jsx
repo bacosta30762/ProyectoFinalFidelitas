@@ -15,7 +15,7 @@ const MechanicOrdenListPage = () => {
     try {
       const token = getToken();
       const response = await fetch(
-        `${API_ROUTES.ordenes}/listar-ordenes-usuario`,
+        `${API_ROUTES.ordenes}/listar-ordenes-asignadas`,
         {
           method: "GET",
           headers: { Authorization: `Bearer ${token}` },
@@ -37,7 +37,6 @@ const MechanicOrdenListPage = () => {
         cliente: order.nombreCliente || "No registrado",
         monto: "₡" + (order.monto || "0"),
         fecha: order.dia || "Sin fecha",
-        mecanico: order.nombreMecanico || "No asignado",
       }));
 
       dispatch(setOrders(formattedOrders));
@@ -60,9 +59,6 @@ const MechanicOrdenListPage = () => {
 
   return (
     <div style={{ padding: "20px" }}>
-      <h1 style={{ textAlign: "center", marginBottom: "20px" }}>
-        Mecánico: {mecanicoNombre || "Desconocido"}
-      </h1>
       <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Mis Órdenes</h2>
       <input
         type="text"

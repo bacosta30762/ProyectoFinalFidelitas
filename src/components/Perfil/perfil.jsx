@@ -16,9 +16,9 @@ const Profile = () => {
   }, [dispatch, user?.cedula]);
 
   const handleEdit = () => {
-    console.log("editar call");
-    console.log(user);
-    navigate(`/perfileditar`);
+    console.log("Editar perfil de usuario:", user);
+    // 🔹 Pasar el ID (cedula) en la URL
+    navigate(`/perfileditar/${user.cedula}`);
   };
 
   return (

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   fetchUserProfile,
   updateUserProfile,
@@ -10,6 +10,7 @@ import "./perfileditar.css";
 const Perfileditar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { id } = useParams(); // 🔹 Obtener el ID desde la URL
 
   // Obtener usuario desde Redux
   const { user, loading, error } = useSelector((state) => state.loginState);
@@ -20,14 +21,14 @@ const Perfileditar = () => {
     correo: "",
   });
 
-  // Al montar el componente, cargar los datos del usuario
+  // 🔹 Cargar los datos del usuario si no están en Redux
   useEffect(() => {
-    if (!user) {
-      dispatch(fetchUserProfile());
+    if (!user || user.cedula !== id) {
+      dispatch(fetchUserProfile(id));
     }
-  }, [dispatch, user]);
+  }, [dispatch, id, user]);
 
-  // Sincronizar el estado local con los datos del usuario
+  // 🔹 Sincronizar el estado local con los datos del usuario
   useEffect(() => {
     if (user) {
       setUpdatedData({
@@ -43,23 +44,29 @@ const Perfileditar = () => {
     setUpdatedData({ ...updatedData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(updateUserProfile(user.cedula, updatedData));
-    navigate("/Perfil");
+
+    // 🔹 Enviar los datos actualizados a Redux
+    await dispatch(updateUserProfile(id, updatedData));
+
+    // 🔹 Redirigir de vuelta al perfil
+    setTimeout(() => {
+      navigate("/Perfil");
+    }, 500);
   };
 
-  // Mostrar mensaje mientras carga
+  // 🔹 Mostrar mensaje mientras carga
   if (loading) {
     return <div className="loading">Cargando...</div>;
   }
 
-  // Mostrar error si ocurre
+  // 🔹 Mostrar error si ocurre
   if (error) {
     return <div className="error">Error: {error}</div>;
   }
 
-  // Validación adicional si no hay datos
+  // 🔹 Validación si no hay datos
   if (!user) {
     return <div className="error">No se encontraron datos del usuario.</div>;
   }
@@ -76,7 +83,6 @@ const Perfileditar = () => {
             value={updatedData.nombre}
             onChange={handleChange}
             className="edit-user-input"
-            disabled
           />
         </label>
         <label>
