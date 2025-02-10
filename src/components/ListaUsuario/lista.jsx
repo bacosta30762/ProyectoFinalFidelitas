@@ -24,10 +24,13 @@ const UserList = () => {
         );
         const userData = response.data.map((user, index) => ({
           id: index + 1,
-          name: `${user.nombre} ${user.apellidos}`,
+          //name: `${user.nombre} ${user.apellidos}`,
+          nombre: user.nombre,
+          apellidos: user.apellidos,
           cedula: user.cedula,
           email: user.email,
-          rol: user.activo ? "Activo" : "Inactivo",
+          activo: user.activo === "Activo", //Convierte "Activo"/"Inactivo" a true/false
+          estado: user.activo, //Ya es "Activo" o "Inactivo", no necesita conversión
         }));
         dispatch(setUsers(userData));
       } catch (error) {
@@ -41,7 +44,7 @@ const UserList = () => {
 
   const filteredUsers = users.filter(
     (user) =>
-      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.cedula.includes(searchTerm)
   );
 
@@ -74,17 +77,18 @@ const UserList = () => {
       <div className="user-list">
         <div className="user-list-header">
           <span>Nombre</span>
+          <span>Apellidos</span>
           <span>Cédula</span>
           <span>Email</span>
-          <span>Rol</span>
+          <span>Estado</span>
           <span>Acciones</span>
         </div>
         {paginatedUsers.map((user) => (
           <div key={user.id} className="user-list-row">
-            <span>{user.name}</span>
-            <span>{user.cedula}</span>
+            <span>{user.nombre}</span>
+            <span>{user.apellidos}</span>
             <span>{user.email}</span>
-            <span>{user.rol}</span>
+            <span>{user.estado}</span>
             <button
               onClick={() => navigate(`/edit-user/${user.id}`)}
               className="edit-button"

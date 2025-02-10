@@ -66,3 +66,13 @@
   border: 1px solid #ddd;
   resize: none;
 }
+
+.responder-icon {
+  cursor: pointer;
+  margin-left: 10px;
+  color: #888;
+}
+
+.responder-icon:hover {
+  color: #28a745;
+}

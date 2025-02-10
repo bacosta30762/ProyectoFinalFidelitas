@@ -11,14 +11,14 @@ const userReducer = (state = initialState, action) => {
       return { ...state, users: action.payload };
 
     case UPDATE_USER:
-      return {
-        ...state,
-        users: state.users.map((user) =>
-          user.id === action.payload.id
-            ? { ...user, ...action.payload.userData }
-            : user
-        ),
-      };
+  return {
+    ...state,
+    users: state.users.map((user) =>
+      user.id === action.payload.id
+        ? { ...user, ...action.payload.userData, activo: action.payload.userData.activo ?? user.activo } // ✅ Asegura que activo se actualiza correctamente
+        : user
+    ),
+  };
 
     case DELETE_USER:
       return {

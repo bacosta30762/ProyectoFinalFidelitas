@@ -1,11 +1,14 @@
 .edit-user-container {
-  max-width: 450px;
+  width: 50%;
   margin: 20px auto;
   padding: 25px;
   background-color: #ffffff;
   border-radius: 10px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
   font-family: "Arial", sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .edit-user-title {
@@ -19,22 +22,28 @@
 .edit-user-form {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  width: 100%;
 }
 
 label {
   font-size: 14px;
   margin-bottom: 5px;
   color: #555555;
+  text-align: center;
+  width: 100%;
 }
 
 .edit-user-input {
   padding: 12px;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   border: 1px solid #cccccc;
   border-radius: 6px;
   font-size: 16px;
   background-color: #f9f9f9;
   color: #333333;
+  width: 80%;
+  text-align: center;
 }
 
 .edit-user-input:focus {
@@ -42,16 +51,21 @@ label {
   outline: none;
 }
 
-.save-button {
+.save-button, .delete-button {
   padding: 12px;
   margin-top: 10px;
   border: none;
   border-radius: 6px;
-  background-color: #007bff;
-  color: #ffffff;
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
+  width: 80%;
+  text-align: center;
+}
+
+.save-button {
+  background-color: #007bff;
+  color: #ffffff;
 }
 
 .save-button:hover {
@@ -60,18 +74,43 @@ label {
 }
 
 .delete-button {
-  padding: 12px;
-  margin-top: 15px;
-  border: none;
-  border-radius: 6px;
   background-color: #dc3545;
   color: #ffffff;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .delete-button:hover {
   background-color: #a71d2a;
   transform: translateY(-2px);
+}
+
+.activar {
+  background-color: #28a745;
+}
+
+.activar:hover {
+  background-color: #218838;
+}
+
+.desactivar {
+  background-color: #dc3545;
+}
+
+.desactivar:hover {
+  background-color: #a71d2a;
+}
+
+.assign-role-button {
+  background: linear-gradient(45deg, #4caf50, #81c784);
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.assign-role-button:hover {
+  background: linear-gradient(45deg, #66bb6a, #4caf50);
+  transform: scale(1.05);
 }
