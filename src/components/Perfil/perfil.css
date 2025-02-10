@@ -1,71 +1,87 @@
 .profile-container {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 30%;
-    margin: auto;
-    margin-top: 20px;
-  }
-  
-  .profile-title {
-    font-size: 24px;
-    margin-bottom: 20px;
-    text-align: center;
-    color: #333;
-  }
-  
-  .profile-info {
-    margin-bottom: 20px;
-  }
-  
-  .profile-field {
-    margin-bottom: 10px;
-  }
-  
-  .profile-field label {
-    font-weight: bold;
-  }
-  
-  .profile-field p {
-    margin: 5px 0;
-    color: #333;
-  }
-  
-  .contact-method {
-    border-top: 1px solid #ccc;
-    padding-top: 10px;
-  }
-  
-  .contact-method h3 {
-    margin-bottom: 10px;
-    color: #333;
-  }
-  
-  .contact-method p {
-    font-size: 16px;
-    color: #555;
-  }
-  
-  .edit-button {
-    padding: 10px 10px;
-    border: none;
-    border-radius: 4px;
-    background-color: #2e353c;
-    color: white;
-    font-size: 15px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-top: 20px;
-    display: block;
-    margin-right: auto;
-  }
-  
-  .edit-button:hover {
-    background-color: #a5a7aa;
-  }
+  background-color: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  width: 40%;
+  margin: auto;
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all 0.3s ease;
+}
 
-  #botonmodi{
-    width: 20%;
+/* Ajustes para pantallas pequeñas */
+@media (max-width: 768px) {
+  .profile-container {
+    width: 90%;
+    margin-top: 20px;
+    padding: 20px;
   }
-  
+}
+
+.profile-title {
+  font-size: 26px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #2e353c;
+}
+
+.profile-info {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.profile-field {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.profile-field:last-child {
+  border-bottom: none;
+}
+
+.profile-field label {
+  font-weight: bold;
+  font-size: 16px;
+  color: #2e353c;
+  flex: 1;
+}
+
+.profile-field p {
+  margin: 0;
+  font-size: 16px;
+  color: #555;
+  flex: 2;
+  text-align: right;
+}
+
+.edit-button {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
+  background-color: #007bff;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: 20px;
+  width: 50%;
+  text-align: center;
+}
+
+.edit-button:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+#botonmodi {
+  width: 100%;
+  max-width: 200px;
+}
