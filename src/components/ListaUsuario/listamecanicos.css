@@ -1,0 +1,156 @@
+.mecanico-list-container {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  width: 70%; /* Más ancho */
+  margin: 20px auto;
+  font-family: Arial, sans-serif;
+}
+
+.mecanico-list-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #333;
+}
+
+.search-bar {
+  padding: 10px;
+  width: 100%;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.mecanico-list {
+  display: grid;
+  grid-template-rows: auto;
+}
+
+.mecanico-list-header,
+.mecanico-list-row {
+  display: grid;
+  grid-template-columns: 1.5fr 1.5fr 1.2fr 3fr 1.2fr; /* Ajustamos el tamaño */
+  gap: 10px;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.mecanico-servicios {
+  white-space: normal; /* Permite múltiples líneas */
+  overflow-wrap: break-word;
+}
+
+.mecanico-list-header {
+  background-color: #f8f8f8;
+  font-weight: bold;
+  text-align: left;
+}
+
+.edit-button {
+  background-color: #007bff;
+  color: white;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  text-align: center;
+}
+
+.edit-button:hover {
+  background-color: #0056b3;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.pagination-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 5px 15px;
+  margin: 0 5px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.pagination-button:disabled {
+  background-color: #ddd;
+  cursor: not-allowed;
+}
+
+.pagination-info {
+  font-size: 14px;
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 500px; /* Aumentar el ancho del modal */
+  text-align: center;
+}
+
+/* Contenedor de cada servicio */
+.service-checkbox {
+  display: flex;
+  align-items: center; /* Alinear verticalmente */
+  justify-content: flex-start; /* Alinear el contenido a la izquierda */
+  gap: 5px; /* Reducir espacio entre el checkbox y el label */
+  margin-bottom: 10px;
+}
+
+/* Ajuste para que el checkbox no quede muy separado */
+.service-checkbox input {
+  width: 16px; /* Tamaño estándar del checkbox */
+  height: 16px;
+}
+
+/* Contenedor de botones centrado */
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px; /* Espacio entre botones */
+  margin-top: 20px;
+}
+
+/* Ajustes de botones */
+.save-button, .close-button {
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  color: white;
+  border-radius: 5px;
+}
+
+.save-button {
+  background-color: #4CAF50;
+}
+
+.close-button {
+  background-color: #f44336;
+}
+
+.save-button:hover, .close-button:hover {
+  opacity: 0.8;
+}

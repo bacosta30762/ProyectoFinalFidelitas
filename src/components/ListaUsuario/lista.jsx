@@ -87,6 +87,7 @@ const UserList = () => {
           <div key={user.id} className="user-list-row">
             <span>{user.nombre}</span>
             <span>{user.apellidos}</span>
+            <span>{user.cedula}</span>
             <span>{user.email}</span>
             <span>{user.estado}</span>
             <button

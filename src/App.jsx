@@ -29,6 +29,7 @@ import ComentariosValoraciones from "./components/Comentarios/ComentariosValorac
 import Inventarios from "./components/Inventarios/Inventarios.jsx";
 import Calendario from "./components/Planificacion/Calendar.jsx";
 import ComentariosAdmin from "./components/Comentarios/AdminComentarios.jsx";
+import ListaMecanico from "./components/ListaUsuario/MecanicoList.jsx";
 
 function App() {
   return (
@@ -88,6 +89,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <ListaOrdenesPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/lista-mecanicos/"
+            element={
+              <ProtectedRoute>
+                <ListaMecanico />
               </ProtectedRoute>
             }
           />

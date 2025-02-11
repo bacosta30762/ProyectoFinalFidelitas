@@ -43,6 +43,9 @@ export default function AppHeader() {
                   <NavDropdown.Item as={NavLink} to="/ListaUsuario">
                     Lista Usuario
                   </NavDropdown.Item>
+                  <NavDropdown.Item as={NavLink} to="/lista-mecanicos">
+                    Lista Mecánicos
+                  </NavDropdown.Item>
                   <NavDropdown.Item as={NavLink} to="/comentarios-admin">
                     Opiniones
                   </NavDropdown.Item>

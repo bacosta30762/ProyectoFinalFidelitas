@@ -9,7 +9,7 @@ const MechanicOrdenListPage = () => {
   const filteredOrders = useSelector((state) => state.orders.filteredOrders);
   const searchTerm = useSelector((state) => state.orders.searchTerm);
 
-  const [mecanicoNombre, setMecanicoNombre] = useState(""); // Dynamically fetched mechanic name
+  const [mecanicoNombre, setMecanicoNombre] = useState("");
 
   const fetchOrders = async () => {
     try {
@@ -28,15 +28,14 @@ const MechanicOrdenListPage = () => {
 
       const data = await response.json();
 
-      // Format orders
       const formattedOrders = data.map((order) => ({
         id: order.numeroOrden,
         numeroOrden: order.numeroOrden,
         placaVehiculo: order.placaVehiculo || "Sin placa",
         servicio: order.nombreServicio || "Sin servicio",
         cliente: order.nombreCliente || "No registrado",
-        monto: "₡" + (order.monto || "0"),
         fecha: order.dia || "Sin fecha",
+        estado: order.estado,
       }));
 
       dispatch(setOrders(formattedOrders));
@@ -46,6 +45,33 @@ const MechanicOrdenListPage = () => {
       }
     } catch (error) {
       console.error("Error fetching mechanic orders:", error);
+    }
+  };
+
+  const handleEstadoChange = async (orderId, nuevoEstado) => {
+    try {
+      const token = getToken();
+      const response = await fetch(`${API_ROUTES.ordenes}/actualizar-estado`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ NumeroOrden: orderId, Estado: nuevoEstado }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Error al actualizar el estado de la orden.");
+      }
+
+      // Actualizar estado en frontend
+      dispatch(setOrders(
+        filteredOrders.map((order) =>
+          order.id === orderId ? { ...order, estado: nuevoEstado } : order
+        )
+      ));
+    } catch (error) {
+      console.error("Error al actualizar estado:", error);
     }
   };
 
@@ -83,24 +109,12 @@ const MechanicOrdenListPage = () => {
           textAlign: "center",
         }}
       >
-        <div>
-          <strong>Número de Orden</strong>
-        </div>
-        <div>
-          <strong>Placa del Vehículo</strong>
-        </div>
-        <div>
-          <strong>Servicio Prestado</strong>
-        </div>
-        <div>
-          <strong>Cliente</strong>
-        </div>
-        <div>
-          <strong>Monto</strong>
-        </div>
-        <div>
-          <strong>Fecha</strong>
-        </div>
+        <div><strong>Número de Orden</strong></div>
+        <div><strong>Placa del Vehículo</strong></div>
+        <div><strong>Servicio Prestado</strong></div>
+        <div><strong>Cliente</strong></div>
+        <div><strong>Estado</strong></div>
+        <div><strong>Fecha</strong></div>
 
         {filteredOrders.length > 0 ? (
           filteredOrders.map((orden) => (
@@ -109,7 +123,17 @@ const MechanicOrdenListPage = () => {
               <div>{orden.placaVehiculo}</div>
               <div>{orden.servicio}</div>
               <div>{orden.cliente}</div>
-              <div>{orden.monto}</div>
+              <div>
+                <select
+                  value={orden.estado}
+                  onChange={(e) => handleEstadoChange(orden.id, e.target.value)}
+                  style={{ padding: "5px", borderRadius: "4px" }}
+                >
+                  <option value="Pendiente">Pendiente</option>
+                  <option value="En ejecución">En ejecución</option>
+                  <option value="Finalizado">Finalizado</option>
+                </select>
+              </div>
               <div>{orden.fecha}</div>
             </React.Fragment>
           ))
