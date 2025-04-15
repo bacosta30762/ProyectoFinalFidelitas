@@ -17,11 +17,9 @@ const EditUser = () => {
     apellidos: "",
     cedula: "",
     email: "",
-    rol: "",
+    rol: [],
     activo: false,
   });
-
-  const [roles, setRoles] = useState([]);
 
   useEffect(() => {
     if (user) {
@@ -30,7 +28,7 @@ const EditUser = () => {
         apellidos: user.apellidos,
         cedula: user.cedula,
         email: user.email,
-        rol: user.rol,
+        rol: Array.isArray(user.rol) ? user.rol : [user.rol],
         activo: user.activo,
       });
     }
@@ -41,7 +39,7 @@ const EditUser = () => {
     setUserData({ ...userData, [name]: value });
   };
 
-   const handleSubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     const updatedUserData = {
       cedula: userData.cedula,
@@ -53,40 +51,6 @@ const EditUser = () => {
     dispatch(updateUser(user.id, updatedUserData));
     alert("Información actualizada para el usuario: " + userData.nombre);
     navigate("/user-list");
-  };
-
-  const handleToggleActive = async () => {
-    const confirmMessage = userData.activo
-      ? `¿Estás seguro de que deseas desactivar al usuario ${userData.name}?`
-      : `¿Estás seguro de que deseas activar al usuario ${userData.name}?`;
-
-    if (window.confirm(confirmMessage)) {
-      const url = `https://apirymlubricentro-dddjebcxhyf6hse7.centralus-01.azurewebsites.net/api/Usuarios/${
-        userData.activo ? "Deseactivar" : "Activar"
-      }?cedula=${userData.cedula}`;
-
-      try {
-        const response = await fetch(url, { method: "PUT" });
-
-        if (response.ok) {
-          alert(
-            `Usuario ${
-              userData.activo ? "desactivado" : "activado"
-            } correctamente`
-          );
-
-          const updatedUser = { ...userData, activo: !userData.activo };
-          setUserData(updatedUser); // Actualiza el estado local
-
-          dispatch(updateUser(user.id, updatedUser)); // ✅ Actualiza Redux
-        } else {
-          alert("Hubo un problema al actualizar el usuario");
-        }
-      } catch (error) {
-        console.error("Error al actualizar usuario:", error);
-        alert("Error en la conexión con el servidor");
-      }
-    }
   };
 
   const updateUser = (id, userData) => {
@@ -119,14 +83,47 @@ const EditUser = () => {
     };
   };
 
+  const handleToggleActive = async () => {
+    const confirmMessage = userData.activo
+      ? `¿Estás seguro de que deseas desactivar al usuario ${userData.nombre}?`
+      : `¿Estás seguro de que deseas activar al usuario ${userData.nombre}?`;
+
+    if (window.confirm(confirmMessage)) {
+      const url = `https://apirymlubricentro-dddjebcxhyf6hse7.centralus-01.azurewebsites.net/api/Usuarios/${
+        userData.activo ? "Deseactivar" : "Activar"
+      }?cedula=${userData.cedula}`;
+
+      try {
+        const response = await fetch(url, { method: "PUT" });
+
+        if (response.ok) {
+          alert(
+            `Usuario ${
+              userData.activo ? "desactivado" : "activado"
+            } correctamente`
+          );
+
+          const updatedUser = { ...userData, activo: !userData.activo };
+          setUserData(updatedUser);
+          dispatch(updateUser(user.id, updatedUser));
+        } else {
+          alert("Hubo un problema al actualizar el usuario");
+        }
+      } catch (error) {
+        console.error("Error al actualizar usuario:", error);
+        alert("Error en la conexión con el servidor");
+      }
+    }
+  };
+
   const handleAssignRole = async () => {
-    const confirmMessage = `¿Estás seguro de que deseas asignar el rol ${userData.rol} al usuario ${userData.name}?`;
+    const confirmMessage = `¿Estás seguro de que deseas asignar los roles [${userData.rol.join(", ")}] al usuario ${userData.nombre}?`;
 
     if (window.confirm(confirmMessage)) {
       const url = "https://apirymlubricentro-dddjebcxhyf6hse7.centralus-01.azurewebsites.net/api/Usuarios/AsignarRol";
       const body = {
         Cedula: userData.cedula,
-        RoleNames: [userData.rol],
+        RoleNames: userData.rol,
       };
 
       try {
@@ -138,15 +135,15 @@ const EditUser = () => {
           body: JSON.stringify(body),
         });
 
-        if (response.ok) {
-          alert(
-            `Rol ${userData.rol} asignado correctamente a ${userData.name}`
-          );
+        const data = await response.json();
+
+        if (response.ok && data.fueExitoso) {
+          alert(`Roles [${userData.rol.join(", ")}] asignados correctamente a ${userData.nombre}`);
         } else {
-          alert("Hubo un problema al asignar el rol");
+          alert("Error al asignar roles: " + (data.errores?.join(", ") ?? ""));
         }
       } catch (error) {
-        console.error("Error al asignar el rol:", error);
+        console.error("Error al asignar los roles:", error);
         alert("Error en la conexión con el servidor");
       }
     }
@@ -197,20 +194,24 @@ const EditUser = () => {
           />
         </label>
         <label>
-          Rol:
+          Roles:
           <select
             name="rol"
+            multiple
             value={userData.rol}
-            onChange={handleChange}
+            onChange={(e) => {
+              const selectedOptions = Array.from(e.target.selectedOptions, (opt) => opt.value);
+              setUserData({ ...userData, rol: selectedOptions });
+            }}
             className="edit-user-input"
           >
-            <option value="Usuario">Usuario</option>
             <option value="Admin">Admin</option>
-            <option value="Mecanico">Mecánico</option>
+            <option value="Mecanico">Mecanico</option>
             <option value="Contador">Contador</option>
+            <option value="Usuario">Usuario</option>
           </select>
         </label>
-        <button onClick={handleAssignRole} className="assign-role-button">
+        <button type="button" onClick={handleAssignRole} className="assign-role-button">
           Asignar Rol
         </button>
         <button type="submit" className="save-button">
@@ -219,9 +220,7 @@ const EditUser = () => {
       </form>
       <button
         onClick={handleToggleActive}
-        className={`delete-button ${
-          userData.activo ? "desactivar" : "activar"
-        }`}
+        className={`delete-button ${userData.activo ? "desactivar" : "activar"}`}
       >
         {userData.activo ? "Desactivar Usuario" : "Activar Usuario"}
       </button>
@@ -230,3 +229,4 @@ const EditUser = () => {
 };
 
 export default EditUser;
+
