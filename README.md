@@ -932,7 +932,7 @@ This project is private and proprietary.
 
 ## 👥 Authors
 
-- Your Name - Initial work
+- Brandon Acosta Cascante
 
 ## 🙏 Acknowledgments
 
