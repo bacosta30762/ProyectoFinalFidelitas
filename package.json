@@ -1,9 +1,9 @@
 {
-  "name": "web-page-lubricentro",
+  "name": "lubricentro-management-system",
   "version": "0.1.0",
   "private": true,
   "proxy": "http://localhost:7180",
-  "homepage": "http://bacosta30762.github.io/ProyectoFinalFidelitas",
+  "homepage": "http://bacosta30762.github.io/lubricentro-management-system",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
     "@fortawesome/free-solid-svg-icons": "^6.6.0",

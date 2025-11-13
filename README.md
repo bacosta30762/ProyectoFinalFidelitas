@@ -85,8 +85,8 @@ Get started in 5 minutes! See the [Quick Start Guide](docs/QUICK_START.md) for a
 
 ```bash
 # Clone and install
-git clone https://github.com/yourusername/ProyectoFinalFidelitas.git
-cd ProyectoFinalFidelitas
+git clone https://github.com/yourusername/lubricentro-management-system.git
+cd lubricentro-management-system
 npm install
 npm start
 ```
@@ -102,8 +102,8 @@ npm start
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/ProyectoFinalFidelitas.git
-   cd ProyectoFinalFidelitas
+   git clone https://github.com/yourusername/lubricentro-management-system.git
+   cd lubricentro-management-system
    ```
 
 2. **Install dependencies**
@@ -138,7 +138,7 @@ npm start
 ## 📁 Project Structure
 
 ```
-ProyectoFinalFidelitas/
+lubricentro-management-system/
 ├── public/                 # Static files
 │   └── index.html
 ├── src/

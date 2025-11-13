@@ -27,10 +27,10 @@ Before you begin, ensure you have the following installed:
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/ProyectoFinalFidelitas.git
+git clone https://github.com/yourusername/lubricentro-management-system.git
 
 # Navigate to the project directory
-cd ProyectoFinalFidelitas
+cd lubricentro-management-system
 ```
 
 ### 2. Install Dependencies
@@ -149,7 +149,7 @@ npm run lint -- --fix
 ## Project Structure Overview
 
 ```
-ProyectoFinalFidelitas/
+lubricentro-management-system/
 ├── public/                    # Static files
 │   └── index.html            # HTML template
 ├── src/                       # Source code
@@ -276,7 +276,7 @@ git config --global user.email "your.email@example.com"
 git init
 
 # Add remote repository
-git remote add origin https://github.com/yourusername/ProyectoFinalFidelitas.git
+git remote add origin https://github.com/yourusername/lubricentro-management-system.git
 ```
 
 ### Common Git Commands
