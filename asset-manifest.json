@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/ProyectoFinalFidelitas/static/css/main.cdd14375.css",
-    "main.js": "/ProyectoFinalFidelitas/static/js/main.8ffb9dde.js",
-    "static/js/239.4142456f.chunk.js": "/ProyectoFinalFidelitas/static/js/239.4142456f.chunk.js",
-    "static/js/213.f6238c7a.chunk.js": "/ProyectoFinalFidelitas/static/js/213.f6238c7a.chunk.js",
-    "static/js/634.9cf6d044.chunk.js": "/ProyectoFinalFidelitas/static/js/634.9cf6d044.chunk.js",
-    "index.html": "/ProyectoFinalFidelitas/index.html",
-    "main.cdd14375.css.map": "/ProyectoFinalFidelitas/static/css/main.cdd14375.css.map",
-    "main.8ffb9dde.js.map": "/ProyectoFinalFidelitas/static/js/main.8ffb9dde.js.map",
-    "239.4142456f.chunk.js.map": "/ProyectoFinalFidelitas/static/js/239.4142456f.chunk.js.map",
-    "213.f6238c7a.chunk.js.map": "/ProyectoFinalFidelitas/static/js/213.f6238c7a.chunk.js.map",
-    "634.9cf6d044.chunk.js.map": "/ProyectoFinalFidelitas/static/js/634.9cf6d044.chunk.js.map"
+    "main.css": "/lubricentro-management-system/static/css/main.cdd14375.css",
+    "main.js": "/lubricentro-management-system/static/js/main.5e438c8a.js",
+    "static/js/239.248ee4c5.chunk.js": "/lubricentro-management-system/static/js/239.248ee4c5.chunk.js",
+    "static/js/213.53fa99c9.chunk.js": "/lubricentro-management-system/static/js/213.53fa99c9.chunk.js",
+    "static/js/634.7f3be865.chunk.js": "/lubricentro-management-system/static/js/634.7f3be865.chunk.js",
+    "index.html": "/lubricentro-management-system/index.html",
+    "main.cdd14375.css.map": "/lubricentro-management-system/static/css/main.cdd14375.css.map",
+    "main.5e438c8a.js.map": "/lubricentro-management-system/static/js/main.5e438c8a.js.map",
+    "239.248ee4c5.chunk.js.map": "/lubricentro-management-system/static/js/239.248ee4c5.chunk.js.map",
+    "213.53fa99c9.chunk.js.map": "/lubricentro-management-system/static/js/213.53fa99c9.chunk.js.map",
+    "634.7f3be865.chunk.js.map": "/lubricentro-management-system/static/js/634.7f3be865.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.cdd14375.css",
-    "static/js/main.8ffb9dde.js"
+    "static/js/main.5e438c8a.js"
   ]
 }
