@@ -19,7 +19,7 @@ git --version
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/yourusername/lubricentro-management-system.git
+git clone https://github.com/bacosta30762/lubricentro-management-system.git
 cd lubricentro-management-system
 
 # 2. Install dependencies
