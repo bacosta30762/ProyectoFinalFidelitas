@@ -102,7 +102,7 @@ npm start
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/lubricentro-management-system.git
+   git clone https://github.com/bacosta30762/lubricentro-management-system.git
    cd lubricentro-management-system
    ```
 
