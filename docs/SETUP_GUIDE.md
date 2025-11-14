@@ -27,7 +27,7 @@ Before you begin, ensure you have the following installed:
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/lubricentro-management-system.git
+git clone https://github.com/bacosta30762/lubricentro-management-system.git
 
 # Navigate to the project directory
 cd lubricentro-management-system
