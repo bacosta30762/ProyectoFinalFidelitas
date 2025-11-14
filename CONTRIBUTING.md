@@ -29,13 +29,13 @@ Thank you for your interest in contributing! This document provides guidelines a
 
 2. **Clone your fork**
    ```bash
-   git clone https://github.com/yourusername/lubricentro-management-system.git
+   git clone https://github.com/bacosta30762/lubricentro-management-system.git
    cd lubricentro-management-system
    ```
 
 3. **Add upstream remote**
    ```bash
-   git remote add upstream https://github.com/originalowner/lubricentro-management-system.git
+   git remote add upstream https://github.com/bacosta30762/lubricentro-management-system.git
    ```
 
 4. **Install dependencies**
