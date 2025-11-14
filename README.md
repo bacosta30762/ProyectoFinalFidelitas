@@ -85,7 +85,7 @@ Get started in 5 minutes! See the [Quick Start Guide](docs/QUICK_START.md) for a
 
 ```bash
 # Clone and install
-git clone https://github.com/yourusername/lubricentro-management-system.git
+git clone https://github.com/bacosta30762/lubricentro-management-system.git
 cd lubricentro-management-system
 npm install
 npm start
